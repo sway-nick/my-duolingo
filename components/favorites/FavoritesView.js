@@ -1,11 +1,11 @@
-import { speakWord } from '../../services/audioService.js?v=386.0';
-import { toggleFavoriteApi, clearAllFavoritesApi, getUserFavorites } from '../../services/api.js?v=386.0';
-import { t, getWordTranslation, getWordNotes, getInterfaceLanguage } from '../../services/i18n.js?v=386.0';
-import { ProService } from '../../services/proService.js?v=386.0';
-import { getProStrings } from '../../services/proI18n.js?v=386.0';
-import { getSpokenEnglishStrings } from './spokenEnglishI18n.js?v=386.0';
-import { getMicroRulesStrings } from './grammarUiTranslations.js?v=386.0';
-import { isPairCollection } from '../../services/confusablePairsData.js?v=386.0';
+import { speakWord } from '../../services/audioService.js?v=423.0';
+import { toggleFavoriteApi, clearAllFavoritesApi, getUserFavorites } from '../../services/api.js?v=423.0';
+import { t, getWordTranslation, getWordNotes, getInterfaceLanguage } from '../../services/i18n.js?v=423.0';
+import { ProService } from '../../services/proService.js?v=423.0';
+import { getProStrings } from '../../services/proI18n.js?v=423.0';
+import { getSpokenEnglishStrings } from './spokenEnglishI18n.js?v=423.0';
+import { getMicroRulesStrings } from './grammarUiTranslations.js?v=423.0';
+import { isPairCollection } from '../../services/confusablePairsData.js?v=423.0';
 import {
   removeWordFromCollection,
   syncCollectionToAndroidWidget,
@@ -20,15 +20,20 @@ import {
   getCollectionUnlockStep,
   getCollectionUnlockedCount,
   unlockMoreCollectionItems,
-} from '../../services/collectionsService.js?v=386.0';
-import { AdService } from '../../services/adService.js?v=386.0';
-import { isProActive } from '../../services/proState.js?v=386.0';
-import { openAddWordsToCollectionModal } from '../modals/AddWordsToCollectionModal.js?v=386.0';
-import { openWidgetConfigBottomSheet } from '../modals/WidgetConfigBottomSheet.js?v=386.0';
-import { openAddWordModal, attachWordLongPress } from '../dictionary/DictionaryView.js?v=386.0';
+  STATIVE_VERBS_SET,
+  getVerbFilterStrings,
+} from '../../services/collectionsService.js?v=423.0';
+import { AdService } from '../../services/adService.js?v=423.0';
+import { isProActive } from '../../services/proState.js?v=423.0';
+import { openAddWordsToCollectionModal } from '../modals/AddWordsToCollectionModal.js?v=423.0';
+import { openWidgetConfigBottomSheet } from '../modals/WidgetConfigBottomSheet.js?v=423.0';
+import { openAddWordModal, attachWordLongPress } from '../dictionary/DictionaryView.js?v=423.0';
+import { getRelatedMicroRulesForCollection, getCrossLinkStrings } from './crossLinksMap.js?v=423.0';
+import { navigateWithReturn } from '../../services/navigationStack.js?v=423.0';
 
 export const PAGINATED_COLLECTIONS = new Set([
   'it_terms',
+  'finance_terms',
   'verbs',
   'adjectives',
   'phrasal_verbs',
@@ -162,10 +167,12 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
     });
   };
 
-  if (collectionId !== 'it_terms' && !isCollectionPackDownloaded(collectionId)) {
+  const isProPreviewPack = collectionId === 'it_terms' || collectionId === 'finance_terms';
+  if (!isProPreviewPack && !isCollectionPackDownloaded(collectionId)) {
     const packStrings = getDownloadablePackStrings();
     const PACK_META = {
       it_terms: { icon: '💻', desc: packStrings.itDesc, count: 200 },
+      finance_terms: { icon: '💰', desc: packStrings.financeDesc, count: 200 },
       idioms: { icon: '💬', desc: packStrings.idiomsDesc, count: 150 },
       verbs: { icon: '⚡', desc: packStrings.verbsDesc, count: 100 },
       adjectives: { icon: '🌟', desc: packStrings.adjectivesDesc, count: 100 },
@@ -175,7 +182,7 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
     const packIcon = meta.icon;
     const packDesc = meta.desc;
     const totalCount = Array.isArray(favoriteWords) ? favoriteWords.length : meta.count;
-    const isItProLocked = collectionId === 'it_terms' && !isProActive();
+    const isItProLocked = isProPreviewPack && !isProActive();
     const partialStep = getCollectionUnlockStep(collectionId);
     const sPro = isItProLocked ? getProStrings(getInterfaceLanguage()) : null;
 
@@ -328,7 +335,7 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
   }
 
   const isPro = isProActive();
-  const isItPreview = collectionId === 'it_terms' && !isPro && favoriteWords.length > 6;
+  const isItPreview = (collectionId === 'it_terms' || collectionId === 'finance_terms') && !isPro && favoriteWords.length > 6;
   const partialStep = getCollectionUnlockStep(collectionId);
   const isPartialPack = partialStep > 0 && !isPro;
   const partialUnlockedCount = isItPreview
@@ -338,6 +345,24 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
   const hasMoreToUnlock = isPartialPack && partialUnlockedCount < favoriteWords.length;
   const sProMore = (hasMoreToUnlock || isItPreview) ? getProStrings(getInterfaceLanguage()) : null;
   const packStringsMore = (hasMoreToUnlock || isItPreview) ? getDownloadablePackStrings() : null;
+
+  const isVerbsCol = collectionId === 'verbs';
+  const verbFilter = isVerbsCol && options._verbFilter === 'stative'
+    ? 'stative'
+    : 'action';
+  const actionVerbCount = isVerbsCol
+    ? visibleWords.filter((w) => !STATIVE_VERBS_SET.has(String(w.word || '').toLowerCase().trim())).length
+    : 0;
+  const stativeVerbCount = isVerbsCol
+    ? visibleWords.filter((w) => STATIVE_VERBS_SET.has(String(w.word || '').toLowerCase().trim())).length
+    : 0;
+  const filteredVisibleWords = isVerbsCol
+    ? visibleWords.filter((w) => {
+        const isStative = STATIVE_VERBS_SET.has(String(w.word || '').toLowerCase().trim());
+        return verbFilter === 'stative' ? isStative : !isStative;
+      })
+    : visibleWords;
+  const verbFilterStrings = isVerbsCol ? getVerbFilterStrings(getInterfaceLanguage()) : null;
 
   const isPhrasalCol = collectionId === 'phrasal_verbs';
   const isPairCol = isPairCollection(collectionId);
@@ -349,7 +374,7 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
     : (isPaginated ? loadSavedCollectionPage(collectionId) : 1);
   if (!Number.isFinite(currentPage) || currentPage < 1) currentPage = 1;
 
-  const totalPages = isPaginated ? Math.max(1, Math.ceil(visibleWords.length / effectivePageSize)) : 1;
+  const totalPages = isPaginated ? Math.max(1, Math.ceil(filteredVisibleWords.length / effectivePageSize)) : 1;
   if (currentPage > totalPages) currentPage = totalPages;
   if (currentPage < 1) currentPage = 1;
 
@@ -358,8 +383,8 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
   }
 
   const startIndex = isPaginated ? (currentPage - 1) * effectivePageSize : 0;
-  const endIndex = isPaginated ? Math.min(startIndex + effectivePageSize, visibleWords.length) : visibleWords.length;
-  const wordsToRender = isPaginated ? visibleWords.slice(startIndex, endIndex) : visibleWords;
+  const endIndex = isPaginated ? Math.min(startIndex + effectivePageSize, filteredVisibleWords.length) : filteredVisibleWords.length;
+  const wordsToRender = isPaginated ? filteredVisibleWords.slice(startIndex, endIndex) : filteredVisibleWords;
 
   const mrStrings = getMicroRulesStrings(getInterfaceLanguage());
   const prevLabel = mrStrings.prevBtn || 'Previous';
@@ -623,6 +648,13 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
       .col-page-btn.col-page-nav { font-size: 18px; font-weight: 800; }
       .col-page-ellipsis { min-width: 18px; height: 36px; display: inline-flex; align-items: center; justify-content: center; color: var(--text-muted, #64748b); font-weight: 800; font-size: 14px; flex-shrink: 0; user-select: none; }
       .col-page-info { text-align: center; font-size: 12px; font-weight: 700; color: var(--text-muted, #64748b); margin-bottom: 12px; }
+      .verb-filter-bar { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+      .verb-filter-chip { border: 1.5px solid var(--border-color, rgba(148, 163, 184, 0.28)); background: var(--card-bg, #ffffff); color: var(--text-main, #0f172a); border-radius: 12px; padding: 8px 9px; font-size: 12px; font-weight: 700; cursor: pointer; text-align: center; line-height: 1.2; transition: all 0.15s ease; }
+      body.dark-theme .verb-filter-chip, .dark-theme .verb-filter-chip, [data-theme="dark"] .verb-filter-chip { background: rgba(30, 41, 59, 0.72); color: #e2e8f0; border-color: rgba(148, 163, 184, 0.25); }
+      .verb-filter-chip.is-active { background: #2563eb; border-color: #2563eb; color: #ffffff; box-shadow: 0 3px 10px rgba(37, 99, 235, 0.28); }
+      body.dark-theme .verb-filter-chip.is-active, .dark-theme .verb-filter-chip.is-active, [data-theme="dark"] .verb-filter-chip.is-active { background: #38bdf8; border-color: #38bdf8; color: #0f172a; box-shadow: 0 3px 10px rgba(56, 189, 248, 0.28); }
+      .verb-stative-hint { margin: 0 0 10px; padding: 8px 11px; border-radius: 11px; font-size: 12.5px; font-weight: 600; background: rgba(37, 99, 235, 0.08); border: 1px solid rgba(37, 99, 235, 0.22); color: #1d4ed8; }
+      body.dark-theme .verb-stative-hint, .dark-theme .verb-stative-hint, [data-theme="dark"] .verb-stative-hint { background: rgba(56, 189, 248, 0.12); border-color: rgba(56, 189, 248, 0.3); color: #38bdf8; }
     </style>
     <div class="favorites-page">
       ${backBtnHtml}
@@ -668,6 +700,14 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
         </div>
       </div>
 
+      ${isVerbsCol && verbFilterStrings ? `
+        <div class="verb-filter-bar" role="tablist">
+          <button type="button" class="verb-filter-chip ${verbFilter === 'action' ? 'is-active' : ''}" data-verb-filter="action">${escapeHtml(verbFilterStrings.action)} (${actionVerbCount})</button>
+          <button type="button" class="verb-filter-chip ${verbFilter === 'stative' ? 'is-active' : ''}" data-verb-filter="stative">${escapeHtml(verbFilterStrings.stative)} (${stativeVerbCount})</button>
+        </div>
+        ${verbFilter === 'stative' ? `<p class="verb-stative-hint">⚡ ${escapeHtml(verbFilterStrings.stativeHint)}</p>` : ''}
+      ` : ''}
+
       <div class="favorites-grid" id="favorites-grid">
         ${isPairCol ? renderPairCardsHtml() : (isPhrasalCol ? renderPhrasalMindMapsHtml() : wordsToRender
           .map((word) => {
@@ -695,7 +735,10 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
               <h3 class="fav-word">${escapeHtml(word.word)}</h3>
               <p class="fav-translation">${escapeHtml(getWordTranslation(word))}</p>
               ${(() => {
-                const n = getWordNotes(word, null, { hideItNotes: collectionId !== 'it_terms' });
+                const n = getWordNotes(word, null, {
+                  hideItNotes: collectionId !== 'it_terms',
+                  hideFinanceNotes: collectionId !== 'finance_terms',
+                });
                 return n ? `<p class="dict-notes">${escapeHtml(n)}</p>` : '';
               })()}
             </div>
@@ -728,7 +771,7 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
             🔒 ${partialUnlockedCount} / ${favoriteWords.length}
           </p>
           <p style="margin: 0 auto 14px; font-size: 13.5px; line-height: 1.45; color: var(--text-muted); max-width: 340px;">
-            ${escapeHtml(packStringsMore.itDesc)}
+            ${escapeHtml(collectionId === 'finance_terms' ? (packStringsMore.financeDesc || packStringsMore.itDesc) : packStringsMore.itDesc)}
           </p>
           <button type="button" id="open-it-pro-btn" class="primary-button btn-orange" style="min-height: 46px; padding: 0 24px; font-size: 15px; font-weight: 800; border-radius: 14px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; background: linear-gradient(135deg, #f59e0b, #ea580c); box-shadow: 0 6px 18px rgba(234, 88, 12, 0.35);">
             <span style="font-size: 17px;">⭐</span>
@@ -736,6 +779,23 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
           </button>
         </div>
       ` : ''}
+      ${(() => {
+        const relRules = getRelatedMicroRulesForCollection(collectionId);
+        if (!relRules || relRules.length === 0) return '';
+        const cl = getCrossLinkStrings(getInterfaceLanguage());
+        return `
+          <div class="fav-cross-box" style="margin-top: 16px; padding: 12px 14px; border-radius: 16px; background: var(--card-bg, #ffffff); border: 1px solid var(--border-color, rgba(148, 163, 184, 0.24));">
+            <div style="font-size: 12.5px; font-weight: 800; color: var(--text-muted, #64748b); margin-bottom: 8px;">${escapeHtml(cl.relatedRulesHeading || 'Связанные правила')}</div>
+            <div style="display: flex; flex-wrap: wrap; gap: 7px;">
+              ${relRules.map((rid) => `
+                <button type="button" class="fav-cross-rule-chip" data-fav-nav-rule="${rid}" style="border: 1px solid rgba(37, 99, 235, 0.32); background: rgba(37, 99, 235, 0.08); color: var(--primary-color, #2563eb); border-radius: 999px; padding: 6px 12px; font-size: 12.5px; font-weight: 700; cursor: pointer;">
+                  ${escapeHtml(cl.microRulePrefix || '📖 Правило')} #${rid} →
+                </button>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      })()}
     </div>
   `;
 
@@ -790,14 +850,40 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
     if (onBack) onBack();
   });
 
+  container.querySelectorAll('[data-fav-nav-rule]').forEach((chip) => {
+    chip.addEventListener('click', () => {
+      const ruleId = Number(chip.getAttribute('data-fav-nav-rule'));
+      if (!ruleId || typeof window === 'undefined' || typeof window._navigateToTopicLink !== 'function') return;
+      navigateWithReturn(
+        () => renderFavoritesView(favoriteWords, containerSelector, options),
+        () => window._navigateToTopicLink({ targetType: 'grammar_microrules', ruleId }),
+        `col_${collectionId}`
+      );
+    });
+  });
+
   container.querySelector('#header-set-widget-btn')?.addEventListener('click', handleWidgetButtonClick);
   container.querySelector('#header-add-words-btn')?.addEventListener('click', triggerAddWords);
 
+  if (isVerbsCol) {
+    container.querySelectorAll('[data-verb-filter]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const nextFilter = btn.getAttribute('data-verb-filter') || 'all';
+        if (nextFilter === verbFilter) return;
+        options._verbFilter = nextFilter;
+        options._currentPage = 1;
+        renderFavoritesView(favoriteWords, containerSelector, options);
+      });
+    });
+  }
+
   // Bind practice button
   container.querySelector('#start-fav-practice-btn')?.addEventListener('click', () => {
-    const currentWords = (visibleWords && visibleWords.length > 0)
-      ? visibleWords
-      : getCollectionWords(collectionId, allWords);
+    const currentWords = isVerbsCol
+      ? filteredVisibleWords
+      : ((visibleWords && visibleWords.length > 0)
+        ? visibleWords
+        : getCollectionWords(collectionId, allWords));
     onStartFavoritePractice(currentWords);
   });
 
@@ -851,7 +937,7 @@ function renderFavoritesView(favoriteWords = [], containerSelector = '#app-conte
 
   if (isItPreview) {
     container.querySelector('#open-it-pro-btn')?.addEventListener('click', () => {
-      ProService.openPaywall('it_terms');
+      ProService.openPaywall(collectionId);
     });
     if (typeof window !== 'undefined') {
       if (window._favItProChangedHandler) {

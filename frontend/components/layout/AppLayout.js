@@ -1,12 +1,12 @@
-import { getCurrentUser, getGuestTrainingCount, GUEST_WORD_LIMIT, getUserAvatar } from '../../services/authService.js?v=386.0';
-import { getUserWeeklyXP, getUserWeeklyRank, formatCompactXp, getCachedLeaderboard } from '../../services/api.js?v=386.0';
-import { renderAuthModal } from '../auth/AuthModal.js?v=386.0';
-import { openShareDialog } from '../modals/ShareModal.js?v=386.0';
-import { openChallengeModal } from '../modals/ChallengeModal.js?v=386.0';
-import { t, getInterfaceLanguage } from '../../services/i18n.js?v=386.0';
-import { isEmailVerified } from '../../services/firebase.js?v=386.0';
-import { renderMondayWinnersTicker, updateMondayTickerTabVisibility, initMondayWinnersTickerListener } from './MondayWinnersTicker.js?v=386.0';
-import { isProActive } from '../../services/proState.js?v=386.0';
+import { getCurrentUser, getGuestTrainingCount, GUEST_WORD_LIMIT, getUserAvatar } from '../../services/authService.js?v=423.0';
+import { getUserWeeklyXP, getUserWeeklyRank, formatCompactXp, getCachedLeaderboard } from '../../services/api.js?v=423.0';
+import { renderAuthModal } from '../auth/AuthModal.js?v=423.0';
+import { openShareDialog } from '../modals/ShareModal.js?v=423.0';
+import { openChallengeModal } from '../modals/ChallengeModal.js?v=423.0';
+import { t, getInterfaceLanguage } from '../../services/i18n.js?v=423.0';
+import { isEmailVerified } from '../../services/firebase.js?v=423.0';
+import { renderMondayWinnersTicker, updateMondayTickerTabVisibility, initMondayWinnersTickerListener } from './MondayWinnersTicker.js?v=423.0';
+import { isProActive } from '../../services/proState.js?v=423.0';
 
 let globalAuthChangedCallback = () => {};
 let globalTabChangeCallback = () => {};
@@ -284,8 +284,11 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
           <button class="nav-tab active" data-tab="training" title="${t('training')}">
             <span class="tab-icon">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
-                <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+                <path d="M14.4 14.4 9.6 9.6"></path>
+                <path d="M18.657 21.485a2 2 0 1 1-2.829-2.828l-1.767 1.768a2 2 0 1 1-2.829-2.829l6.364-6.364a2 2 0 1 1 2.829 2.829l-1.768 1.767a2 2 0 1 1 2.828 2.829z"></path>
+                <path d="m21.5 21.5-1.4-1.4"></path>
+                <path d="M3.9 3.9 2.5 2.5"></path>
+                <path d="M6.404 12.768a2 2 0 1 1-2.829-2.829l1.768-1.767a2 2 0 1 1-2.828-2.829l2.828-2.828a2 2 0 1 1 2.829 2.828l1.767-1.768a2 2 0 1 1 2.829 2.829z"></path>
               </svg>
             </span>
             <span class="drawer-item-text">${t('training')}</span>

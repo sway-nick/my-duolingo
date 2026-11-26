@@ -17,7 +17,8 @@ export const SPOKEN_ENGLISH_I18N = {
     "freeBadge": "Бесплатно",
     "adUnlock10Btn": "Открыть ещё 10 за видео",
     "proRemainingHint": "Остальные {n} примеров доступны в PRO-версии",
-    "unlockedCounter": "Открыто: {n} / {total}"
+    "unlockedCounter": "Открыто: {n} / {total}",
+    "practiceBtn": "Тренировка"
   },
   "uk": {
     "grammarHubTitle": "Граматика",
@@ -37,7 +38,8 @@ export const SPOKEN_ENGLISH_I18N = {
     "freeBadge": "Безкоштовно",
     "adUnlock10Btn": "Відкрити ще 10 за відео",
     "proRemainingHint": "Інші {n} прикладів доступні у PRO-версії",
-    "unlockedCounter": "Відкрито: {n} / {total}"
+    "unlockedCounter": "Відкрито: {n} / {total}",
+    "practiceBtn": "Тренування"
   },
   "en": {
     "grammarHubTitle": "Grammar",
@@ -57,7 +59,8 @@ export const SPOKEN_ENGLISH_I18N = {
     "freeBadge": "Free",
     "adUnlock10Btn": "Unlock 10 more with video",
     "proRemainingHint": "Remaining {n} examples are available in PRO",
-    "unlockedCounter": "Unlocked: {n} / {total}"
+    "unlockedCounter": "Unlocked: {n} / {total}",
+    "practiceBtn": "Practice"
   },
   "de": {
     "grammarHubTitle": "Grammatik",
@@ -77,7 +80,8 @@ export const SPOKEN_ENGLISH_I18N = {
     "freeBadge": "Kostenlos",
     "adUnlock10Btn": "10 weitere per Video freischalten",
     "proRemainingHint": "Die übrigen {n} Beispiele sind mit PRO verfügbar",
-    "unlockedCounter": "Freigeschaltet: {n} / {total}"
+    "unlockedCounter": "Freigeschaltet: {n} / {total}",
+    "practiceBtn": "Training"
   },
   "es": {
     "grammarHubTitle": "Gramática",
@@ -97,7 +101,8 @@ export const SPOKEN_ENGLISH_I18N = {
     "freeBadge": "Gratis",
     "adUnlock10Btn": "Desbloquear 10 más con video",
     "proRemainingHint": "Los {n} ejemplos restantes están disponibles en PRO",
-    "unlockedCounter": "Desbloqueado: {n} / {total}"
+    "unlockedCounter": "Desbloqueado: {n} / {total}",
+    "practiceBtn": "Practicar"
   },
   "fr": {
     "grammarHubTitle": "Grammaire",
@@ -117,7 +122,8 @@ export const SPOKEN_ENGLISH_I18N = {
     "freeBadge": "Gratuit",
     "adUnlock10Btn": "Débloquer 10 de plus avec une vidéo",
     "proRemainingHint": "Les {n} autres exemples sont disponibles avec PRO",
-    "unlockedCounter": "Débloqué : {n} / {total}"
+    "unlockedCounter": "Débloqué : {n} / {total}",
+    "practiceBtn": "Entraînement"
   },
   "pl": {
     "grammarHubTitle": "Gramatyka",
@@ -137,7 +143,8 @@ export const SPOKEN_ENGLISH_I18N = {
     "freeBadge": "Za darmo",
     "adUnlock10Btn": "Odblokuj jeszcze 10 za wideo",
     "proRemainingHint": "Pozostałe {n} przykładów jest dostępnych w wersji PRO",
-    "unlockedCounter": "Odblokowano: {n} / {total}"
+    "unlockedCounter": "Odblokowano: {n} / {total}",
+    "practiceBtn": "Trening"
   },
   "tr": {
     "grammarHubTitle": "Dilbilgisi",
@@ -157,7 +164,8 @@ export const SPOKEN_ENGLISH_I18N = {
     "freeBadge": "Ücretsiz",
     "adUnlock10Btn": "Video ile 10 tane daha aç",
     "proRemainingHint": "Kalan {n} örnek PRO sürümünde açıktır",
-    "unlockedCounter": "Açık: {n} / {total}"
+    "unlockedCounter": "Açık: {n} / {total}",
+    "practiceBtn": "Pratik yap"
   },
   "it": {
     "grammarHubTitle": "Grammatica",
@@ -177,7 +185,8 @@ export const SPOKEN_ENGLISH_I18N = {
     "freeBadge": "Gratis",
     "adUnlock10Btn": "Sblocca altri 10 con un video",
     "proRemainingHint": "I restanti {n} esempi sono disponibili con PRO",
-    "unlockedCounter": "Sbloccati: {n} / {total}"
+    "unlockedCounter": "Sbloccati: {n} / {total}",
+    "practiceBtn": "Allenamento"
   },
   "ro": {
     "grammarHubTitle": "Gramatică",
@@ -197,7 +206,8 @@ export const SPOKEN_ENGLISH_I18N = {
     "freeBadge": "Gratuit",
     "adUnlock10Btn": "Deblochează încă 10 cu un video",
     "proRemainingHint": "Restul de {n} exemple sunt disponibile în PRO",
-    "unlockedCounter": "Deblocate: {n} / {total}"
+    "unlockedCounter": "Deblocate: {n} / {total}",
+    "practiceBtn": "Antrenament"
   },
   "bg": {
     "grammarHubTitle": "Граматика",
@@ -217,7 +227,8 @@ export const SPOKEN_ENGLISH_I18N = {
     "freeBadge": "Безплатно",
     "adUnlock10Btn": "Отключи още 10 с видео",
     "proRemainingHint": "Останалите {n} примера са достъпни в PRO",
-    "unlockedCounter": "Отключени: {n} / {total}"
+    "unlockedCounter": "Отключени: {n} / {total}",
+    "practiceBtn": "Тренировка"
   },
   "hu": {
     "grammarHubTitle": "Nyelvtan",
@@ -237,7 +248,8 @@ export const SPOKEN_ENGLISH_I18N = {
     "freeBadge": "Ingyenes",
     "adUnlock10Btn": "Nyiss meg még 10-et videóval",
     "proRemainingHint": "A maradék {n} példa PRO-val érhető el",
-    "unlockedCounter": "Feloldva: {n} / {total}"
+    "unlockedCounter": "Feloldva: {n} / {total}",
+    "practiceBtn": "Gyakorlás"
   },
   "el": {
     "grammarHubTitle": "Γραμματική",
@@ -257,7 +269,8 @@ export const SPOKEN_ENGLISH_I18N = {
     "freeBadge": "Δωρεάν",
     "adUnlock10Btn": "Ξεκλείδωσε άλλα 10 με βίντεο",
     "proRemainingHint": "Τα υπόλοιπα {n} παραδείγματα είναι διαθέσιμα στο PRO",
-    "unlockedCounter": "Ξεκλειδωμένα: {n} / {total}"
+    "unlockedCounter": "Ξεκλειδωμένα: {n} / {total}",
+    "practiceBtn": "Εξάσκηση"
   },
   "da": {
     "grammarHubTitle": "Grammatik",
@@ -277,7 +290,8 @@ export const SPOKEN_ENGLISH_I18N = {
     "freeBadge": "Gratis",
     "adUnlock10Btn": "Lås 10 flere op med video",
     "proRemainingHint": "De resterende {n} eksempler fås med PRO",
-    "unlockedCounter": "Låst op: {n} / {total}"
+    "unlockedCounter": "Låst op: {n} / {total}",
+    "practiceBtn": "Øv"
   },
   "lv": {
     "grammarHubTitle": "Gramatika",
@@ -297,7 +311,8 @@ export const SPOKEN_ENGLISH_I18N = {
     "freeBadge": "Bezmaksas",
     "adUnlock10Btn": "Atbloķēt vēl 10 ar video",
     "proRemainingHint": "Atlikušie {n} piemēri pieejami PRO versijā",
-    "unlockedCounter": "Atbloķēti: {n} / {total}"
+    "unlockedCounter": "Atbloķēti: {n} / {total}",
+    "practiceBtn": "Treniņš"
   },
   "lt": {
     "grammarHubTitle": "Gramatika",
@@ -317,7 +332,8 @@ export const SPOKEN_ENGLISH_I18N = {
     "freeBadge": "Nemokamai",
     "adUnlock10Btn": "Atidaryti dar 10 už vaizdo įrašą",
     "proRemainingHint": "Likę {n} pavyzdžiai pasiekiami su PRO",
-    "unlockedCounter": "Atidaryta: {n} / {total}"
+    "unlockedCounter": "Atidaryta: {n} / {total}",
+    "practiceBtn": "Treniruotė"
   },
   "pt": {
     "grammarHubTitle": "Gramática",
@@ -337,7 +353,8 @@ export const SPOKEN_ENGLISH_I18N = {
     "freeBadge": "Grátis",
     "adUnlock10Btn": "Desbloquear mais 10 com vídeo",
     "proRemainingHint": "Os {n} exemplos restantes estão disponíveis no PRO",
-    "unlockedCounter": "Desbloqueado: {n} / {total}"
+    "unlockedCounter": "Desbloqueado: {n} / {total}",
+    "practiceBtn": "Praticar"
   },
   "sk": {
     "grammarHubTitle": "Gramatika",
@@ -357,7 +374,8 @@ export const SPOKEN_ENGLISH_I18N = {
     "freeBadge": "Zadarmo",
     "adUnlock10Btn": "Odomknúť ďalších 10 za video",
     "proRemainingHint": "Zvyšných {n} príkladov je dostupných v PRO",
-    "unlockedCounter": "Odomknuté: {n} / {total}"
+    "unlockedCounter": "Odomknuté: {n} / {total}",
+    "practiceBtn": "Precvičiť"
   },
   "sl": {
     "grammarHubTitle": "Slovnica",
@@ -377,7 +395,8 @@ export const SPOKEN_ENGLISH_I18N = {
     "freeBadge": "Brezplačno",
     "adUnlock10Btn": "Odkleni še 10 z videom",
     "proRemainingHint": "Preostalih {n} primerov je na voljo v PRO",
-    "unlockedCounter": "Odklenjeno: {n} / {total}"
+    "unlockedCounter": "Odklenjeno: {n} / {total}",
+    "practiceBtn": "Vadba"
   },
   "fi": {
     "grammarHubTitle": "Kielioppi",
@@ -397,7 +416,8 @@ export const SPOKEN_ENGLISH_I18N = {
     "freeBadge": "Ilmainen",
     "adUnlock10Btn": "Avaa 10 lisää videolla",
     "proRemainingHint": "Loput {n} esimerkkiä ovat saatavilla PRO-versiossa",
-    "unlockedCounter": "Avattu: {n} / {total}"
+    "unlockedCounter": "Avattu: {n} / {total}",
+    "practiceBtn": "Harjoittelu"
   },
   "hr": {
     "grammarHubTitle": "Gramatika",
@@ -417,7 +437,8 @@ export const SPOKEN_ENGLISH_I18N = {
     "freeBadge": "Besplatno",
     "adUnlock10Btn": "Otključaj još 10 uz video",
     "proRemainingHint": "Preostalih {n} primjera dostupno je uz PRO",
-    "unlockedCounter": "Otključano: {n} / {total}"
+    "unlockedCounter": "Otključano: {n} / {total}",
+    "practiceBtn": "Vježba"
   },
   "cs": {
     "grammarHubTitle": "Gramatika",
@@ -437,7 +458,8 @@ export const SPOKEN_ENGLISH_I18N = {
     "freeBadge": "Zdarma",
     "adUnlock10Btn": "Odemknout dalších 10 za video",
     "proRemainingHint": "Zbývajících {n} příkladů je dostupných v PRO",
-    "unlockedCounter": "Odemčeno: {n} / {total}"
+    "unlockedCounter": "Odemčeno: {n} / {total}",
+    "practiceBtn": "Procvičit"
   },
   "sv": {
     "grammarHubTitle": "Grammatik",
@@ -457,7 +479,8 @@ export const SPOKEN_ENGLISH_I18N = {
     "freeBadge": "Gratis",
     "adUnlock10Btn": "Lås upp 10 till med video",
     "proRemainingHint": "Resterande {n} exempel finns i PRO",
-    "unlockedCounter": "Upplåst: {n} / {total}"
+    "unlockedCounter": "Upplåst: {n} / {total}",
+    "practiceBtn": "Öva"
   },
   "et": {
     "grammarHubTitle": "Grammatika",
@@ -477,7 +500,8 @@ export const SPOKEN_ENGLISH_I18N = {
     "freeBadge": "Tasuta",
     "adUnlock10Btn": "Ava veel 10 videoga",
     "proRemainingHint": "Ülejäänud {n} näidet on saadaval PRO-s",
-    "unlockedCounter": "Avatud: {n} / {total}"
+    "unlockedCounter": "Avatud: {n} / {total}",
+    "practiceBtn": "Treening"
   },
   "hi": {
     "grammarHubTitle": "व्याकरण",
@@ -497,7 +521,8 @@ export const SPOKEN_ENGLISH_I18N = {
     "freeBadge": "मुफ़्त",
     "adUnlock10Btn": "वीडियो देखकर 10 और अनलॉक करें",
     "proRemainingHint": "बाकी {n} उदाहरण PRO में उपलब्ध हैं",
-    "unlockedCounter": "खुले: {n} / {total}"
+    "unlockedCounter": "खुले: {n} / {total}",
+    "practiceBtn": "अभ्यास करें"
   },
   "bn": {
     "grammarHubTitle": "ব্যাকরণ",
@@ -517,7 +542,8 @@ export const SPOKEN_ENGLISH_I18N = {
     "freeBadge": "ফ্রি",
     "adUnlock10Btn": "ভিডিও দেখে আরও ১০টি আনলক করুন",
     "proRemainingHint": "বাকি {n}টি উদাহরণ PRO-তে পাওয়া যাবে",
-    "unlockedCounter": "খোলা হয়েছে: {n} / {total}"
+    "unlockedCounter": "খোলা হয়েছে: {n} / {total}",
+    "practiceBtn": "অনুশীলন"
   },
   "ar": {
     "grammarHubTitle": "القواعد",
@@ -537,7 +563,8 @@ export const SPOKEN_ENGLISH_I18N = {
     "freeBadge": "مجاني",
     "adUnlock10Btn": "افتح 10 إضافية بمشاهدة فيديو",
     "proRemainingHint": "الأمثلة المتبقية ({n}) متاحة في PRO",
-    "unlockedCounter": "المفتوح: {n} / {total}"
+    "unlockedCounter": "المفتوح: {n} / {total}",
+    "practiceBtn": "تدرب"
   },
   "fa": {
     "grammarHubTitle": "دستور زبان",
@@ -557,7 +584,8 @@ export const SPOKEN_ENGLISH_I18N = {
     "freeBadge": "رایگان",
     "adUnlock10Btn": "باز کردن ۱۰ مورد دیگر با ویدیو",
     "proRemainingHint": "{n} مثال باقی‌مانده در نسخه PRO در دسترس است",
-    "unlockedCounter": "باز شده: {n} / {total}"
+    "unlockedCounter": "باز شده: {n} / {total}",
+    "practiceBtn": "تمرین"
   },
   "ur": {
     "grammarHubTitle": "گرامر",
@@ -577,7 +605,8 @@ export const SPOKEN_ENGLISH_I18N = {
     "freeBadge": "مفت",
     "adUnlock10Btn": "ویڈیو دیکھ کر مزید 10 کھولیں",
     "proRemainingHint": "باقی {n} مثالیں PRO ورژن میں دستیاب ہیں",
-    "unlockedCounter": "کھلے ہوئے: {n} / {total}"
+    "unlockedCounter": "کھلے ہوئے: {n} / {total}",
+    "practiceBtn": "مشق"
   },
   "id": {
     "grammarHubTitle": "Tata bahasa",
@@ -597,7 +626,8 @@ export const SPOKEN_ENGLISH_I18N = {
     "freeBadge": "Gratis",
     "adUnlock10Btn": "Buka 10 lagi dengan video",
     "proRemainingHint": "{n} contoh lainnya tersedia di versi PRO",
-    "unlockedCounter": "Terbuka: {n} / {total}"
+    "unlockedCounter": "Terbuka: {n} / {total}",
+    "practiceBtn": "Latihan"
   },
   "vi": {
     "grammarHubTitle": "Ngữ pháp",
@@ -617,7 +647,8 @@ export const SPOKEN_ENGLISH_I18N = {
     "freeBadge": "Miễn phí",
     "adUnlock10Btn": "Mở thêm 10 bằng video",
     "proRemainingHint": "{n} ví dụ còn lại có sẵn trong bản PRO",
-    "unlockedCounter": "Đã mở: {n} / {total}"
+    "unlockedCounter": "Đã mở: {n} / {total}",
+    "practiceBtn": "Luyện tập"
   },
   "th": {
     "grammarHubTitle": "ไวยากรณ์",
@@ -637,7 +668,8 @@ export const SPOKEN_ENGLISH_I18N = {
     "freeBadge": "ฟรี",
     "adUnlock10Btn": "ปลดล็อกเพิ่ม 10 ด้วยวิดีโอ",
     "proRemainingHint": "อีก {n} ตัวอย่างที่เหลือใช้ได้ใน PRO",
-    "unlockedCounter": "ปลดล็อกแล้ว: {n} / {total}"
+    "unlockedCounter": "ปลดล็อกแล้ว: {n} / {total}",
+    "practiceBtn": "ฝึกฝน"
   },
   "ko": {
     "grammarHubTitle": "문법",
@@ -657,7 +689,8 @@ export const SPOKEN_ENGLISH_I18N = {
     "freeBadge": "무료",
     "adUnlock10Btn": "영상 보고 10개 더 열기",
     "proRemainingHint": "나머지 {n}개 예문은 PRO에서 이용 가능합니다",
-    "unlockedCounter": "잠금 해제: {n} / {total}"
+    "unlockedCounter": "잠금 해제: {n} / {total}",
+    "practiceBtn": "연습하기"
   },
   "ja": {
     "grammarHubTitle": "文法",
@@ -677,7 +710,8 @@ export const SPOKEN_ENGLISH_I18N = {
     "freeBadge": "無料",
     "adUnlock10Btn": "動画を見てさらに10個解放",
     "proRemainingHint": "残りの{n}個はPRO版で利用できます",
-    "unlockedCounter": "解放済み: {n} / {total}"
+    "unlockedCounter": "解放済み: {n} / {total}",
+    "practiceBtn": "練習する"
   },
   "zh": {
     "grammarHubTitle": "语法",
@@ -697,7 +731,8 @@ export const SPOKEN_ENGLISH_I18N = {
     "freeBadge": "免费",
     "adUnlock10Btn": "看视频再解锁 10 条",
     "proRemainingHint": "其余 {n} 个例句在 PRO 版中解锁",
-    "unlockedCounter": "已解锁: {n} / {total}"
+    "unlockedCounter": "已解锁: {n} / {total}",
+    "practiceBtn": "练习"
   },
   "kk": {
     "grammarHubTitle": "Грамматика",
@@ -717,7 +752,8 @@ export const SPOKEN_ENGLISH_I18N = {
     "freeBadge": "Тегін",
     "adUnlock10Btn": "Видео көріп тағы 10 ашу",
     "proRemainingHint": "Қалған {n} мысал PRO нұсқасында қолжетімді",
-    "unlockedCounter": "Ашылды: {n} / {total}"
+    "unlockedCounter": "Ашылды: {n} / {total}",
+    "practiceBtn": "Жаттығу"
   }
 };
 

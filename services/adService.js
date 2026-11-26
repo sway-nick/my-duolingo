@@ -1,5 +1,5 @@
-import { getInterfaceLanguage } from './i18n.js?v=386.0';
-import { isProActive, consumeFreeShield, getFreeShieldsLeft } from './proState.js?v=386.0';
+import { getInterfaceLanguage } from './i18n.js?v=423.0';
+import { isProActive, consumeFreeShield, getFreeShieldsLeft } from './proState.js?v=423.0';
 /**
  * Google AdMob Integration Service
  * Manages Rewarded Ads, Interstitials, Banners and Shield mechanisms

@@ -1,10 +1,10 @@
-import { getLeaderboard, getCachedLeaderboard, getIsoWeekKey, formatCompactXp } from '../../services/api.js?v=386.0';
-import { getRecentWeekKeys, getTimeUntilMonthEnd } from '../../services/weekKey.js?v=386.0';
-import { getCurrentUser, getUserAvatar } from '../../services/authService.js?v=386.0';
-import { renderAuthModal } from '../auth/AuthModal.js?v=386.0';
-import { t, getInterfaceLanguage } from '../../services/i18n.js?v=386.0';
-import { isEmailVerified, sendEmailVerification, checkAndRefreshEmailVerification } from '../../services/firebase.js?v=386.0';
-import { isProActive } from '../../services/proState.js?v=386.0';
+import { getLeaderboard, getCachedLeaderboard, getIsoWeekKey, formatCompactXp } from '../../services/api.js?v=423.0';
+import { getRecentWeekKeys, getTimeUntilMonthEnd } from '../../services/weekKey.js?v=423.0';
+import { getCurrentUser, getUserAvatar } from '../../services/authService.js?v=423.0';
+import { renderAuthModal } from '../auth/AuthModal.js?v=423.0';
+import { t, getInterfaceLanguage } from '../../services/i18n.js?v=423.0';
+import { isEmailVerified, sendEmailVerification, checkAndRefreshEmailVerification } from '../../services/firebase.js?v=423.0';
+import { isProActive } from '../../services/proState.js?v=423.0';
 
 let currentPeriod = typeof localStorage !== 'undefined' ? (localStorage.getItem('myduo_leaderboard_period') || 'week') : 'week'; // 'week' or 'all'
 

@@ -1,7 +1,7 @@
 import {
   getMicroRulesStrings,
   MICRO_RULES_I18N,
-} from './grammarUiTranslations.js?v=386.0';
+} from './grammarUiTranslations.js?v=423.0';
 import {
   speakTextInLangAsync,
   stopAllAudio,
@@ -9,14 +9,18 @@ import {
   triggerHaptic,
   playSuccessSound,
   playErrorSound,
-} from '../../services/audioService.js?v=386.0';
-import { addWeeklyXP, getUserProgress } from '../../services/api.js?v=386.0';
-import { AdService } from '../../services/adService.js?v=386.0';
-import { isProActive, getTestLearnedCount, getMicroRuleQuota, PRO_LIMITS } from '../../services/proState.js?v=386.0';
-import { ProService } from '../../services/proService.js?v=386.0';
-import { getProStrings } from '../../services/proI18n.js?v=386.0';
-import { t, getInterfaceLanguage } from '../../services/i18n.js?v=386.0';
-import { formatQuizBlankedHtml, bindQuizWordPopover, closeQuizWordPopover } from './quizWordPopover.js?v=386.0';
+} from '../../services/audioService.js?v=423.0';
+import { addWeeklyXP, getUserProgress } from '../../services/api.js?v=423.0';
+import { AdService } from '../../services/adService.js?v=423.0';
+import { isProActive, getTestLearnedCount, getMicroRuleQuota, PRO_LIMITS } from '../../services/proState.js?v=423.0';
+import { ProService } from '../../services/proService.js?v=423.0';
+import { getProStrings } from '../../services/proI18n.js?v=423.0';
+import { t, getInterfaceLanguage } from '../../services/i18n.js?v=423.0';
+import { formatQuizBlankedHtml, bindQuizWordPopover, closeQuizWordPopover } from './quizWordPopover.js?v=423.0';
+import { WORD_ORDER_TILES_UI_I18N, WORD_ORDER_TILES_BY_RULE_ID } from './wordOrderTilesData.js?v=423.0';
+import { MISTAKE_CARD_LABELS_I18N, RULE_MISTAKE_CARDS } from './ruleMistakeCardsData.js?v=423.0';
+import { getRelatedLinksForMicroRule, getCrossLinkStrings } from './crossLinksMap.js?v=423.0';
+import { navigateWithReturn } from '../../services/navigationStack.js?v=423.0';
 
 export { MICRO_RULES_I18N, getMicroRulesStrings };
 
@@ -27,6 +31,7 @@ const STORAGE_KEY_CARD_IDX = 'myduo_microrules_card_idx';
 const STORAGE_KEY_LEVEL = 'myduo_microrules_level';
 const STORAGE_KEY_PAGE_PREFIX = 'myduo_microrules_page_';
 const RTL_LOCALES = new Set(['ar', 'fa', 'ur']);
+const TILES_ONLY_RULE_IDS = new Set([9, 157]);
 const PAGE_SIZE = 10;
 const levels = ['A1', 'A2', 'B1', 'B2'];
 
@@ -39,6 +44,10 @@ function escapeHtml(str) {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#39;');
+}
+
+function formatMistakeTextHtml(str) {
+  return escapeHtml(str).replace(/~~([^~]+)~~/g, '<s class="mr-strike">$1</s>');
 }
 
 function loadNumSetFromStorage(key) {
@@ -758,6 +767,257 @@ function getStylesHtml() {
         margin-top: 6px;
         font-variant-numeric: tabular-nums;
       }
+      .mr-mistakes-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin: 0 0 12px;
+      }
+      .mr-mistake-card {
+        background: rgba(148, 163, 184, 0.08);
+        border: 1px solid var(--border-color, rgba(148, 163, 184, 0.2));
+        border-radius: 12px;
+        padding: 9px 11px;
+      }
+      .mr-mistake-pair {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 5px;
+      }
+      .mr-mistake-side {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 6px;
+        padding: 5px 8px;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 700;
+      }
+      .mr-mistake-side.is-wrong {
+        background: rgba(239, 68, 68, 0.11);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+        color: #b91c1c;
+      }
+      .mr-mistake-side.is-right {
+        background: rgba(34, 197, 94, 0.12);
+        border: 1px solid rgba(34, 197, 94, 0.32);
+        color: #15803d;
+      }
+      body.dark-theme .mr-mistake-side.is-wrong,
+      .dark-theme .mr-mistake-side.is-wrong,
+      [data-theme="dark"] .mr-mistake-side.is-wrong {
+        color: #fca5a5;
+      }
+      body.dark-theme .mr-mistake-side.is-right,
+      .dark-theme .mr-mistake-side.is-right,
+      [data-theme="dark"] .mr-mistake-side.is-right {
+        color: #86efac;
+      }
+      .mr-mistake-label {
+        font-size: 11px;
+        font-weight: 800;
+        opacity: 0.9;
+      }
+      .mr-mistake-en {
+        direction: ltr;
+        text-align: left;
+        font-weight: 800;
+      }
+      .mr-strike {
+        text-decoration: line-through;
+        text-decoration-thickness: 2px;
+        color: #ef4444;
+        opacity: 0.9;
+      }
+      .mr-mistake-meaning {
+        font-size: 12px;
+        color: var(--text-muted);
+        margin-top: 6px;
+        line-height: 1.35;
+      }
+      .mr-tiles-section {
+        margin-top: 14px;
+        padding-top: 12px;
+        border-top: 1px dashed var(--border-color, rgba(148, 163, 184, 0.25));
+      }
+      .mr-tiles-heading {
+        font-size: 12.5px;
+        font-weight: 800;
+        color: var(--mr-accent);
+        margin-bottom: 3px;
+      }
+      .mr-tiles-sub {
+        font-size: 12px;
+        color: var(--text-muted);
+        margin-bottom: 9px;
+      }
+      .mr-tiles-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .mr-tiles-item {
+        background: rgba(148, 163, 184, 0.06);
+        border: 1.5px solid var(--border-color, rgba(148, 163, 184, 0.18));
+        border-radius: 12px;
+        padding: 10px 11px;
+        transition: border-color 0.15s ease, background 0.15s ease;
+      }
+      .mr-tiles-item.is-solved {
+        border-color: rgba(34, 197, 94, 0.45);
+        background: rgba(34, 197, 94, 0.07);
+      }
+      .mr-tiles-item.is-wrong {
+        border-color: rgba(239, 68, 68, 0.5);
+        animation: mrTileShake 0.28s ease;
+      }
+      @keyframes mrTileShake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-4px); }
+        75% { transform: translateX(4px); }
+      }
+      .mr-tiles-tr {
+        font-size: 12.5px;
+        font-weight: 700;
+        color: var(--text-main);
+        margin-bottom: 7px;
+      }
+      .mr-tiles-answer-row {
+        min-height: 40px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        padding: 7px 8px;
+        border-radius: 10px;
+        border: 1.5px dashed var(--border-color, rgba(148, 163, 184, 0.32));
+        background: var(--mr-surface-muted);
+        margin-bottom: 8px;
+        direction: ltr;
+        align-items: center;
+      }
+      .mr-tiles-item.is-solved .mr-tiles-answer-row {
+        border-style: solid;
+        border-color: rgba(34, 197, 94, 0.45);
+        background: rgba(34, 197, 94, 0.1);
+      }
+      .mr-tiles-placeholder {
+        font-size: 12px;
+        color: var(--text-muted);
+        opacity: 0.75;
+      }
+      .mr-tiles-bank {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-bottom: 8px;
+        direction: ltr;
+      }
+      .mr-tile-chip {
+        border: 1.5px solid var(--border-color, rgba(148, 163, 184, 0.3));
+        background: var(--card-bg, rgba(30, 41, 59, 0.9));
+        color: var(--text-main);
+        font-size: 13px;
+        font-weight: 700;
+        padding: 5px 10px;
+        border-radius: 9px;
+        cursor: pointer;
+        transition: transform 0.1s ease, opacity 0.15s ease, border-color 0.15s ease;
+      }
+      .mr-tile-chip:active:not(:disabled) { transform: scale(0.95); }
+      .mr-tile-chip.is-placed {
+        background: var(--mr-accent-soft);
+        border-color: var(--mr-accent);
+        color: var(--mr-accent);
+      }
+      .mr-tiles-item.is-solved .mr-tile-chip.is-placed {
+        background: rgba(34, 197, 94, 0.16);
+        border-color: #22c55e;
+        color: #16a34a;
+      }
+      body.dark-theme .mr-tiles-item.is-solved .mr-tile-chip.is-placed,
+      .dark-theme .mr-tiles-item.is-solved .mr-tile-chip.is-placed,
+      [data-theme="dark"] .mr-tiles-item.is-solved .mr-tile-chip.is-placed {
+        color: #86efac;
+      }
+      .mr-tile-chip.is-used {
+        opacity: 0.28;
+        cursor: default;
+        pointer-events: none;
+      }
+      .mr-tiles-actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .mr-tile-act-btn {
+        border: 1.5px solid var(--border-color, rgba(148, 163, 184, 0.28));
+        background: var(--card-bg, rgba(30, 41, 59, 0.85));
+        color: var(--text-main);
+        font-size: 12px;
+        font-weight: 800;
+        padding: 6px 12px;
+        border-radius: 9px;
+        cursor: pointer;
+      }
+      .mr-tile-act-btn.is-check {
+        background: var(--mr-accent);
+        border-color: var(--mr-accent);
+        color: #ffffff;
+      }
+      body.dark-theme .mr-tile-act-btn.is-check,
+      .dark-theme .mr-tile-act-btn.is-check,
+      [data-theme="dark"] .mr-tile-act-btn.is-check {
+        color: #0f172a;
+      }
+      .mr-tile-act-btn:disabled {
+        opacity: 0.45;
+        cursor: default;
+      }
+      .mr-tiles-feedback {
+        font-size: 12px;
+        font-weight: 700;
+        margin-top: 6px;
+      }
+      .mr-tiles-feedback.is-ok { color: #16a34a; }
+      .mr-tiles-feedback.is-wrong { color: #ef4444; }
+      body.dark-theme .mr-tiles-feedback.is-ok,
+      .dark-theme .mr-tiles-feedback.is-ok,
+      [data-theme="dark"] .mr-tiles-feedback.is-ok {
+        color: #4ade80;
+      }
+      .mr-crosslinks {
+        margin-top: 12px;
+        padding-top: 10px;
+        border-top: 1px dashed var(--border-color, rgba(148, 163, 184, 0.24));
+      }
+      .mr-crosslinks-heading {
+        font-size: 12px;
+        font-weight: 800;
+        color: var(--text-muted);
+        margin-bottom: 6px;
+      }
+      .mr-crosslinks-wrap {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      .mr-crosslink-chip {
+        border: 1px solid var(--mr-accent-border);
+        background: var(--mr-accent-soft);
+        color: var(--mr-accent);
+        font-size: 12px;
+        font-weight: 700;
+        padding: 5px 10px;
+        border-radius: 999px;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+      }
+      .mr-crosslink-chip:active { transform: scale(0.97); }
     </style>
   `;
 }
@@ -805,7 +1065,12 @@ export async function renderMicroRulesView(containerSelector = '#app-content', o
     : containerSelector;
   if (!container) return;
 
-  const { onBack = () => {} } = options;
+  const {
+    onBack = () => {},
+    initialRuleId = null,
+    initialLevel = null,
+    onNavigateLink = null,
+  } = options;
   if (typeof window !== 'undefined' && window.trackScreen) {
     window.trackScreen('micro_rules', 'MicroRulesView');
   }
@@ -813,6 +1078,10 @@ export async function renderMicroRulesView(containerSelector = '#app-content', o
   const baseLang = rawLang.split('-')[0];
   const isRtl = RTL_LOCALES.has(baseLang);
   const s = getMicroRulesStrings(rawLang);
+  const tileUi = WORD_ORDER_TILES_UI_I18N[rawLang] || WORD_ORDER_TILES_UI_I18N[baseLang] || WORD_ORDER_TILES_UI_I18N.en;
+  const mistakeLabels = MISTAKE_CARD_LABELS_I18N[rawLang] || MISTAKE_CARD_LABELS_I18N[baseLang] || MISTAKE_CARD_LABELS_I18N.en;
+  const crossStrings = typeof getCrossLinkStrings === 'function' ? getCrossLinkStrings(rawLang) : {};
+  const relatedTopicsHeading = crossStrings?.relatedHeading || crossStrings?.relatedTopics || (baseLang === 'ru' ? 'Связанные темы' : 'Related topics');
 
   if (!cachedDataMod) {
     container.innerHTML = `
@@ -830,13 +1099,13 @@ export async function renderMicroRulesView(containerSelector = '#app-content', o
       try { stopAllAudio(); } catch (_) {}
       onBack();
     });
-    cachedDataMod = await import('./microRulesData.js?v=386.0');
+    cachedDataMod = await import('./microRulesData.js?v=423.0');
     if (!container.isConnected) return;
   }
 
   const { MICRO_RULES, getLocalizedMicroRule, getTopicTitle } = cachedDataMod;
 
-  let activeLevel = loadSavedLevel();
+  let activeLevel = (initialLevel && levels.includes(initialLevel)) ? initialLevel : loadSavedLevel();
   let currentPage = options._currentPage !== undefined
     ? Number(options._currentPage)
     : loadSavedMicroRulesPage(activeLevel);
@@ -844,9 +1113,25 @@ export async function renderMicroRulesView(containerSelector = '#app-content', o
   const doneSet = loadDoneSet();
   const unlockedSet = loadUnlockedSet();
   const quizDoneSet = loadQuizDoneSet();
-  const expandedDoneSet = new Set();
+  const expandedDoneSet = new Set(Array.isArray(options._restoreExpandedIds) ? options._restoreExpandedIds.map(Number) : []);
   const solvedQuestions = new Map();
+  const tileStates = new Map();
+  const tileSolvedMap = new Map();
   let audioSeq = 0;
+
+  if (initialRuleId !== null && initialRuleId !== undefined) {
+    const targetRuleId = Number(initialRuleId);
+    const targetRule = MICRO_RULES.find((r) => r.id === targetRuleId);
+    if (targetRule) {
+      activeLevel = targetRule.level;
+      const levelRules = MICRO_RULES.filter((r) => r.level === activeLevel);
+      const indexInLevel = levelRules.findIndex((r) => r.id === targetRuleId);
+      currentPage = Math.floor(Math.max(0, indexInLevel) / PAGE_SIZE) + 1;
+      saveLevel(activeLevel);
+      saveSavedMicroRulesPage(activeLevel, currentPage);
+      expandedDoneSet.add(targetRuleId);
+    }
+  }
 
   function playExample(enText, btnEl) {
     const seq = ++audioSeq;
@@ -965,6 +1250,28 @@ export async function renderMicroRulesView(containerSelector = '#app-content', o
 
         <h3 class="mr-rule-title">${escapeHtml(displayTitle)}</h3>
         <p class="mr-rule-text">${escapeHtml(loc.rule)}</p>
+        ${Array.isArray(RULE_MISTAKE_CARDS[item.id]) && RULE_MISTAKE_CARDS[item.id].length > 0 ? `
+          <div class="mr-mistakes-list">
+            ${RULE_MISTAKE_CARDS[item.id].map((pair) => {
+              const meaning = pair.meaning?.[rawLang] || pair.meaning?.[baseLang] || pair.meaning?.en || pair.meaning?.ru || '';
+              return `
+                <div class="mr-mistake-card">
+                  <div class="mr-mistake-pair">
+                    <div class="mr-mistake-side is-wrong">
+                      <span class="mr-mistake-label">${escapeHtml(mistakeLabels.wrongLabel)}</span>
+                      <span class="mr-mistake-en">${formatMistakeTextHtml(pair.wrong)}</span>
+                    </div>
+                    <div class="mr-mistake-side is-right">
+                      <span class="mr-mistake-label">${escapeHtml(mistakeLabels.rightLabel)}</span>
+                      <span class="mr-mistake-en">${escapeHtml(pair.right)}</span>
+                    </div>
+                  </div>
+                  ${meaning ? `<div class="mr-mistake-meaning">${escapeHtml(meaning)}</div>` : ''}
+                </div>
+              `;
+            }).join('')}
+          </div>
+        ` : ''}
         ${loc.table && Array.isArray(loc.table.rows) && loc.table.rows.length > 0 ? `
           <div class="mr-table-scroll">
             <table class="mr-ref-table">
@@ -982,7 +1289,107 @@ export async function renderMicroRulesView(containerSelector = '#app-content', o
           </div>
         ` : ''}
 
-        ${Array.isArray(loc.quiz) && loc.quiz.length > 0 ? `
+        ${(() => {
+          const relLinks = typeof getRelatedLinksForMicroRule === 'function'
+            ? (getRelatedLinksForMicroRule(item.id, item.topic) || [])
+            : [];
+          if (!Array.isArray(relLinks) || relLinks.length === 0) return '';
+          return `
+            <div class="mr-crosslinks">
+              <div class="mr-crosslinks-heading">🔗 ${escapeHtml(relatedTopicsHeading)}</div>
+              <div class="mr-crosslinks-wrap">
+                ${relLinks.map((lnk, lIdx) => {
+                  const lbl = (lnk?.labelKey && crossStrings?.[lnk.labelKey])
+                    || (typeof lnk?.label === 'string' ? lnk.label : '')
+                    || lnk?.targetId
+                    || '';
+                  const iconHtml = lnk?.icon ? `<span>${escapeHtml(lnk.icon)}</span>` : '<span>🔗</span>';
+                  const hasLeadingEmoji = /^[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/u.test(lbl);
+                  return `
+                    <button type="button" class="mr-crosslink-chip" data-mr-crosslink="${item.id}:${lIdx}">
+                      ${hasLeadingEmoji ? '' : iconHtml}
+                      <span>${escapeHtml(lbl)}</span>
+                      <span aria-hidden="true">↗</span>
+                    </button>
+                  `;
+                }).join('')}
+              </div>
+            </div>
+          `;
+        })()}
+
+        ${Array.isArray(WORD_ORDER_TILES_BY_RULE_ID[item.id]) && WORD_ORDER_TILES_BY_RULE_ID[item.id].length > 0 ? `
+          <div class="mr-tiles-section">
+            <div class="mr-quiz-header">
+              <div class="mr-tiles-heading">${escapeHtml(tileUi.heading)}${TILES_ONLY_RULE_IDS.has(item.id) ? ' (+5 XP)' : ''}</div>
+              ${TILES_ONLY_RULE_IDS.has(item.id) && isQuizDone ? `<span class="mr-quiz-badge">${escapeHtml(s.quizDoneBadge || 'Пройдено ✓ +5 XP')}</span>` : ''}
+            </div>
+            <div class="mr-tiles-sub">${escapeHtml(tileUi.instruction)}</div>
+            <div class="mr-tiles-list">
+              ${WORD_ORDER_TILES_BY_RULE_ID[item.id].map((ex, exIdx) => {
+                const stateKey = `${item.id}:${ex.id}`;
+                const solvedSetTiles = tileSolvedMap.get(item.id);
+                const isTileSolved = isQuizDone || Boolean(solvedSetTiles && solvedSetTiles.has(ex.id));
+                const st = tileStates.get(stateKey) || { placed: [], status: isTileSolved ? 'solved' : 'idle' };
+                const effectiveStatus = isTileSolved ? 'solved' : st.status;
+                const usedSet = new Set(st.placed);
+                const trText = ex.tr?.[rawLang] || ex.tr?.[baseLang] || ex.tr?.en || ex.tr?.ru || '';
+                const placedTokens = isTileSolved && st.placed.length === 0
+                  ? ex.answerTokens.map((tok, i) => ({ tok, idx: i }))
+                  : st.placed.map((tileIdx) => ({ tok: ex.tiles[tileIdx], idx: tileIdx }));
+                return `
+                  <div class="mr-tiles-item ${effectiveStatus === 'solved' ? 'is-solved' : (effectiveStatus === 'wrong' ? 'is-wrong' : '')}" data-tile-ex-wrap="${item.id}:${escapeHtml(ex.id)}">
+                    ${trText ? `<div class="mr-tiles-tr">${exIdx + 1}. ${escapeHtml(trText)}</div>` : ''}
+                    <div class="mr-tiles-answer-row">
+                      ${placedTokens.length > 0
+                        ? placedTokens.map((p, pos) => `
+                            <button
+                              type="button"
+                              class="mr-tile-chip is-placed"
+                              data-tile-remove="${item.id}:${escapeHtml(ex.id)}:${pos}"
+                              ${effectiveStatus === 'solved' ? 'disabled' : ''}
+                            >${escapeHtml(p.tok)}</button>
+                          `).join('')
+                        : `<span class="mr-tiles-placeholder">...</span>`
+                      }
+                    </div>
+                    <div class="mr-tiles-bank">
+                      ${ex.tiles.map((tok, tileIdx) => {
+                        const isUsed = isTileSolved || usedSet.has(tileIdx);
+                        return `
+                          <button
+                            type="button"
+                            class="mr-tile-chip ${isUsed ? 'is-used' : ''}"
+                            data-tile-pick="${item.id}:${escapeHtml(ex.id)}:${tileIdx}"
+                            ${isUsed ? 'disabled' : ''}
+                          >${escapeHtml(tok)}</button>
+                        `;
+                      }).join('')}
+                    </div>
+                    <div class="mr-tiles-actions">
+                      <button
+                        type="button"
+                        class="mr-tile-act-btn is-check"
+                        data-tile-check="${item.id}:${escapeHtml(ex.id)}"
+                        ${effectiveStatus === 'solved' || st.placed.length !== ex.tiles.length ? 'disabled' : ''}
+                      >${escapeHtml(tileUi.checkBtn)}</button>
+                      <button
+                        type="button"
+                        class="mr-tile-act-btn"
+                        data-tile-reset="${item.id}:${escapeHtml(ex.id)}"
+                        ${effectiveStatus === 'solved' || st.placed.length === 0 ? 'disabled' : ''}
+                      >${escapeHtml(tileUi.resetBtn)}</button>
+                    </div>
+                    ${effectiveStatus === 'solved' ? `<div class="mr-tiles-feedback is-ok">${escapeHtml(tileUi.correctMsg)}</div>` : ''}
+                    ${effectiveStatus === 'wrong' ? `<div class="mr-tiles-feedback is-wrong">${escapeHtml(tileUi.wrongMsg)}</div>` : ''}
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          </div>
+        ` : ''}
+
+        ${!TILES_ONLY_RULE_IDS.has(item.id) && Array.isArray(loc.quiz) && loc.quiz.length > 0 ? `
           <div class="mr-quiz-section">
             <div class="mr-quiz-header">
               <span class="mr-quiz-title">${escapeHtml(s.quizHeading || '⚡ Мини-тест (+5 XP)')}</span>
@@ -1106,6 +1513,9 @@ export async function renderMicroRulesView(containerSelector = '#app-content', o
         updateDynamicContent();
         if (markingDone) {
           scrollRuleCardToTop(id);
+          if (typeof window !== 'undefined' && typeof window._checkCefrMilestoneNudge === 'function') {
+            setTimeout(() => window._checkCefrMilestoneNudge(), 350);
+          }
         } else if (typeof window !== 'undefined' && typeof window.scrollTo === 'function') {
           window.scrollTo(0, prevScrollY);
         }
@@ -1137,6 +1547,34 @@ export async function renderMicroRulesView(containerSelector = '#app-content', o
       });
     });
 
+    function checkAndCompleteRuleQuiz(ruleId, item) {
+      const isTilesOnly = TILES_ONLY_RULE_IDS.has(ruleId);
+      const regularSolvedCount = solvedQuestions.get(ruleId)?.size || 0;
+      const regularDone = isTilesOnly || regularSolvedCount >= (item.quiz?.length || 0);
+      const tileList = WORD_ORDER_TILES_BY_RULE_ID[ruleId] || [];
+      const tileDoneCount = tileSolvedMap.get(ruleId)?.size || 0;
+      const tilesDone = tileDoneCount >= tileList.length;
+      if (regularDone && tilesDone && !quizDoneSet.has(ruleId)) {
+        quizDoneSet.add(ruleId);
+        saveQuizDoneSet(quizDoneSet);
+        if (!doneSet.has(ruleId)) {
+          doneSet.add(ruleId);
+          saveDoneSet(doneSet);
+        }
+        expandedDoneSet.delete(ruleId);
+        try { addWeeklyXP(5); } catch (_) {}
+        if (typeof window !== 'undefined' && window.trackEvent) {
+          window.trackEvent('microrule_completed', { rule_id: ruleId });
+        }
+        updateProgressPill();
+        if (typeof window !== 'undefined' && typeof window._checkCefrMilestoneNudge === 'function') {
+          setTimeout(() => window._checkCefrMilestoneNudge(), 350);
+        }
+        return true;
+      }
+      return false;
+    }
+
     rootEl.querySelectorAll('[data-mr-quiz-opt]').forEach((quizBtn) => {
       quizBtn.addEventListener('click', () => {
         if (quizBtn.disabled) return;
@@ -1158,22 +1596,7 @@ export async function renderMicroRulesView(containerSelector = '#app-content', o
           try { playSuccessSound(); } catch (_) {}
           try { triggerHaptic('selection'); } catch (_) {}
 
-          let justCompletedRule = false;
-          if (solvedSet.size >= item.quiz.length && !quizDoneSet.has(ruleId)) {
-            quizDoneSet.add(ruleId);
-            saveQuizDoneSet(quizDoneSet);
-            if (!doneSet.has(ruleId)) {
-              doneSet.add(ruleId);
-              saveDoneSet(doneSet);
-            }
-            expandedDoneSet.delete(ruleId);
-            justCompletedRule = true;
-            try { addWeeklyXP(5); } catch (_) {}
-            if (typeof window !== 'undefined' && window.trackEvent) {
-              window.trackEvent('microrule_completed', { rule_id: ruleId });
-            }
-            updateProgressPill();
-          }
+          const justCompletedRule = checkAndCompleteRuleQuiz(ruleId, item);
           const prevScrollY = typeof window !== 'undefined' ? window.scrollY : 0;
           updateDynamicContent();
           if (justCompletedRule) {
@@ -1187,6 +1610,117 @@ export async function renderMicroRulesView(containerSelector = '#app-content', o
           try { playErrorSound(); } catch (_) {}
           try { triggerHaptic('selection'); } catch (_) {}
         }
+      });
+    });
+
+    const handleTileMutate = (ruleId, exId, mutator) => {
+      const tileList = WORD_ORDER_TILES_BY_RULE_ID[ruleId] || [];
+      const ex = tileList.find((x) => x.id === exId);
+      const item = MICRO_RULES.find((r) => r.id === ruleId);
+      if (!ex || !item) return;
+      const stateKey = `${ruleId}:${exId}`;
+      const cur = tileStates.get(stateKey) || { placed: [], status: 'idle' };
+      if (cur.status === 'solved' || quizDoneSet.has(ruleId)) return;
+      const next = mutator(cur, ex, item);
+      if (!next) return;
+      tileStates.set(stateKey, next);
+      let justCompletedRule = false;
+      if (next.status === 'solved') {
+        let sSet = tileSolvedMap.get(ruleId);
+        if (!sSet) {
+          sSet = new Set();
+          tileSolvedMap.set(ruleId, sSet);
+        }
+        sSet.add(exId);
+        justCompletedRule = checkAndCompleteRuleQuiz(ruleId, item);
+      }
+      const prevScrollY = typeof window !== 'undefined' ? window.scrollY : 0;
+      updateDynamicContent();
+      if (justCompletedRule) {
+        scrollRuleCardToTop(ruleId);
+      } else if (typeof window !== 'undefined' && typeof window.scrollTo === 'function') {
+        window.scrollTo(0, prevScrollY);
+      }
+    };
+
+    rootEl.querySelectorAll('[data-tile-pick]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const [rStr, exId, idxStr] = (btn.getAttribute('data-tile-pick') || '').split(':');
+        const ruleId = Number(rStr);
+        const tileIdx = Number(idxStr);
+        handleTileMutate(ruleId, exId, (cur) => {
+          if (cur.placed.includes(tileIdx)) return null;
+          return { placed: [...cur.placed, tileIdx], status: 'idle' };
+        });
+      });
+    });
+
+    rootEl.querySelectorAll('[data-tile-remove]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const [rStr, exId, posStr] = (btn.getAttribute('data-tile-remove') || '').split(':');
+        const ruleId = Number(rStr);
+        const pos = Number(posStr);
+        handleTileMutate(ruleId, exId, (cur) => ({
+          placed: cur.placed.filter((_, i) => i !== pos),
+          status: 'idle',
+        }));
+      });
+    });
+
+    rootEl.querySelectorAll('[data-tile-reset]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const [rStr, exId] = (btn.getAttribute('data-tile-reset') || '').split(':');
+        handleTileMutate(Number(rStr), exId, () => ({ placed: [], status: 'idle' }));
+      });
+    });
+
+    rootEl.querySelectorAll('[data-tile-check]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const [rStr, exId] = (btn.getAttribute('data-tile-check') || '').split(':');
+        handleTileMutate(Number(rStr), exId, (cur, ex) => {
+          const built = cur.placed.map((i) => ex.tiles[i]).join(' ');
+          const expected = ex.answerTokens.join(' ');
+          if (built === expected) {
+            try { playSuccessSound(); } catch (_) {}
+            try { triggerHaptic('selection'); } catch (_) {}
+            return { placed: cur.placed, status: 'solved' };
+          }
+          try { playErrorSound(); } catch (_) {}
+          try { triggerHaptic('selection'); } catch (_) {}
+          return { placed: cur.placed, status: 'wrong' };
+        });
+      });
+    });
+
+    rootEl.querySelectorAll('[data-mr-crosslink]').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const [rStr, idxStr] = (btn.getAttribute('data-mr-crosslink') || '').split(':');
+        const ruleId = Number(rStr);
+        const linkIdx = Number(idxStr);
+        const item = MICRO_RULES.find((r) => r.id === ruleId);
+        const relLinks = typeof getRelatedLinksForMicroRule === 'function'
+          ? (getRelatedLinksForMicroRule(ruleId, item?.topic || '') || [])
+          : [];
+        const link = relLinks[linkIdx];
+        if (!link) return;
+        const savedState = {
+          activeLevel,
+          currentPage,
+          expandedIds: [...expandedDoneSet],
+          scrollY: typeof window !== 'undefined' ? window.scrollY : 0,
+        };
+        const restoreFn = () => {
+          renderMicroRulesView(container, {
+            ...options,
+            initialRuleId: ruleId,
+            initialLevel: savedState.activeLevel,
+            _currentPage: savedState.currentPage,
+            _restoreExpandedIds: savedState.expandedIds,
+            _restoreScrollY: savedState.scrollY,
+          });
+        };
+        navigateWithReturn(restoreFn, () => onNavigateLink?.(link));
       });
     });
 
@@ -1378,4 +1912,18 @@ export async function renderMicroRulesView(containerSelector = '#app-content', o
   }
 
   updateDynamicContent();
+  if (typeof options._restoreScrollY === 'number' && typeof window !== 'undefined' && typeof window.scrollTo === 'function') {
+    if (typeof requestAnimationFrame === 'function') {
+      requestAnimationFrame(() => window.scrollTo(0, options._restoreScrollY));
+    } else {
+      window.scrollTo(0, options._restoreScrollY);
+    }
+  } else if (initialRuleId !== null && initialRuleId !== undefined) {
+    const targetRuleId = Number(initialRuleId);
+    if (typeof requestAnimationFrame === 'function') {
+      requestAnimationFrame(() => scrollRuleCardToTop(targetRuleId));
+    } else {
+      scrollRuleCardToTop(targetRuleId);
+    }
+  }
 }

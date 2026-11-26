@@ -1,7 +1,7 @@
-import { getInterfaceLanguage } from '../../services/i18n.js?v=386.0';
-import { openGooglePlayStore } from './ReviewFunnelModal.js?v=386.0';
-import { submitSurveyFeedbackApi } from '../../services/api.js?v=386.0';
-import { StorageService } from '../../services/storageService.js?v=386.0';
+import { getInterfaceLanguage } from '../../services/i18n.js?v=423.0';
+import { openGooglePlayStore } from './ReviewFunnelModal.js?v=423.0';
+import { submitSurveyFeedbackApi } from '../../services/api.js?v=423.0';
+import { StorageService } from '../../services/storageService.js?v=423.0';
 
 export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
   "en": {

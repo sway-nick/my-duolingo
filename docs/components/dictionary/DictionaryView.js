@@ -1,7 +1,7 @@
-import { speakWord, triggerHaptic } from '../../services/audioService.js?v=386.0';
-import { toggleFavoriteApi, getUserFavorites, getUserProgress, isWordMastered, addCustomWord, suggestTranslations, batchAddCustomWords, scanDocumentImage, getUserSettings, saveUserSettings, saveUserWordOverride, getLoadedWordsSnapshot } from '../../services/api.js?v=386.0';
-import { t, getInterfaceLanguage, getWordTranslation, getWordNotes, getUserWordOverride } from '../../services/i18n.js?v=386.0';
-import { AdService } from '../../services/adService.js?v=386.0';
+import { speakWord, triggerHaptic } from '../../services/audioService.js?v=423.0';
+import { toggleFavoriteApi, getUserFavorites, getUserProgress, isWordMastered, addCustomWord, suggestTranslations, batchAddCustomWords, scanDocumentImage, getUserSettings, saveUserSettings, saveUserWordOverride, getLoadedWordsSnapshot } from '../../services/api.js?v=423.0';
+import { t, getInterfaceLanguage, getWordTranslation, getWordNotes, getUserWordOverride } from '../../services/i18n.js?v=423.0';
+import { AdService } from '../../services/adService.js?v=423.0';
 
 function compressImageFile(file, maxDimension = 2048, quality = 0.88) {
   return new Promise((resolve, reject) => {

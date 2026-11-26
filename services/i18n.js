@@ -1,5 +1,5 @@
-import { WIDGET_TRANSLATIONS } from './widgetTranslations.js?v=386.0';
-import { isRtlLocale, SUPPORTED_LOCALES, SUPPORTED_LOCALE_CODES, isLocaleSupported } from '../config/locales.js?v=386.0';
+import { WIDGET_TRANSLATIONS } from './widgetTranslations.js?v=423.0';
+import { isRtlLocale, SUPPORTED_LOCALES, SUPPORTED_LOCALE_CODES, isLocaleSupported } from '../config/locales.js?v=423.0';
 
 export { SUPPORTED_LOCALES, SUPPORTED_LOCALE_CODES, isLocaleSupported };
 
@@ -14849,6 +14849,41 @@ export function isItTermWord(wordObj) {
   return Boolean(wText && IT_TERM_WORD_KEYS_SET.has(wText));
 }
 
+const FINANCE_TERM_WORD_KEYS_SET = new Set([
+  "account", "allowance", "atm", "balance", "bank", "banknote", "bargain", "bill",
+  "bonus", "borrow", "budget", "cash", "cashback", "charge", "check", "coin",
+  "commission", "credit card", "consumer", "contract", "cost", "credit", "currency", "customer",
+  "debit", "debt", "deposit", "discount", "donate", "earn", "economy", "expense",
+  "fee", "finance", "fine", "fund", "grant", "guarantee", "income", "installment",
+  "insurance", "interest", "invest", "invoice", "lend", "loan", "loss", "market",
+  "money", "mortgage", "overdraft", "owe", "pay", "paycheck", "payment", "payroll",
+  "pension", "percent", "pin", "poverty", "price", "profit", "purchase", "quote",
+  "rate", "receipt", "refund", "rent", "repay", "retail", "sale", "save",
+  "savings", "spend", "statement", "tax", "transfer", "wage", "wealth", "withdrawal",
+  "accounting", "acquisition", "allocation", "amortization", "annuity", "appraisal", "arbitrage", "arrears",
+  "auction", "audit", "bailout", "bankruptcy", "bear market", "beneficiary", "bid", "bond",
+  "boom", "broker", "brokerage", "bull market", "buyout", "capital", "cash flow", "central bank",
+  "clearing", "collateral", "commodity", "compliance", "compound interest", "consolidation", "corporate", "coupon",
+  "credit score", "creditor", "crisis", "crowdfunding", "cryptocurrency", "customs", "debtor", "default",
+  "deficit", "deflation", "depreciation", "derivative", "devaluation", "diversification", "dividend", "downturn",
+  "duty", "earnings", "enterprise", "equity", "escrow", "estate", "exchange", "exchange rate",
+  "excise", "expenditure", "export", "fiscal", "fixed income", "fluctuation", "forecast", "forex",
+  "franchise", "fraud", "futures", "gdp", "gross", "growth", "guarantor", "hedge",
+  "import", "inflation", "insolvency", "interest rate", "inventory", "investment", "investor", "ipo",
+  "ledger", "leverage", "liability", "liquidation", "liquidity", "margin", "maturity", "merger",
+  "monetary", "monopoly", "mutual fund", "net", "net worth", "option", "overhead", "portfolio",
+  "premium", "principal", "recession", "remittance", "reserve", "return", "revenue", "risk",
+  "royalty", "share", "shareholder", "solvency", "speculation", "spread", "stimulus", "stock",
+  "subsidy", "surplus", "tariff", "taxation", "treasury", "turnover", "valuation", "venture capital"
+]);
+
+export function isFinanceTermWord(wordObj) {
+  if (!wordObj) return false;
+  if (wordObj.finance_note === true || String(wordObj.category || '').trim() === 'Finance') return true;
+  const wText = wordObj.word ? String(wordObj.word).toLowerCase().trim() : '';
+  return Boolean(wText && FINANCE_TERM_WORD_KEYS_SET.has(wText));
+}
+
 export function getWordNotes(wordObj, explicitLang, options = {}) {
   if (!wordObj) return '';
 
@@ -14873,8 +14908,15 @@ export function getWordNotes(wordObj, explicitLang, options = {}) {
     } catch (e) {}
   }
 
-  // 2. Isolate IT collection notes from the general Dictionary and general Training
-  if (options && options.hideItNotes && isItTermWord(wordObj)) {
+  // 2. Isolate IT & Finance specialized collection notes from the general Dictionary and general Training
+  const hideIt = Boolean(options && options.hideItNotes);
+  const hideFinance = options && options.hideFinanceNotes !== undefined
+    ? Boolean(options.hideFinanceNotes)
+    : hideIt;
+  if (hideIt && isItTermWord(wordObj)) {
+    return '';
+  }
+  if (hideFinance && isFinanceTermWord(wordObj)) {
     return '';
   }
 

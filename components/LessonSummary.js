@@ -1,8 +1,8 @@
-import { AudioService } from '../services/audioService.js?v=386.0';
-import { StorageService } from '../services/storageService.js?v=386.0';
-import { t } from '../services/i18n.js?v=386.0';
-import { checkAndPromptReviewFunnel } from './modals/ReviewFunnelModal.js?v=386.0';
-import { showFairyTaleSurveyModal, getFairyTaleStrings } from './modals/FairyTaleSurveyModal.js?v=386.0';
+import { AudioService } from '../services/audioService.js?v=423.0';
+import { StorageService } from '../services/storageService.js?v=423.0';
+import { t } from '../services/i18n.js?v=423.0';
+import { checkAndPromptReviewFunnel } from './modals/ReviewFunnelModal.js?v=423.0';
+import { showFairyTaleSurveyModal, getFairyTaleStrings } from './modals/FairyTaleSurveyModal.js?v=423.0';
 
 export function renderLessonSummary(container, results) {
     if (!container) return;

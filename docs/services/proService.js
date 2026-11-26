@@ -4,9 +4,9 @@ import {
   setEntitlement,
   clearEntitlement,
   getEntitlement,
-} from './proState.js?v=386.0';
-import { getEffectiveUserId } from './authService.js?v=386.0';
-import { redeemPromoCodeFirestore, fetchProEntitlementFirestore } from './firebase.js?v=386.0';
+} from './proState.js?v=423.0';
+import { getEffectiveUserId } from './authService.js?v=423.0';
+import { redeemPromoCodeFirestore, fetchProEntitlementFirestore } from './firebase.js?v=423.0';
 
 export const PRO_PRODUCT_ID = 'eb_pro_lifetime';
 

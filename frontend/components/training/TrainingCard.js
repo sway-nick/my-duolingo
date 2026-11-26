@@ -21,13 +21,13 @@ import {
   updateMediaSessionStatus,
   primeAudioForAutoplay,
   triggerHaptic,
-} from '../../services/audioService.js?v=386.0';
-import { isProActive, getFreeShieldsLeft } from '../../services/proState.js?v=386.0';
-import { getProStrings } from '../../services/proI18n.js?v=386.0';
+} from '../../services/audioService.js?v=423.0';
+import { isProActive, getFreeShieldsLeft } from '../../services/proState.js?v=423.0';
+import { getProStrings } from '../../services/proI18n.js?v=423.0';
 import {
   isCustomKeyboardEnabled,
   renderEnglishKeyboard,
-} from './EnglishKeyboard.js?v=386.0';
+} from './EnglishKeyboard.js?v=423.0';
 import {
   saveProgress,
   toggleFavoriteApi,
@@ -40,12 +40,12 @@ import {
   transcribeAudio,
   transcribePingAudio,
   getLoadedWordsSnapshot,
-} from '../../services/api.js?v=386.0';
-import { t, getInterfaceLanguage, getWordTranslation, getWordNotes } from '../../services/i18n.js?v=386.0';
-import { AdService } from '../../services/adService.js?v=386.0';
-import { getActiveCollectionId, getCollectionTitle } from '../../services/collectionsService.js?v=386.0';
-import { renderWordBlocksExercise } from '../exercises/WordBlocksExercise.js?v=386.0';
-import { openAddWordModal, attachWordLongPress } from '../dictionary/DictionaryView.js?v=386.0';
+} from '../../services/api.js?v=423.0';
+import { t, getInterfaceLanguage, getWordTranslation, getWordNotes } from '../../services/i18n.js?v=423.0';
+import { AdService } from '../../services/adService.js?v=423.0';
+import { getActiveCollectionId, getCollectionTitle } from '../../services/collectionsService.js?v=423.0';
+import { renderWordBlocksExercise } from '../exercises/WordBlocksExercise.js?v=423.0';
+import { openAddWordModal, attachWordLongPress } from '../dictionary/DictionaryView.js?v=423.0';
 
 const _sanitizedCategoryCache = new Map();
 function sanitizeCategory(cat) {
@@ -436,6 +436,7 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
     isSingleRemaining = false,
     availableModes = { cards: true, quiz: true, pairs: true, input: true },
     isFavPractice = false,
+    favQuizStage = null,
     favCollectionTitle = '',
     isBlocksMode = false,
     blocksWord = null,
@@ -502,6 +503,9 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
   } else {
     quizStage = rawQuizStage % 4; // 0: En->Ru, 1: Audio->Ru, 2: Ru->En, 3: Consonants
   }
+  if (isFavPractice && favQuizStage !== null && Number.isInteger(Number(favQuizStage))) {
+    quizStage = Number(favQuizStage);
+  }
 
   const isCardsMode = currentMethod === 'cards';
   const isPairsMode = currentMethod === 'pairs';
@@ -533,7 +537,13 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
   const isItCollectionPractice = Boolean(
     isFavPractice && typeof window !== 'undefined' && window._activePracticeCollectionId === 'it_terms'
   );
-  const wordNotes = getWordNotes(activeTargetWord, null, { hideItNotes: !isItCollectionPractice });
+  const isFinanceCollectionPractice = Boolean(
+    isFavPractice && typeof window !== 'undefined' && window._activePracticeCollectionId === 'finance_terms'
+  );
+  const wordNotes = getWordNotes(activeTargetWord, null, {
+    hideItNotes: !isItCollectionPractice,
+    hideFinanceNotes: !isFinanceCollectionPractice,
+  });
   const hasNotes = Boolean(wordNotes && String(wordNotes).trim().length > 0);
   const notesBtnHtml = hasNotes
     ? `<button type="button" class="word-notes-btn" id="word-notes-btn" title="${t('word_notes_title') || 'Примечание'}" aria-label="${t('word_notes_title') || 'Примечание'}">
@@ -2438,7 +2448,10 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             <div class="flashcard-face-body">
               <h2 class="flashcard-translation">${escapeHtml(getWordTranslation(currentWord))}</h2>
               ${(() => {
-                const fcNote = getWordNotes(currentWord, null, { hideItNotes: !isItCollectionPractice });
+                const fcNote = getWordNotes(currentWord, null, {
+                  hideItNotes: !isItCollectionPractice,
+                  hideFinanceNotes: !isFinanceCollectionPractice,
+                });
                 return fcNote ? `<p class="flashcard-notes">${escapeHtml(fcNote)}</p>` : '';
               })()}
             </div>
@@ -2560,7 +2573,10 @@ function renderTrainingCard(currentWord, allWords = [], options = {}) {
             if (transEl) transEl.textContent = getWordTranslation(currentWord);
             const backBody = flashcard.querySelector('.flashcard-back .flashcard-face-body');
             if (backBody) {
-              const fcNote = getWordNotes(currentWord, null, { hideItNotes: !isItCollectionPractice });
+              const fcNote = getWordNotes(currentWord, null, {
+                hideItNotes: !isItCollectionPractice,
+                hideFinanceNotes: !isFinanceCollectionPractice,
+              });
               let noteEl = backBody.querySelector('.flashcard-notes');
               if (fcNote) {
                 if (!noteEl) {

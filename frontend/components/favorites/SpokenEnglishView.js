@@ -1,18 +1,33 @@
-import { SPOKEN_ENGLISH_ITEMS, getLocalizedSpokenItem } from './spokenEnglishData.js?v=386.0';
-import { getSpokenEnglishStrings } from './spokenEnglishI18n.js?v=386.0';
-import { getInterfaceLanguage, t } from '../../services/i18n.js?v=386.0';
-import { speakWord } from '../../services/audioService.js?v=386.0';
-import { AdService } from '../../services/adService.js?v=386.0';
-import { isProActive } from '../../services/proState.js?v=386.0';
-import { ProService } from '../../services/proService.js?v=386.0';
-import { getProStrings } from '../../services/proI18n.js?v=386.0';
-import { getMicroRulesStrings } from './grammarUiTranslations.js?v=386.0';
+import { SPOKEN_ENGLISH_ITEMS, getLocalizedSpokenItem } from './spokenEnglishData.js?v=423.0';
+import { getSpokenEnglishStrings } from './spokenEnglishI18n.js?v=423.0';
+import { getInterfaceLanguage, t } from '../../services/i18n.js?v=423.0';
+import { speakWord } from '../../services/audioService.js?v=423.0';
+import { AdService } from '../../services/adService.js?v=423.0';
+import { isProActive } from '../../services/proState.js?v=423.0';
+import { ProService } from '../../services/proService.js?v=423.0';
+import { getProStrings } from '../../services/proI18n.js?v=423.0';
+import { getMicroRulesStrings } from './grammarUiTranslations.js?v=423.0';
+import { pushNavReturn } from '../../services/navigationStack.js?v=423.0';
 
 const PAGE_SIZE = 10;
 const STORAGE_KEY_SPOKEN_AD_UNLOCKED = 'myduo_spoken_ad_unlocked';
 const STORAGE_KEY_SPOKEN_UNLOCKED_COUNT = 'myduo_spoken_unlocked_count';
 const STORAGE_KEY_SPOKEN_PAGE_PREFIX = 'myduo_spoken_page_';
 const STORAGE_KEY_SPOKEN_CAT = 'myduo_spoken_cat';
+const STORAGE_KEY_SPOKEN_PRACTICED = 'myduo_spoken_practiced';
+
+function recordSpokenPracticedIds(ids = []) {
+  try {
+    if (typeof localStorage === 'undefined') return;
+    const raw = localStorage.getItem(STORAGE_KEY_SPOKEN_PRACTICED);
+    const existing = raw ? JSON.parse(raw) : [];
+    const merged = new Set(Array.isArray(existing) ? existing : []);
+    for (const id of ids) {
+      if (id !== undefined && id !== null) merged.add(id);
+    }
+    localStorage.setItem(STORAGE_KEY_SPOKEN_PRACTICED, JSON.stringify([...merged]));
+  } catch (_) {}
+}
 
 export function loadSavedSpokenPage(cat = 'all') {
   try {
@@ -33,11 +48,11 @@ export function saveSavedSpokenPage(cat = 'all', page = 1) {
 
 export function loadSavedSpokenCategory() {
   try {
-    if (typeof localStorage === 'undefined') return 'all';
+    if (typeof localStorage === 'undefined') return 'reductions';
     const val = localStorage.getItem(STORAGE_KEY_SPOKEN_CAT);
-    if (['all', 'reductions', 'drops', 'texting', 'phrases'].includes(val)) return val;
+    if (['reductions', 'drops', 'texting', 'phrases'].includes(val)) return val;
   } catch (_) {}
-  return 'all';
+  return 'reductions';
 }
 
 export function saveSavedSpokenCategory(cat) {
@@ -92,7 +107,11 @@ export function renderSpokenEnglishView(containerSelector = '#app-content', opti
   const container = document.querySelector(containerSelector);
   if (!container) return;
 
-  const { onBack = () => {} } = options;
+  const {
+    onBack = () => {},
+    onStartPractice = null,
+    initialCategory = null,
+  } = options;
   const lang = getInterfaceLanguage();
   const isRtl = ['ar', 'fa', 'ur'].includes(lang);
   const s = getSpokenEnglishStrings(lang);
@@ -101,7 +120,9 @@ export function renderSpokenEnglishView(containerSelector = '#app-content', opti
   const prevLabel = mrStrings.prevBtn || 'Previous';
   const nextLabel = mrStrings.nextBtn || 'Next';
 
-  const activeCategoryInit = options._activeCategory || loadSavedSpokenCategory();
+  const validCats = ['reductions', 'drops', 'texting', 'phrases'];
+  const activeCategoryInit = (options._activeCategory && validCats.includes(options._activeCategory) ? options._activeCategory : null)
+    || (initialCategory && validCats.includes(initialCategory) ? initialCategory : loadSavedSpokenCategory());
   if (typeof window !== 'undefined' && window.trackScreen) {
     window.trackScreen('spoken_english', 'SpokenEnglishView');
   }
@@ -139,9 +160,11 @@ export function renderSpokenEnglishView(containerSelector = '#app-content', opti
     };
 
     const filteredItems = SPOKEN_ENGLISH_ITEMS.map((item, index) => ({ item, index }))
-      .filter(({ item }) => activeCategory === 'all' || item.category === activeCategory);
+      .filter(({ item }) => item.category === activeCategory);
 
-    const visibleItems = filteredItems.filter(({ index }) => index < unlockedLimit);
+    const visibleItems = isPro ? filteredItems : filteredItems.slice(0, unlockedLimit);
+    const catTotal = filteredItems.length;
+    const catProRemaining = Math.max(0, catTotal - visibleItems.length);
 
     const totalPages = Math.max(1, Math.ceil(visibleItems.length / PAGE_SIZE));
     if (currentPage > totalPages) currentPage = totalPages;
@@ -153,7 +176,7 @@ export function renderSpokenEnglishView(containerSelector = '#app-content', opti
     const endIndex = Math.min(startIndex + PAGE_SIZE, visibleItems.length);
     const pageItems = visibleItems.slice(startIndex, endIndex);
 
-    const filterChipsHtml = ['all', 'reductions', 'drops', 'texting', 'phrases']
+    const filterChipsHtml = ['reductions', 'drops', 'texting', 'phrases']
       .map((cat) => `
         <button type="button" class="spoken-filter-chip ${activeCategory === cat ? 'is-active' : ''}" data-spoken-cat="${cat}">
           ${escapeHtml(catLabels[cat] || cat)}
@@ -161,14 +184,14 @@ export function renderSpokenEnglishView(containerSelector = '#app-content', opti
       `)
       .join('');
 
-    const cardsHtml = pageItems.map(({ item, index }) => {
+    const cardsHtml = pageItems.map(({ item }, idxInPage) => {
       const loc = getLocalizedSpokenItem(item, lang);
       const badgeLabel = catLabels[item.category] || item.category;
       return `
         <article class="spoken-card" data-spoken-id="${item.id}">
           <div class="spoken-card-top">
             <span class="spoken-cat-badge">${escapeHtml(badgeLabel)}</span>
-            <span class="spoken-num">#${index + 1}</span>
+            <span class="spoken-num">#${startIndex + idxInPage + 1}</span>
           </div>
           <div class="spoken-pair-row">
             <div class="spoken-formal-box">
@@ -236,10 +259,10 @@ export function renderSpokenEnglishView(containerSelector = '#app-content', opti
     ` : '';
 
     let gateBoxHtml = '';
-    if (!isPro && unlockedLimit < total) {
+    if (!isPro && catProRemaining > 0) {
       gateBoxHtml = `
         <div class="spoken-gate-box" id="spoken-gate-box">
-          <p class="spoken-gate-counter">🔒 ${escapeHtml(String(s.unlockedCounter || '{n} / {total}').replace('{n}', String(unlockedLimit)).replace('{total}', String(total)))}</p>
+          <p class="spoken-gate-counter">🔒 ${escapeHtml(String(s.unlockedCounter || '{n} / {total}').replace('{n}', String(visibleItems.length)).replace('{total}', String(catTotal)))}</p>
           <div class="spoken-gate-actions">
             <button type="button" id="spoken-ad-unlock-btn" class="primary-button btn-orange spoken-gate-btn">
               <span>🎬</span>
@@ -260,6 +283,8 @@ export function renderSpokenEnglishView(containerSelector = '#app-content', opti
         .spoken-header { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 8px; }
         .spoken-back-btn { background: var(--card-bg, #ffffff); border: 1.5px solid var(--border-color, rgba(148, 163, 184, 0.28)); color: var(--text-main, #0f172a); border-radius: 12px; padding: 7px 14px; font-size: 14px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0; }
         .spoken-back-btn:active { transform: scale(0.97); }
+        .spoken-practice-btn { margin-inline-start: auto; border: none; border-radius: 12px; padding: 7px 14px; font-size: 13.5px; font-weight: 800; background: linear-gradient(135deg, #22c55e, #16a34a); color: #ffffff; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0; box-shadow: 0 3px 10px rgba(22, 163, 74, 0.25); }
+        .spoken-practice-btn:active { transform: scale(0.97); }
         .spoken-title { margin: 0; font-size: 19px; font-weight: 800; color: var(--text-main, #0f172a); min-width: 0; overflow-wrap: anywhere; }
         .spoken-sub { margin: 0 0 12px; font-size: 13.5px; color: var(--text-muted, #64748b); line-height: 1.4; overflow-wrap: anywhere; }
         .spoken-filters { display: flex; flex-wrap: wrap; gap: 6px; padding-bottom: 4px; margin-bottom: 12px; width: 100%; box-sizing: border-box; }
@@ -312,6 +337,7 @@ export function renderSpokenEnglishView(containerSelector = '#app-content', opti
         <div class="spoken-header">
           <button type="button" id="spoken-back-btn" class="spoken-back-btn">‹ ${escapeHtml(s.backBtn)}</button>
           <h2 class="spoken-title">${escapeHtml(s.hubTitle)}</h2>
+          ${pageItems.length > 0 ? `<button type="button" id="spoken-practice-btn" class="spoken-practice-btn">🎓 ${escapeHtml(s.practiceBtn || 'Practice')}</button>` : ''}
         </div>
         <p class="spoken-sub">${escapeHtml(s.hubSubtitle)}</p>
         <div class="spoken-filters">${filterChipsHtml}</div>
@@ -323,9 +349,55 @@ export function renderSpokenEnglishView(containerSelector = '#app-content', opti
 
     container.querySelector('#spoken-back-btn')?.addEventListener('click', () => onBack());
 
+    container.querySelector('#spoken-practice-btn')?.addEventListener('click', () => {
+      const roundItems = pageItems.slice(0, 10);
+      if (roundItems.length === 0) return;
+
+      const practiceWords = roundItems.map(({ item }) => {
+        const loc = getLocalizedSpokenItem(item, lang);
+        const meaningText = loc.meaning || item.formal;
+        return {
+          id: 'spoken_' + item.id,
+          word: item.spoken,
+          translation: meaningText,
+          translations: {
+            [lang]: meaningText,
+            ru: item.meanings?.ru || item.meaning?.ru || item.formal,
+            en: item.formal + (item.spoken ? ' (' + item.spoken + ')' : ''),
+          },
+          transcription: item.formal,
+          notes: loc.explanation || item.formal,
+          example: item.example,
+          category: 'Spoken English',
+        };
+      });
+
+      if (typeof window !== 'undefined' && window.trackEvent) {
+        window.trackEvent('spoken_practice_start', {
+          category: activeCategory,
+          page: currentPage,
+          count: practiceWords.length,
+        });
+      }
+
+      pushNavReturn({
+        label: 'spoken_english',
+        restore: () =>
+          renderSpokenEnglishView(containerSelector, {
+            ...options,
+            _activeCategory: activeCategory,
+            _currentPage: currentPage,
+          }),
+      });
+
+      if (typeof onStartPractice === 'function') {
+        onStartPractice(practiceWords, 'spoken_english', s.hubTitle);
+      }
+    });
+
     container.querySelectorAll('[data-spoken-cat]').forEach((btn) => {
       btn.addEventListener('click', () => {
-        const cat = btn.getAttribute('data-spoken-cat') || 'all';
+        const cat = btn.getAttribute('data-spoken-cat') || 'reductions';
         if (cat === activeCategory) return;
         if (typeof window !== 'undefined' && window.trackEvent) {
           window.trackEvent('spoken_category_select', { category: cat });

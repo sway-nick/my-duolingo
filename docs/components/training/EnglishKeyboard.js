@@ -1,7 +1,7 @@
 // Built-in English QWERTY Keyboard for Training Input Mode & Consonants Quiz.
 // Eliminates Android system keyboard popups, layout switching, and T9/autocorrect hints.
 
-import { triggerHaptic } from '../../services/audioService.js?v=386.0';
+import { triggerHaptic } from '../../services/audioService.js?v=423.0';
 
 const STORAGE_KEY = 'eb_custom_keyboard';
 

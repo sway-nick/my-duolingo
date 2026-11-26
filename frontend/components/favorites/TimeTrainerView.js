@@ -6,8 +6,8 @@ import {
   playFanfareSound,
   getSavedVoiceAccent,
   triggerHaptic,
-} from '../../services/audioService.js?v=386.0';
-import { getInterfaceLanguage } from '../../services/i18n.js?v=386.0';
+} from '../../services/audioService.js?v=423.0';
+import { getInterfaceLanguage } from '../../services/i18n.js?v=423.0';
 
 export const TIME_TRAINER_TRANSLATIONS = {
   ru: {

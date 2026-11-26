@@ -1,5 +1,5 @@
-import { handleFeedbackClick } from '../layout/AppLayout.js?v=386.0';
-import { getInterfaceLanguage } from '../../services/i18n.js?v=386.0';
+import { handleFeedbackClick } from '../layout/AppLayout.js?v=423.0';
+import { getInterfaceLanguage } from '../../services/i18n.js?v=423.0';
 
 export const REVIEW_TRANSLATIONS = {
   en: {
