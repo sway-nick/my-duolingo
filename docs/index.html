@@ -124,7 +124,7 @@
             window.hideAppSplashScreen();
           }
         }, 4000);
-        if ('serviceWorker' in navigator) {
+        if ('serviceWorker' in navigator && !document.documentElement.classList.contains('is-android-app')) {
           window.addEventListener('load', function() {
             navigator.serviceWorker.register('./sw.js?v=423.0').catch(function() {});
           });
@@ -145,9 +145,18 @@
     <meta name="theme-color" content="#0f1c2a" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" />
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,500;1,600;1,700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,500;1,600;1,700&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,500;1,600;1,700&display=swap" rel="stylesheet" /></noscript>
     <link rel="stylesheet" href="./assets/css/main.css?v=423.0" />
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script>
+      if (!document.documentElement.classList.contains('is-android-app')) {
+        var gsi = document.createElement('script');
+        gsi.src = 'https://accounts.google.com/gsi/client';
+        gsi.async = true;
+        gsi.defer = true;
+        document.head.appendChild(gsi);
+      }
+    </script>
   </head>
 
   <body>
@@ -219,44 +228,48 @@
       import { speakWord, preloadWordAudio, playFanfareSound, releaseScreenWakeLock, stopSilentAudioAnchor, stopNativeBackgroundPlayback, isCategoryAudioDownloaded, downloadCategoryVoicePack, verifyCategoryAudioInCache, getSavedVoiceAccent, isSfxMuted } from './services/audioService.js?v=423.0';
       import { getCurrentUser, isGuestLimitReached, incrementGuestTrainingCount, GUEST_WORD_LIMIT, getEffectiveUserId } from './services/authService.js?v=423.0';
       import { renderAppLayout, updateHeaderUser, updateMondayTickerTabVisibility } from './components/layout/AppLayout.js?v=423.0';
-      import { t, getInterfaceLanguage, getWordTranslation, getWordNotes, getCategoryDetails, getCategoryVoiceModalStrings } from './services/i18n.js?v=423.0';
+      import { t, getInterfaceLanguage, getWordTranslation, getWordNotes, getCategoryDetails, getCategoryVoiceModalStrings, ensureLocaleLoaded } from './services/i18n.js?v=423.0';
       import { renderTrainingCard } from './components/training/TrainingCard.js?v=423.0';
-      import { renderStatsView } from './components/stats/StatsView.js?v=423.0';
-      import { renderSettingsView } from './components/settings/SettingsView.js?v=423.0';
-      import { renderFavoritesView } from './components/favorites/FavoritesView.js?v=423.0';
-      import { renderCollectionsHubView } from './components/favorites/CollectionsHubView.js?v=423.0';
-      import { renderStoriesView } from './components/favorites/StoriesView.js?v=423.0';
-      import { renderTimeTrainerView } from './components/favorites/TimeTrainerView.js?v=423.0';
-      import { renderNumberAudioTrainerView } from './components/favorites/NumberAudioTrainerView.js?v=423.0';
-      import { renderMicroRulesView } from './components/favorites/MicroRulesView.js?v=423.0';
-      import { renderTenseConstructionsView } from './components/favorites/TenseConstructionsView.js?v=423.0';
-      import { renderGrammarHubView } from './components/favorites/GrammarHubView.js?v=423.0';
-      import { renderSpokenEnglishView } from './components/favorites/SpokenEnglishView.js?v=423.0';
-      import { renderDailyNewsView, stopDailyNewsAudio, closeNewsWordPopover } from './components/favorites/DailyNewsView.js?v=423.0';
-      import { renderNumbersFolderView } from './components/favorites/NumbersFolderView.js?v=423.0';
-      import { renderGrammarReferenceView } from './components/favorites/GrammarReferenceView.js?v=423.0';
-      import { renderIrregularVerbsPacksView } from './components/favorites/IrregularVerbsPacksView.js?v=423.0';
-      import { renderLevelMatrixView } from './components/favorites/LevelMatrixView.js?v=423.0';
-      import { getLevelMatrixStrings } from './components/favorites/levelMatrixData.js?v=423.0';
-      import { maybeShowLevelMatrixNudge } from './components/modals/LevelMatrixNudgeModal.js?v=423.0';
-      import { showSmartPathModal } from './components/modals/SmartPathModal.js?v=423.0';
       import { pushNavReturn, popNavReturn, hasNavReturn, clearNavReturn } from './services/navigationStack.js?v=423.0';
       import { getCollectionTitle, getActiveCollectionId, syncCollectionToAndroidWidget, getCollectionWords } from './services/collectionsService.js?v=423.0';
-      import { renderDictionaryView } from './components/dictionary/DictionaryView.js?v=423.0';
-      import { renderLeaderboardView, renderMondayMemeTop4Cut, getMondayMemeTop4CutHtml } from './components/leaderboard/LeaderboardView.js?v=423.0';
-      import { renderAuthModal } from './components/auth/AuthModal.js?v=423.0';
-      import { initPrizePodiumListener } from './components/modals/PrizePodiumModal.js?v=423.0';
-      import { showMilestoneStoryModal, showMilestoneUnlockedModal } from './components/modals/MilestoneStoryModal.js?v=423.0';
       import { StorageService } from './services/storageService.js?v=423.0';
       import { AdService } from './services/adService.js?v=423.0';
       import { ProService } from './services/proService.js?v=423.0';
-      import { showProPaywall } from './components/pro/ProPaywallModal.js?v=423.0';
       import { resolveVideoUrl, syncRemoteVideos } from './services/videoService.js?v=423.0';
       import { recordSiteVisitFirestore } from './services/firebase.js?v=423.0';
       import { isWeb100WordsLimitReached, showWebPlayStoreFunnelModal, renderWebLimitCard, incrementWebTrainedCount } from './components/modals/WebPlayStoreFunnelModal.js?v=423.0';
 
-      window.showMilestoneStoryModal = showMilestoneStoryModal;
-      window.showMilestoneUnlockedModal = showMilestoneUnlockedModal;
+      const _lazyCache = new Map();
+      function lazyMod(p) {
+        if (!_lazyCache.has(p)) _lazyCache.set(p, import(p));
+        return _lazyCache.get(p);
+      }
+
+      let _dailyNewsMod = null;
+      async function loadDailyNewsMod() {
+        const m = await lazyMod('./components/favorites/DailyNewsView.js?v=423.0');
+        _dailyNewsMod = m;
+        return m;
+      }
+      function stopDailyNewsAudio() {
+        if (_dailyNewsMod && typeof _dailyNewsMod.stopDailyNewsAudio === 'function') {
+          _dailyNewsMod.stopDailyNewsAudio();
+        }
+      }
+      function closeNewsWordPopover() {
+        if (_dailyNewsMod && typeof _dailyNewsMod.closeNewsWordPopover === 'function') {
+          _dailyNewsMod.closeNewsWordPopover();
+        }
+      }
+
+      window.showMilestoneStoryModal = async (...args) => {
+        const { showMilestoneStoryModal } = await lazyMod('./components/modals/MilestoneStoryModal.js?v=423.0');
+        return showMilestoneStoryModal(...args);
+      };
+      window.showMilestoneUnlockedModal = async (...args) => {
+        const { showMilestoneUnlockedModal } = await lazyMod('./components/modals/MilestoneStoryModal.js?v=423.0');
+        return showMilestoneUnlockedModal(...args);
+      };
       window.StorageService = StorageService;
 
       // Track active unique day of usage (never resets) & site visit counter
@@ -270,10 +283,12 @@
         AdService.init().catch(() => {});
         ProService.init().catch(() => {});
         window.addEventListener('eb:pro-paywall', (ev) => {
-          showProPaywall({
-            reason: ev?.detail?.reason || 'settings',
-            wordsNeeded: ev?.detail?.wordsNeeded || 0,
-          }).catch(() => {});
+          lazyMod('./components/pro/ProPaywallModal.js?v=423.0')
+            .then(({ showProPaywall }) => showProPaywall({
+              reason: ev?.detail?.reason || 'settings',
+              wordsNeeded: ev?.detail?.wordsNeeded || 0,
+            }))
+            .catch(() => {});
         });
         syncRemoteVideos().catch(() => {});
 
@@ -689,7 +704,7 @@
             localStorage.removeItem('myduo_pending_milestone_unlock');
             localStorage.setItem(`myduo_milestone_story_${targetMilestone}_shown`, 'true');
             setTimeout(() => {
-              showMilestoneUnlockedModal(targetMilestone);
+              window.showMilestoneUnlockedModal(targetMilestone);
             }, delay);
           }
         } catch (_) {}
@@ -738,7 +753,8 @@
 
           const signupBtn = content.querySelector('#guest-signup-btn');
           if (signupBtn) {
-            signupBtn.addEventListener('click', () => {
+            signupBtn.addEventListener('click', async () => {
+              const { renderAuthModal } = await lazyMod('./components/auth/AuthModal.js?v=423.0');
               renderAuthModal(async () => {
                 updateHeaderUser();
                 await loadData();
@@ -749,7 +765,8 @@
 
           const loginBtn = content.querySelector('#guest-login-btn');
           if (loginBtn) {
-            loginBtn.addEventListener('click', () => {
+            loginBtn.addEventListener('click', async () => {
+              const { renderAuthModal } = await lazyMod('./components/auth/AuthModal.js?v=423.0');
               renderAuthModal(async () => {
                 updateHeaderUser();
                 await loadData();
@@ -1248,9 +1265,12 @@
           const canPlayDailyVideo = (lastWatchedVideoDate !== todayVideoKey) || isMemeActive;
 
           if (isMemeActive) {
-            getLeaderboard(completedWeekKey, 'week', true).then(() => {
+            getLeaderboard(completedWeekKey, 'week', true).then(async () => {
               const cCut = document.getElementById('wotd-top4-cut');
-              if (cCut) renderMondayMemeTop4Cut(cCut, completedWeekKey);
+              if (cCut) {
+                const { renderMondayMemeTop4Cut } = await lazyMod('./components/leaderboard/LeaderboardView.js?v=423.0');
+                renderMondayMemeTop4Cut(cCut, completedWeekKey);
+              }
             }).catch(() => {});
           }
 
@@ -1384,7 +1404,7 @@
                           <video id="wotd-card-video" playsinline preload="auto" muted src="assets/video/${currentWotdVideo}" style="width: 100%; height: 100%; object-fit: cover; display: block; border-radius: inherit;"></video>
                           <video id="wotd-card-video-what" playsinline preload="auto" muted src="assets/video/meme_monday_what.mp4" style="width: 100%; height: 100%; object-fit: cover; display: none; border-radius: inherit;"></video>
                           <div id="wotd-top4-cut" style="display: none; pointer-events: none;">
-                            ${isMemeActive ? getMondayMemeTop4CutHtml(completedWeekKey) : ''}
+                            ${isMemeActive ? (await lazyMod('./components/leaderboard/LeaderboardView.js?v=423.0')).getMondayMemeTop4CutHtml(completedWeekKey) : ''}
                           </div>
                         </div>
 
@@ -1644,7 +1664,8 @@
             smartBtn.className = 'hub-dock-btn hub-dock-btn-compass';
             smartBtn.setAttribute('aria-label', 'Smart Course Path');
             smartBtn.innerHTML = '<svg class="hub-dock-icon-img" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M10.5 1C11.4 6.8 13.7 9.1 19.5 10C13.7 10.9 11.4 13.2 10.5 19C9.6 13.2 7.3 10.9 1.5 10C7.3 9.1 9.6 6.8 10.5 1Z" fill="#1e293b"/><path d="M19 14.5C19.45 17.05 20.45 18.05 23 18.5C20.45 18.95 19.45 19.95 19 22.5C18.55 19.95 17.55 18.95 15 18.5C17.55 18.05 18.55 17.05 19 14.5Z" fill="#1e293b"/></svg>';
-            window._openSmartPathModal = () => {
+            window._openSmartPathModal = async () => {
+              const { showSmartPathModal } = await lazyMod('./components/modals/SmartPathModal.js?v=423.0');
               showSmartPathModal(allWords, {
                 onStartVocab: (targetCategory) => {
                   removeHubFloatingFabs();
@@ -1716,11 +1737,12 @@
                   window._currentGrammarSection = null;
                   window._navigateToTopicLink(target);
                 },
-                onOpenMatrix: (levelId) => {
+                onOpenMatrix: async (levelId) => {
                   removeHubFloatingFabs();
                   window._returnToSmartPath = false;
                   window._isCategorySelectOpen = true;
                   window._currentGrammarSection = null;
+                  const { renderLevelMatrixView } = await lazyMod('./components/favorites/LevelMatrixView.js?v=423.0');
                   renderLevelMatrixView(allWords, '#app-content', {
                     initialLevel: levelId || 'A1',
                     initialMode: 'matrix',
@@ -1741,16 +1763,18 @@
             cefrBtn.type = 'button';
             cefrBtn.id = 'hub-cefr-test-fab';
             cefrBtn.className = 'hub-dock-btn';
+            const { getLevelMatrixStrings } = await lazyMod('./components/favorites/levelMatrixData.js?v=423.0');
             const cefrTitle = getLevelMatrixStrings(getInterfaceLanguage())?.hubTitle || 'CEFR';
             cefrBtn.setAttribute('aria-label', cefrTitle);
             cefrBtn.innerHTML = '<svg class="hub-dock-icon-img" viewBox="0 2 24 19" fill="none" stroke="#1e293b" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 10v7M2 10l10-5.5 10 5.5-10 5.5z"/><path d="M6 12.5v5.5c3 3.5 9 3.5 12 0v-5.5"/></svg>';
-            cefrBtn.addEventListener('click', () => {
+            cefrBtn.addEventListener('click', async () => {
               removeHubFloatingFabs();
               if (window.trackEvent) {
                 window.trackEvent('hub_cefr_test_fab_click', { locale: getInterfaceLanguage() });
               }
               window._isCategorySelectOpen = true;
               window._currentGrammarSection = null;
+              const { renderLevelMatrixView } = await lazyMod('./components/favorites/LevelMatrixView.js?v=423.0');
               renderLevelMatrixView(allWords, '#app-content', {
                 onBack: backToMainHub,
                 onNavigateLink: window._navigateToTopicLink,
@@ -1771,13 +1795,14 @@
               }
             } catch (_) {}
             fabBtn.innerHTML = `<img src="assets/icons/hub_nav_globe.webp" alt="NEWS" class="hub-dock-icon-img" />${dotHtml}`;
-            fabBtn.addEventListener('click', () => {
+            fabBtn.addEventListener('click', async () => {
               removeHubFloatingFabs();
               if (window.trackEvent) {
                 window.trackEvent('hub_daily_news_fab_click', { locale: getInterfaceLanguage() });
               }
               window._isCategorySelectOpen = true;
               window._currentGrammarSection = null;
+              const { renderDailyNewsView } = await loadDailyNewsMod();
               renderDailyNewsView('#app-content', {
                 onBack: () => {
                   window._isCategorySelectOpen = false;
@@ -1787,6 +1812,7 @@
               });
             });
 
+            removeHubFloatingFabs();
             fabsWrap.appendChild(smartBtn);
             fabsWrap.appendChild(cefrBtn);
             fabsWrap.appendChild(fabBtn);
@@ -1928,7 +1954,9 @@
 
                     const top4Cut = document.getElementById('wotd-top4-cut');
                     if (isMemeActive && top4Cut) {
-                      renderMondayMemeTop4Cut(top4Cut, completedWeekKey);
+                      lazyMod('./components/leaderboard/LeaderboardView.js?v=423.0')
+                        .then(({ renderMondayMemeTop4Cut }) => renderMondayMemeTop4Cut(top4Cut, completedWeekKey))
+                        .catch(() => {});
                     }
 
                     // Reveal video strictly when first real frame starts playing (prevents black screen!)
@@ -1945,7 +1973,9 @@
                         // STEP 2: Show Top 4 Leaders screen cut for 1.8 seconds
                         cardVideo.style.display = 'none';
                         if (top4Cut) {
-                          renderMondayMemeTop4Cut(top4Cut, completedWeekKey);
+                          lazyMod('./components/leaderboard/LeaderboardView.js?v=423.0')
+                            .then(({ renderMondayMemeTop4Cut }) => renderMondayMemeTop4Cut(top4Cut, completedWeekKey))
+                            .catch(() => {});
                           top4Cut.style.display = 'flex';
                         }
 
@@ -2813,7 +2843,7 @@
         await startPracticeHandler(practiceWords, colId, colTitle);
       };
 
-      function openCollectionCardsHandler(colId, extraOptions = {}) {
+      async function openCollectionCardsHandler(colId, extraOptions = {}) {
         const backToFavOrStack = () => {
           window._isInsideCollectionCards = false;
           window._currentOpenCollectionId = null;
@@ -2827,6 +2857,7 @@
         if (colId === 'numbers_hub') {
           window._isInsideCollectionCards = true;
           window._currentOpenCollectionId = colId;
+          const { renderNumbersFolderView } = await lazyMod('./components/favorites/NumbersFolderView.js?v=423.0');
           renderNumbersFolderView(allWords, '#app-content', {
             onBack: backToFavOrStack,
             onOpenCollection: (subId) => openCollectionCardsHandler(subId),
@@ -2837,6 +2868,7 @@
         if (colId === 'grammar_prepositions') {
           window._isInsideCollectionCards = true;
           window._currentOpenCollectionId = colId;
+          const { renderGrammarReferenceView } = await lazyMod('./components/favorites/GrammarReferenceView.js?v=423.0');
           renderGrammarReferenceView('prepositions', '#app-content', {
             onBack: backToFavOrStack,
             onStartPractice: window._startOpenRoundPractice,
@@ -2848,6 +2880,7 @@
         if (colId === 'grammar_pronouns') {
           window._isInsideCollectionCards = true;
           window._currentOpenCollectionId = colId;
+          const { renderGrammarReferenceView } = await lazyMod('./components/favorites/GrammarReferenceView.js?v=423.0');
           renderGrammarReferenceView('pronouns', '#app-content', {
             onBack: backToFavOrStack,
             onStartPractice: window._startOpenRoundPractice,
@@ -2859,6 +2892,7 @@
         if (colId === 'grammar_conjunctions') {
           window._isInsideCollectionCards = true;
           window._currentOpenCollectionId = colId;
+          const { renderGrammarReferenceView } = await lazyMod('./components/favorites/GrammarReferenceView.js?v=423.0');
           renderGrammarReferenceView('conjunctions', '#app-content', {
             onBack: backToFavOrStack,
             onStartPractice: window._startOpenRoundPractice,
@@ -2871,6 +2905,7 @@
         if (colId === 'irregular_verbs_packs') {
           window._isInsideCollectionCards = true;
           window._currentOpenCollectionId = colId;
+          const { renderIrregularVerbsPacksView } = await lazyMod('./components/favorites/IrregularVerbsPacksView.js?v=423.0');
           renderIrregularVerbsPacksView(allWords, '#app-content', {
             onBack: backToFavOrStack,
             onStartPractice: window._startOpenRoundPractice,
@@ -2885,6 +2920,7 @@
         if (colId === 'level_matrix_exams') {
           window._isInsideCollectionCards = true;
           window._currentOpenCollectionId = colId;
+          const { renderLevelMatrixView } = await lazyMod('./components/favorites/LevelMatrixView.js?v=423.0');
           renderLevelMatrixView(allWords, '#app-content', {
             onBack: backToFavOrStack,
             onNavigateLink: window._navigateToTopicLink,
@@ -2895,18 +2931,21 @@
         if (colId === 'milestone_stories') {
           window._isInsideCollectionCards = true;
           window._currentOpenCollectionId = colId;
+          const { renderStoriesView } = await lazyMod('./components/favorites/StoriesView.js?v=423.0');
           renderStoriesView('#app-content', { onBack: backToFavOrStack });
           return;
         }
         if (colId === 'time_trainer') {
           window._isInsideCollectionCards = true;
           window._currentOpenCollectionId = colId;
+          const { renderTimeTrainerView } = await lazyMod('./components/favorites/TimeTrainerView.js?v=423.0');
           renderTimeTrainerView('#app-content', { onBack: backToFavOrStack });
           return;
         }
         if (colId === 'grammar_microrules') {
           window._isInsideCollectionCards = true;
           window._currentOpenCollectionId = colId;
+          const { renderMicroRulesView } = await lazyMod('./components/favorites/MicroRulesView.js?v=423.0');
           renderMicroRulesView('#app-content', {
             onBack: backToFavOrStack,
             onNavigateLink: window._navigateToTopicLink,
@@ -2918,6 +2957,7 @@
         if (colId === 'tense_constructions') {
           window._isInsideCollectionCards = true;
           window._currentOpenCollectionId = colId;
+          const { renderTenseConstructionsView } = await lazyMod('./components/favorites/TenseConstructionsView.js?v=423.0');
           renderTenseConstructionsView('#app-content', {
             onBack: backToFavOrStack,
             onNavigateLink: window._navigateToTopicLink,
@@ -2938,6 +2978,7 @@
         if (window.trackEvent) {
           window.trackEvent('collection_view', { collection_id: colId, words_count: words.length });
         }
+        const { renderFavoritesView } = await lazyMod('./components/favorites/FavoritesView.js?v=423.0');
         renderFavoritesView(words, '#app-content', {
           collectionId: colId,
           collectionTitle: title,
@@ -2950,8 +2991,9 @@
           onClearAllFavorites: () => {
             favoriteIds.clear();
           },
-          onStartFavoritePractice: (practiceSet) => {
+          onStartFavoritePractice: async (practiceSet) => {
             if (colId === 'numbers' || colId === 'ordinal_numbers') {
+              const { renderNumberAudioTrainerView } = await lazyMod('./components/favorites/NumberAudioTrainerView.js?v=423.0');
               renderNumberAudioTrainerView('#app-content', {
                 mode: colId === 'ordinal_numbers' ? 'ordinals' : 'cardinals',
                 allWords,
@@ -2972,7 +3014,7 @@
         });
       }
 
-      window._navigateToTopicLink = function navigateToTopicLink(target) {
+      window._navigateToTopicLink = async function navigateToTopicLink(target) {
         if (!target || !target.targetType) return;
         removeHubFloatingFabs();
         const goBack = () => {
@@ -2988,12 +3030,14 @@
         };
         const type = target.targetType;
         if (type === 'numbers_hub') {
+          const { renderNumbersFolderView } = await lazyMod('./components/favorites/NumbersFolderView.js?v=423.0');
           renderNumbersFolderView(allWords, '#app-content', {
             onBack: goBack,
             onOpenCollection: (subId) => openCollectionCardsHandler(subId),
             onNavigateLink: window._navigateToTopicLink,
           });
         } else if (type === 'grammar_prepositions') {
+          const { renderGrammarReferenceView } = await lazyMod('./components/favorites/GrammarReferenceView.js?v=423.0');
           renderGrammarReferenceView('prepositions', '#app-content', {
             onBack: goBack,
             onStartPractice: window._startOpenRoundPractice,
@@ -3001,6 +3045,7 @@
             initialGroup: target.targetGroup || 'all',
           });
         } else if (type === 'grammar_pronouns') {
+          const { renderGrammarReferenceView } = await lazyMod('./components/favorites/GrammarReferenceView.js?v=423.0');
           renderGrammarReferenceView('pronouns', '#app-content', {
             onBack: goBack,
             onStartPractice: window._startOpenRoundPractice,
@@ -3015,6 +3060,7 @@
             : grp.startsWith('adv_') ? 'conjunctive_adverbs'
             : grp.startsWith('sub_') || grp === 'subordinating' ? 'subordinating'
             : 'all';
+          const { renderGrammarReferenceView } = await lazyMod('./components/favorites/GrammarReferenceView.js?v=423.0');
           renderGrammarReferenceView('conjunctions', '#app-content', {
             onBack: goBack,
             onStartPractice: window._startOpenRoundPractice,
@@ -3023,6 +3069,7 @@
             initialSection: secHint,
           });
         } else if (type === 'irregular_verbs_packs') {
+          const { renderIrregularVerbsPacksView } = await lazyMod('./components/favorites/IrregularVerbsPacksView.js?v=423.0');
           renderIrregularVerbsPacksView(allWords, '#app-content', {
             onBack: goBack,
             onStartPractice: window._startOpenRoundPractice,
@@ -3033,8 +3080,9 @@
             onFavoriteToggle: handleFavoriteToggle,
           });
         } else if (type === 'collection') {
-          openCollectionCardsHandler(target.targetId);
+          await openCollectionCardsHandler(target.targetId);
         } else if (type === 'grammar_microrules' || type === 'micro_rule') {
+          const { renderMicroRulesView } = await lazyMod('./components/favorites/MicroRulesView.js?v=423.0');
           renderMicroRulesView('#app-content', {
             onBack: goBack,
             onNavigateLink: window._navigateToTopicLink,
@@ -3042,6 +3090,7 @@
             initialLevel: target.level,
           });
         } else if (type === 'tense_construction') {
+          const { renderTenseConstructionsView } = await lazyMod('./components/favorites/TenseConstructionsView.js?v=423.0');
           renderTenseConstructionsView('#app-content', {
             onBack: goBack,
             onNavigateLink: window._navigateToTopicLink,
@@ -3049,12 +3098,14 @@
             initialTab: target.tab || (target.targetId ? 'list' : 'matrix'),
           });
         } else if (type === 'spoken_english') {
+          const { renderSpokenEnglishView } = await lazyMod('./components/favorites/SpokenEnglishView.js?v=423.0');
           renderSpokenEnglishView('#app-content', {
             onBack: goBack,
             onStartPractice: window._startOpenRoundPractice,
             initialCategory: target.category || 'reductions',
           });
         } else if (type === 'level_matrix_exams') {
+          const { renderLevelMatrixView } = await lazyMod('./components/favorites/LevelMatrixView.js?v=423.0');
           renderLevelMatrixView(allWords, '#app-content', {
             onBack: goBack,
             onNavigateLink: window._navigateToTopicLink,
@@ -3065,6 +3116,7 @@
           if (target.category) {
             try { localStorage.setItem('myduo_dict_category', target.category); } catch (_) {}
           }
+          const { renderDictionaryView } = await lazyMod('./components/dictionary/DictionaryView.js?v=423.0');
           renderDictionaryView(allWords, '#app-content', {
             favoriteIds: Array.from(favoriteIds),
             onFavoriteToggle: handleFavoriteToggle,
@@ -3072,13 +3124,14 @@
         }
       };
 
-      window._openLevelMatrixScreen = function openLevelMatrixScreen(initialLevel = 'A1', initialMode = 'matrix') {
+      window._openLevelMatrixScreen = async function openLevelMatrixScreen(initialLevel = 'A1', initialMode = 'matrix') {
         removeHubFloatingFabs();
         const prevTab = activeTab;
         pushNavReturn({
           label: 'stats_level_matrix',
           restore: () => renderTab(prevTab || 'stats', true),
         });
+        const { renderLevelMatrixView } = await lazyMod('./components/favorites/LevelMatrixView.js?v=423.0');
         renderLevelMatrixView(allWords, '#app-content', {
           initialLevel,
           initialMode,
@@ -3093,11 +3146,12 @@
         });
       };
 
-      window._checkCefrMilestoneNudge = function checkCefrMilestoneNudge() {
+      window._checkCefrMilestoneNudge = async function checkCefrMilestoneNudge() {
         try {
           if (window._returnToSmartPath || document.getElementById('smart-path-modal-overlay')) {
             return false;
           }
+          const { maybeShowLevelMatrixNudge } = await lazyMod('./components/modals/LevelMatrixNudgeModal.js?v=423.0');
           return maybeShowLevelMatrixNudge(allWords, {
             onOpenMatrix: (lvl) => window._openLevelMatrixScreen(lvl, 'matrix'),
             onStartExam: (lvl) => window._openLevelMatrixScreen(lvl, 'exam'),
@@ -3108,14 +3162,14 @@
         }
       };
 
-      window._openGrammarHubScreen = function openGrammarHubScreen() {
+      window._openGrammarHubScreen = async function openGrammarHubScreen() {
         removeHubFloatingFabs();
         window._isCategorySelectOpen = true;
         window._currentGrammarSection = null;
         if (window.trackScreen) {
           window.trackScreen('grammar_hub', 'GrammarHub');
         }
-        const openSection = (sectionId) => {
+        const openSection = async (sectionId) => {
           window._currentGrammarSection = sectionId;
           const backToHub = () => {
             if (hasNavReturn()) {
@@ -3125,17 +3179,23 @@
             openGrammarHubScreen();
           };
           if (sectionId === 'milestone_stories') {
+            const { renderStoriesView } = await lazyMod('./components/favorites/StoriesView.js?v=423.0');
             renderStoriesView('#app-content', { onBack: backToHub });
           } else if (sectionId === 'grammar_microrules') {
+            const { renderMicroRulesView } = await lazyMod('./components/favorites/MicroRulesView.js?v=423.0');
             renderMicroRulesView('#app-content', { onBack: backToHub, onNavigateLink: window._navigateToTopicLink });
           } else if (sectionId === 'tense_constructions') {
+            const { renderTenseConstructionsView } = await lazyMod('./components/favorites/TenseConstructionsView.js?v=423.0');
             renderTenseConstructionsView('#app-content', { onBack: backToHub, onNavigateLink: window._navigateToTopicLink });
           } else if (sectionId === 'spoken_english') {
+            const { renderSpokenEnglishView } = await lazyMod('./components/favorites/SpokenEnglishView.js?v=423.0');
             renderSpokenEnglishView('#app-content', { onBack: backToHub, onStartPractice: window._startOpenRoundPractice });
           } else if (sectionId === 'level_matrix_exams') {
+            const { renderLevelMatrixView } = await lazyMod('./components/favorites/LevelMatrixView.js?v=423.0');
             renderLevelMatrixView(allWords, '#app-content', { onBack: backToHub, onNavigateLink: window._navigateToTopicLink });
           }
         };
+        const { renderGrammarHubView } = await lazyMod('./components/favorites/GrammarHubView.js?v=423.0');
         renderGrammarHubView('#app-content', {
           onBack: () => {
             window._isCategorySelectOpen = false;
@@ -3215,6 +3275,7 @@
           window._currentGrammarSection = null;
           await renderTrainingTab();
         } else if (tabName === 'stats') {
+          const { renderStatsView } = await lazyMod('./components/stats/StatsView.js?v=423.0');
           const renderLevelTab = async () => {
             await renderStatsView(allWords, '#app-content', {
               currentCategory: userSettings.category || 'Elementary',
@@ -3228,18 +3289,20 @@
           await renderLevelTab();
         } else if (tabName === 'favorites') {
           if (window._isInsideCollectionCards && window._currentOpenCollectionId) {
-            openCollectionCardsHandler(window._currentOpenCollectionId);
+            await openCollectionCardsHandler(window._currentOpenCollectionId);
             return;
           }
 
           window._isInsideCollectionCards = false;
           window._currentOpenCollectionId = null;
+          const { renderCollectionsHubView } = await lazyMod('./components/favorites/CollectionsHubView.js?v=423.0');
           renderCollectionsHubView(allWords, '#app-content', {
             onStartPractice: startPracticeHandler,
             onOpenCardsView: openCollectionCardsHandler,
           });
         } else if (tabName === 'leaderboard') {
           try {
+            const { renderLeaderboardView } = await lazyMod('./components/leaderboard/LeaderboardView.js?v=423.0');
             await renderLeaderboardView('#app-content', {
               onUserChange: async () => {
                 updateHeaderUser();
@@ -3250,11 +3313,13 @@
             console.error('Failed to render leaderboard:', leadErr);
           }
         } else if (tabName === 'dictionary') {
+          const { renderDictionaryView } = await lazyMod('./components/dictionary/DictionaryView.js?v=423.0');
           renderDictionaryView(allWords, '#app-content', {
             favoriteIds: Array.from(favoriteIds),
             onFavoriteToggle: handleFavoriteToggle,
           });
         } else if (tabName === 'settings') {
+          const { renderSettingsView } = await lazyMod('./components/settings/SettingsView.js?v=423.0');
           await renderSettingsView(
             '#app-content',
             async () => {
@@ -3280,6 +3345,7 @@
 
       window._renderLeaderboardDrawerContent = async () => {
         try {
+          const { renderLeaderboardView } = await lazyMod('./components/leaderboard/LeaderboardView.js?v=423.0');
           await renderLeaderboardView('#leaderboard-drawer-content', {
             onUserChange: async () => {
               updateHeaderUser();
@@ -3292,10 +3358,15 @@
       };
 
       async function init() {
+        await ensureLocaleLoaded(getInterfaceLanguage()).catch(() => {});
         window._isAppInitializing = true;
         window._explicitCardsOpened = false;
         window._trainingRoundJustCompleted = false;
-        initPrizePodiumListener();
+        setTimeout(() => {
+          lazyMod('./components/modals/PrizePodiumModal.js?v=423.0')
+            .then((m) => m.initPrizePodiumListener())
+            .catch(() => {});
+        }, 1500);
         preloadNextWotdVideo();
 
         // 1. Instant local cache restore (0ms)

@@ -1605,7 +1605,7 @@ export function showFairyTaleSurveyModal(triggerSource = 'story_tile') {
       <button class="fts-close-btn" id="fts-close-survey" aria-label="Close">&times;</button>
 
       <div class="fts-cover-wrap">
-        <img class="fts-cover-img" src="assets/images/my_lord_bag_of_rice.png" alt="My Lord Bag of Rice" onerror="this.src='assets/images/my_lord_bag_of_rice.webp'" />
+        <img class="fts-cover-img" src="assets/images/my_lord_bag_of_rice.webp" alt="My Lord Bag of Rice" />
       </div>
 
       <h2 class="fts-title">${displayTitle}</h2>

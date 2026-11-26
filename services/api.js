@@ -29,6 +29,7 @@ import {
 } from './firebase.js?v=423.0';
 import { getIsoWeekKey, getRecentWeekKeys, getIsoWeekStartMs, getIsoMonthKey, getTimeUntilMonthEnd } from './weekKey.js?v=423.0';
 import { t, applyInterfaceDirection, getInterfaceLanguage, getWordTranslation, getWordNotes } from './i18n.js?v=423.0';
+import { SUPPORTED_LOCALE_CODES } from '../config/locales.js?v=423.0';
 
 async function getHealth() {
   return { success: true, status: 'ok', engine: 'firebase' };
@@ -971,18 +972,54 @@ async function getWords(forceRefresh = false) {
     } catch (e) {}
   }
 
-  // Load static dictionary bundled with the app
+  // Load static dictionary bundled with the app (prefer per-language sharded payload)
   try {
     let wordData = null;
-    const pathsToTry = ['./assets/data/words.json', 'assets/data/words.json', '/assets/data/words.json'];
-    for (const p of pathsToTry) {
+    const rawLang = String(currentLang || 'ru').toLowerCase().trim().split(/[-_]/)[0];
+    const shardLang = SUPPORTED_LOCALE_CODES.includes(rawLang) ? rawLang : 'ru';
+    const dataPrefixes = ['./assets/data/', 'assets/data/', '/assets/data/'];
+
+    for (const prefix of dataPrefixes) {
       try {
-        const response = await fetch(p);
-        if (response.ok) {
-          wordData = await response.json();
-          if (Array.isArray(wordData) && wordData.length > 0) break;
+        const [baseRes, langRes] = await Promise.all([
+          fetch(`${prefix}words_base.json`),
+          fetch(`${prefix}words_lang/${shardLang}.json`),
+        ]);
+        if (baseRes && baseRes.ok && langRes && langRes.ok) {
+          const [baseList, langMap] = await Promise.all([baseRes.json(), langRes.json()]);
+          if (Array.isArray(baseList) && baseList.length > 0 && langMap && typeof langMap === 'object') {
+            wordData = baseList.map((b) => {
+              const entry = langMap[b.i];
+              const trans = Array.isArray(entry) ? (entry[0] || '') : (entry || '');
+              const note = Array.isArray(entry) ? (entry[1] || '') : '';
+              return {
+                id: b.i,
+                word: b.w,
+                translation: trans,
+                transcription: b.p || '',
+                level: b.l || '',
+                category: b.c || '',
+                ...(shardLang !== 'ru' && shardLang !== 'en' ? { translations: { [shardLang]: trans } } : {}),
+                ...(note ? { notes: note, ...(shardLang !== 'ru' ? { all_notes: { [shardLang]: note } } : {}) } : {}),
+              };
+            });
+            break;
+          }
         }
       } catch (err) {}
+    }
+
+    if (!Array.isArray(wordData) || wordData.length === 0) {
+      const pathsToTry = ['./assets/data/words.json', 'assets/data/words.json', '/assets/data/words.json'];
+      for (const p of pathsToTry) {
+        try {
+          const response = await fetch(p);
+          if (response.ok) {
+            wordData = await response.json();
+            if (Array.isArray(wordData) && wordData.length > 0) break;
+          }
+        } catch (err) {}
+      }
     }
 
     if (Array.isArray(wordData) && wordData.length > 0) {
@@ -1361,106 +1398,106 @@ async function syncWeeklyXpApi(userId, weekKey, xp, name, avatar) {
 }
 
 const BOT_PROFILES = [
-  { name: 'Alex Smith', avatar: './assets/avatars/avatar_1.png' },
-  { name: 'Elena Petrova', avatar: './assets/avatars/avatar_3.png' },
-  { name: 'Mark Davis', avatar: './assets/avatars/avatar_6.png' },
-  { name: 'Anna Novak', avatar: './assets/avatars/avatar_8.png' },
-  { name: 'Dmitry Kuznetsov', avatar: './assets/avatars/avatar_11.png' },
-  { name: 'Sophie Laurent', avatar: './assets/avatars/avatar_14.png' },
-  { name: 'John Doe', avatar: './assets/avatars/avatar_2.png' },
-  { name: 'Maria Ivanova', avatar: './assets/avatars/avatar_15.png' },
-  { name: 'Carlos Mendes', avatar: './assets/avatars/avatar_4.png' },
-  { name: 'Emma Watson', avatar: './assets/avatars/avatar_5.png' },
-  { name: 'Liam O\'Connor', avatar: './assets/avatars/avatar_7.png' },
-  { name: 'Yuki Tanaka', avatar: './assets/avatars/avatar_9.png' },
-  { name: 'Oliver Brown', avatar: './assets/avatars/avatar_10.png' },
-  { name: 'Chloe Dubois', avatar: './assets/avatars/avatar_12.png' },
-  { name: 'Lucas Silva', avatar: './assets/avatars/avatar_13.png' },
-  { name: 'Maximilian Becker', avatar: './assets/avatars/avatar_16.png' },
-  { name: 'Mia Andersen', avatar: './assets/avatars/avatar_1.png' },
-  { name: 'Noah Johnson', avatar: './assets/avatars/avatar_2.png' },
-  { name: 'Zoe Martin', avatar: './assets/avatars/avatar_3.png' },
-  { name: 'Artem Sokolov', avatar: './assets/avatars/avatar_4.png' },
-  { name: 'Isabella Rossi', avatar: './assets/avatars/avatar_5.png' },
-  { name: 'Viktor Orlov', avatar: './assets/avatars/avatar_6.png' },
-  { name: 'Hannah Schmidt', avatar: './assets/avatars/avatar_7.png' },
-  { name: 'Gabriel Santos', avatar: './assets/avatars/avatar_8.png' },
-  { name: 'Polina Smirnova', avatar: './assets/avatars/avatar_9.png' },
-  { name: 'Daniel Miller', avatar: './assets/avatars/avatar_10.png' },
-  { name: 'Laura Garcia', avatar: './assets/avatars/avatar_11.png' },
-  { name: 'Sergey Volkov', avatar: './assets/avatars/avatar_12.png' },
-  { name: 'Emily Clark', avatar: './assets/avatars/avatar_13.png' },
-  { name: 'Mateo Fernandez', avatar: './assets/avatars/avatar_14.png' },
-  { name: 'Alina Morozova', avatar: './assets/avatars/avatar_15.png' },
-  { name: 'William Taylor', avatar: './assets/avatars/avatar_16.png' },
-  { name: 'Camille Bernard', avatar: './assets/avatars/avatar_1.png' },
-  { name: 'Ivan Popov', avatar: './assets/avatars/avatar_2.png' },
-  { name: 'Freja Nielsen', avatar: './assets/avatars/avatar_3.png' },
-  { name: 'Ethan Wright', avatar: './assets/avatars/avatar_4.png' },
-  { name: 'Daria Lebedeva', avatar: './assets/avatars/avatar_5.png' },
-  { name: 'Leo Moreau', avatar: './assets/avatars/avatar_6.png' },
-  { name: 'Victoria Hall', avatar: './assets/avatars/avatar_7.png' },
-  { name: 'Ksenia Fedorova', avatar: './assets/avatars/avatar_8.png' },
-  { name: 'James Wilson', avatar: './assets/avatars/avatar_9.png' },
-  { name: 'Clara Meyer', avatar: './assets/avatars/avatar_10.png' },
-  { name: 'Ilya Kozlov', avatar: './assets/avatars/avatar_11.png' },
-  { name: 'Sara Lind', avatar: './assets/avatars/avatar_12.png' },
-  { name: 'Mason Evans', avatar: './assets/avatars/avatar_13.png' },
-  { name: 'Anastasia Romanova', avatar: './assets/avatars/avatar_14.png' },
-  { name: 'Hugo Lefebvre', avatar: './assets/avatars/avatar_15.png' },
-  { name: 'Evelyn Moore', avatar: './assets/avatars/avatar_16.png' },
-  { name: 'Mikhail Pavlov', avatar: './assets/avatars/avatar_1.png' },
-  { name: 'Olivia King', avatar: './assets/avatars/avatar_2.png' },
-  { name: 'Thomas Anderson', avatar: './assets/avatars/avatar_3.png' },
-  { name: 'Ekaterina Volkova', avatar: './assets/avatars/avatar_4.png' },
-  { name: 'Benjamin Lee', avatar: './assets/avatars/avatar_5.png' },
-  { name: 'Sofia Costa', avatar: './assets/avatars/avatar_6.png' },
-  { name: 'Andrey Semenov', avatar: './assets/avatars/avatar_7.png' },
-  { name: 'Charlotte Green', avatar: './assets/avatars/avatar_8.png' },
-  { name: 'Lucas Bianchi', avatar: './assets/avatars/avatar_9.png' },
-  { name: 'Valeria Tarasova', avatar: './assets/avatars/avatar_10.png' },
-  { name: 'Henry Adams', avatar: './assets/avatars/avatar_11.png' },
-  { name: 'Mila Jansen', avatar: './assets/avatars/avatar_12.png' },
-  { name: 'Denis Belov', avatar: './assets/avatars/avatar_13.png' },
-  { name: 'Amelia Baker', avatar: './assets/avatars/avatar_14.png' },
-  { name: 'Sebastian Wagner', avatar: './assets/avatars/avatar_15.png' },
-  { name: 'Kira Vasilyeva', avatar: './assets/avatars/avatar_16.png' },
-  { name: 'Jack Campbell', avatar: './assets/avatars/avatar_1.png' },
-  { name: 'Astrid Larsson', avatar: './assets/avatars/avatar_2.png' },
-  { name: 'Pavel Komarov', avatar: './assets/avatars/avatar_3.png' },
-  { name: 'Harper Scott', avatar: './assets/avatars/avatar_4.png' },
-  { name: 'Diego Romero', avatar: './assets/avatars/avatar_5.png' },
-  { name: 'Alisa Zaytseva', avatar: './assets/avatars/avatar_6.png' },
-  { name: 'Samuel Harris', avatar: './assets/avatars/avatar_7.png' },
-  { name: 'Elise Fontaine', avatar: './assets/avatars/avatar_8.png' },
-  { name: 'Timur Gusev', avatar: './assets/avatars/avatar_9.png' },
-  { name: 'Grace Turner', avatar: './assets/avatars/avatar_10.png' },
-  { name: 'Felix Weber', avatar: './assets/avatars/avatar_11.png' },
-  { name: 'Veronika Danilova', avatar: './assets/avatars/avatar_12.png' },
-  { name: 'Arthur Mitchell', avatar: './assets/avatars/avatar_13.png' },
-  { name: 'Lina Johansson', avatar: './assets/avatars/avatar_14.png' },
-  { name: 'Vadim Solovyov', avatar: './assets/avatars/avatar_15.png' },
-  { name: 'Scarlett Phillips', avatar: './assets/avatars/avatar_16.png' },
-  { name: 'Oscar Dupont', avatar: './assets/avatars/avatar_1.png' },
-  { name: 'Nadezhda Belyakova', avatar: './assets/avatars/avatar_2.png' },
-  { name: 'Julian Torres', avatar: './assets/avatars/avatar_3.png' },
-  { name: 'Maya Hoffmann', avatar: './assets/avatars/avatar_4.png' },
-  { name: 'Roman Kudryavtsev', avatar: './assets/avatars/avatar_5.png' },
-  { name: 'Lily Carter', avatar: './assets/avatars/avatar_6.png' },
-  { name: 'Matteo Ricci', avatar: './assets/avatars/avatar_7.png' },
-  { name: 'Yulia Antonova', avatar: './assets/avatars/avatar_8.png' },
-  { name: 'George Kelly', avatar: './assets/avatars/avatar_9.png' },
-  { name: 'Ines Ramos', avatar: './assets/avatars/avatar_10.png' },
-  { name: 'Grigoriy Melnikov', avatar: './assets/avatars/avatar_11.png' },
-  { name: 'Ruby Bennett', avatar: './assets/avatars/avatar_12.png' },
-  { name: 'Jonas Braun', avatar: './assets/avatars/avatar_13.png' },
-  { name: 'Svetlana Ponomareva', avatar: './assets/avatars/avatar_14.png' },
-  { name: 'Louis Leroy', avatar: './assets/avatars/avatar_15.png' },
-  { name: 'Eleanor Bailey', avatar: './assets/avatars/avatar_16.png' },
-  { name: 'Stanislav Borisov', avatar: './assets/avatars/avatar_1.png' },
-  { name: 'Eva Lund', avatar: './assets/avatars/avatar_2.png' },
-  { name: 'Leon Schmitt', avatar: './assets/avatars/avatar_3.png' },
-  { name: 'Tatiana Makarova', avatar: './assets/avatars/avatar_4.png' }
+  { name: 'Alex Smith', avatar: './assets/avatars/avatar_1.webp' },
+  { name: 'Elena Petrova', avatar: './assets/avatars/avatar_3.webp' },
+  { name: 'Mark Davis', avatar: './assets/avatars/avatar_6.webp' },
+  { name: 'Anna Novak', avatar: './assets/avatars/avatar_8.webp' },
+  { name: 'Dmitry Kuznetsov', avatar: './assets/avatars/avatar_11.webp' },
+  { name: 'Sophie Laurent', avatar: './assets/avatars/avatar_14.webp' },
+  { name: 'John Doe', avatar: './assets/avatars/avatar_2.webp' },
+  { name: 'Maria Ivanova', avatar: './assets/avatars/avatar_15.webp' },
+  { name: 'Carlos Mendes', avatar: './assets/avatars/avatar_4.webp' },
+  { name: 'Emma Watson', avatar: './assets/avatars/avatar_5.webp' },
+  { name: 'Liam O\'Connor', avatar: './assets/avatars/avatar_7.webp' },
+  { name: 'Yuki Tanaka', avatar: './assets/avatars/avatar_9.webp' },
+  { name: 'Oliver Brown', avatar: './assets/avatars/avatar_10.webp' },
+  { name: 'Chloe Dubois', avatar: './assets/avatars/avatar_12.webp' },
+  { name: 'Lucas Silva', avatar: './assets/avatars/avatar_13.webp' },
+  { name: 'Maximilian Becker', avatar: './assets/avatars/avatar_16.webp' },
+  { name: 'Mia Andersen', avatar: './assets/avatars/avatar_1.webp' },
+  { name: 'Noah Johnson', avatar: './assets/avatars/avatar_2.webp' },
+  { name: 'Zoe Martin', avatar: './assets/avatars/avatar_3.webp' },
+  { name: 'Artem Sokolov', avatar: './assets/avatars/avatar_4.webp' },
+  { name: 'Isabella Rossi', avatar: './assets/avatars/avatar_5.webp' },
+  { name: 'Viktor Orlov', avatar: './assets/avatars/avatar_6.webp' },
+  { name: 'Hannah Schmidt', avatar: './assets/avatars/avatar_7.webp' },
+  { name: 'Gabriel Santos', avatar: './assets/avatars/avatar_8.webp' },
+  { name: 'Polina Smirnova', avatar: './assets/avatars/avatar_9.webp' },
+  { name: 'Daniel Miller', avatar: './assets/avatars/avatar_10.webp' },
+  { name: 'Laura Garcia', avatar: './assets/avatars/avatar_11.webp' },
+  { name: 'Sergey Volkov', avatar: './assets/avatars/avatar_12.webp' },
+  { name: 'Emily Clark', avatar: './assets/avatars/avatar_13.webp' },
+  { name: 'Mateo Fernandez', avatar: './assets/avatars/avatar_14.webp' },
+  { name: 'Alina Morozova', avatar: './assets/avatars/avatar_15.webp' },
+  { name: 'William Taylor', avatar: './assets/avatars/avatar_16.webp' },
+  { name: 'Camille Bernard', avatar: './assets/avatars/avatar_1.webp' },
+  { name: 'Ivan Popov', avatar: './assets/avatars/avatar_2.webp' },
+  { name: 'Freja Nielsen', avatar: './assets/avatars/avatar_3.webp' },
+  { name: 'Ethan Wright', avatar: './assets/avatars/avatar_4.webp' },
+  { name: 'Daria Lebedeva', avatar: './assets/avatars/avatar_5.webp' },
+  { name: 'Leo Moreau', avatar: './assets/avatars/avatar_6.webp' },
+  { name: 'Victoria Hall', avatar: './assets/avatars/avatar_7.webp' },
+  { name: 'Ksenia Fedorova', avatar: './assets/avatars/avatar_8.webp' },
+  { name: 'James Wilson', avatar: './assets/avatars/avatar_9.webp' },
+  { name: 'Clara Meyer', avatar: './assets/avatars/avatar_10.webp' },
+  { name: 'Ilya Kozlov', avatar: './assets/avatars/avatar_11.webp' },
+  { name: 'Sara Lind', avatar: './assets/avatars/avatar_12.webp' },
+  { name: 'Mason Evans', avatar: './assets/avatars/avatar_13.webp' },
+  { name: 'Anastasia Romanova', avatar: './assets/avatars/avatar_14.webp' },
+  { name: 'Hugo Lefebvre', avatar: './assets/avatars/avatar_15.webp' },
+  { name: 'Evelyn Moore', avatar: './assets/avatars/avatar_16.webp' },
+  { name: 'Mikhail Pavlov', avatar: './assets/avatars/avatar_1.webp' },
+  { name: 'Olivia King', avatar: './assets/avatars/avatar_2.webp' },
+  { name: 'Thomas Anderson', avatar: './assets/avatars/avatar_3.webp' },
+  { name: 'Ekaterina Volkova', avatar: './assets/avatars/avatar_4.webp' },
+  { name: 'Benjamin Lee', avatar: './assets/avatars/avatar_5.webp' },
+  { name: 'Sofia Costa', avatar: './assets/avatars/avatar_6.webp' },
+  { name: 'Andrey Semenov', avatar: './assets/avatars/avatar_7.webp' },
+  { name: 'Charlotte Green', avatar: './assets/avatars/avatar_8.webp' },
+  { name: 'Lucas Bianchi', avatar: './assets/avatars/avatar_9.webp' },
+  { name: 'Valeria Tarasova', avatar: './assets/avatars/avatar_10.webp' },
+  { name: 'Henry Adams', avatar: './assets/avatars/avatar_11.webp' },
+  { name: 'Mila Jansen', avatar: './assets/avatars/avatar_12.webp' },
+  { name: 'Denis Belov', avatar: './assets/avatars/avatar_13.webp' },
+  { name: 'Amelia Baker', avatar: './assets/avatars/avatar_14.webp' },
+  { name: 'Sebastian Wagner', avatar: './assets/avatars/avatar_15.webp' },
+  { name: 'Kira Vasilyeva', avatar: './assets/avatars/avatar_16.webp' },
+  { name: 'Jack Campbell', avatar: './assets/avatars/avatar_1.webp' },
+  { name: 'Astrid Larsson', avatar: './assets/avatars/avatar_2.webp' },
+  { name: 'Pavel Komarov', avatar: './assets/avatars/avatar_3.webp' },
+  { name: 'Harper Scott', avatar: './assets/avatars/avatar_4.webp' },
+  { name: 'Diego Romero', avatar: './assets/avatars/avatar_5.webp' },
+  { name: 'Alisa Zaytseva', avatar: './assets/avatars/avatar_6.webp' },
+  { name: 'Samuel Harris', avatar: './assets/avatars/avatar_7.webp' },
+  { name: 'Elise Fontaine', avatar: './assets/avatars/avatar_8.webp' },
+  { name: 'Timur Gusev', avatar: './assets/avatars/avatar_9.webp' },
+  { name: 'Grace Turner', avatar: './assets/avatars/avatar_10.webp' },
+  { name: 'Felix Weber', avatar: './assets/avatars/avatar_11.webp' },
+  { name: 'Veronika Danilova', avatar: './assets/avatars/avatar_12.webp' },
+  { name: 'Arthur Mitchell', avatar: './assets/avatars/avatar_13.webp' },
+  { name: 'Lina Johansson', avatar: './assets/avatars/avatar_14.webp' },
+  { name: 'Vadim Solovyov', avatar: './assets/avatars/avatar_15.webp' },
+  { name: 'Scarlett Phillips', avatar: './assets/avatars/avatar_16.webp' },
+  { name: 'Oscar Dupont', avatar: './assets/avatars/avatar_1.webp' },
+  { name: 'Nadezhda Belyakova', avatar: './assets/avatars/avatar_2.webp' },
+  { name: 'Julian Torres', avatar: './assets/avatars/avatar_3.webp' },
+  { name: 'Maya Hoffmann', avatar: './assets/avatars/avatar_4.webp' },
+  { name: 'Roman Kudryavtsev', avatar: './assets/avatars/avatar_5.webp' },
+  { name: 'Lily Carter', avatar: './assets/avatars/avatar_6.webp' },
+  { name: 'Matteo Ricci', avatar: './assets/avatars/avatar_7.webp' },
+  { name: 'Yulia Antonova', avatar: './assets/avatars/avatar_8.webp' },
+  { name: 'George Kelly', avatar: './assets/avatars/avatar_9.webp' },
+  { name: 'Ines Ramos', avatar: './assets/avatars/avatar_10.webp' },
+  { name: 'Grigoriy Melnikov', avatar: './assets/avatars/avatar_11.webp' },
+  { name: 'Ruby Bennett', avatar: './assets/avatars/avatar_12.webp' },
+  { name: 'Jonas Braun', avatar: './assets/avatars/avatar_13.webp' },
+  { name: 'Svetlana Ponomareva', avatar: './assets/avatars/avatar_14.webp' },
+  { name: 'Louis Leroy', avatar: './assets/avatars/avatar_15.webp' },
+  { name: 'Eleanor Bailey', avatar: './assets/avatars/avatar_16.webp' },
+  { name: 'Stanislav Borisov', avatar: './assets/avatars/avatar_1.webp' },
+  { name: 'Eva Lund', avatar: './assets/avatars/avatar_2.webp' },
+  { name: 'Leon Schmitt', avatar: './assets/avatars/avatar_3.webp' },
+  { name: 'Tatiana Makarova', avatar: './assets/avatars/avatar_4.webp' }
 ];
 
 function generateDynamicBots(weekKey) {

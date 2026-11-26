@@ -52,6 +52,8 @@ public class MainActivity extends BridgeActivity {
     private ActivityResultLauncher<Intent> googleSignInLauncher;
     private TextToSpeech tts;
     private boolean ttsInitialized = false;
+    private Runnable pendingTtsAction;
+    private String pendingTtsUtteranceId;
     private volatile boolean isPageOriginTrusted = true;
     private FirebaseAnalytics firebaseAnalytics;
 
@@ -126,7 +128,6 @@ public class MainActivity extends BridgeActivity {
         firebaseAnalytics = FirebaseAnalytics.getInstance(this);
         setupAnalyticsBridge();
         setupOcrBridge();
-        initNativeTts();
         lockWebViewTextZoom();
 
         if (bridge != null) {
@@ -157,8 +158,15 @@ public class MainActivity extends BridgeActivity {
             }
         }
 
-        StudyReminderManager.scheduleReminder(this);
         handleWidgetConfigIntent(getIntent());
+
+        // Defer non-critical Binder IPC / AlarmManager work until after first layout/frame
+        getWindow().getDecorView().post(() -> {
+            if (!isFinishing() && !isDestroyed()) {
+                initNativeTts();
+                StudyReminderManager.scheduleReminder(this);
+            }
+        });
     }
 
     @Override
@@ -298,7 +306,11 @@ public class MainActivity extends BridgeActivity {
         lockWebViewTextZoom();
         injectSafeTopToWebView();
         injectSafeBottomToWebView();
-        GoldCardWidgetProvider.updateAllWidgets(MainActivity.this);
+        getWindow().getDecorView().postDelayed(() -> {
+            if (!isFinishing() && !isDestroyed()) {
+                GoldCardWidgetProvider.updateAllWidgets(MainActivity.this);
+            }
+        }, 250);
 
         if (bridge != null && bridge.getWebView() != null) {
             bridge.getWebView().post(() -> {
@@ -518,18 +530,28 @@ public class MainActivity extends BridgeActivity {
     @Override
     public void onDestroy() {
         BackgroundAudioService.setActionListener(null);
+        pendingTtsAction = null;
+        pendingTtsUtteranceId = null;
+        ttsInitialized = false;
         if (tts != null) {
             try {
                 tts.stop();
                 tts.shutdown();
             } catch (Exception ignored) {}
+            tts = null;
         }
         super.onDestroy();
     }
 
     private void initNativeTts() {
+        if (tts != null) return;
         try {
-            tts = new TextToSpeech(this, status -> {
+            tts = new TextToSpeech(this, status -> runOnUiThread(() -> {
+                if (tts == null || isFinishing() || isDestroyed()) {
+                    pendingTtsAction = null;
+                    pendingTtsUtteranceId = null;
+                    return;
+                }
                 if (status == TextToSpeech.SUCCESS) {
                     ttsInitialized = true;
                     try {
@@ -548,8 +570,22 @@ public class MainActivity extends BridgeActivity {
                             }
                         });
                     } catch (Exception ignored) {}
+                    Runnable pending = pendingTtsAction;
+                    pendingTtsAction = null;
+                    pendingTtsUtteranceId = null;
+                    if (pending != null) {
+                        pending.run();
+                    }
+                } else {
+                    ttsInitialized = false;
+                    String failedId = pendingTtsUtteranceId;
+                    pendingTtsAction = null;
+                    pendingTtsUtteranceId = null;
+                    if (failedId != null) {
+                        notifyTtsDone(failedId);
+                    }
                 }
-            });
+            }));
         } catch (Exception ignored) {}
     }
 
@@ -651,44 +687,65 @@ public class MainActivity extends BridgeActivity {
                             return false;
                         }
                         runOnUiThread(() -> {
-                            try {
-                                if (tts == null) {
+                            Runnable doSpeak = () -> {
+                                try {
+                                    if (tts == null || !ttsInitialized) {
+                                        notifyTtsDone(utteranceId);
+                                        return;
+                                    }
+                                    Locale locale;
+                                    if ("uk".equalsIgnoreCase(langCode) || "uk-UA".equalsIgnoreCase(langCode)) {
+                                        locale = new Locale("uk", "UA");
+                                    } else if ("ru".equalsIgnoreCase(langCode) || "ru-RU".equalsIgnoreCase(langCode)) {
+                                        locale = new Locale("ru", "RU");
+                                    } else if ("en-GB".equalsIgnoreCase(langCode) || "gb".equalsIgnoreCase(langCode)) {
+                                        locale = Locale.UK;
+                                    } else if ("en".equalsIgnoreCase(langCode) || "en-US".equalsIgnoreCase(langCode) || "us".equalsIgnoreCase(langCode)) {
+                                        locale = Locale.US;
+                                    } else if ("de".equalsIgnoreCase(langCode) || "de-DE".equalsIgnoreCase(langCode)) {
+                                        locale = Locale.GERMANY;
+                                    } else if ("fr".equalsIgnoreCase(langCode) || "fr-FR".equalsIgnoreCase(langCode)) {
+                                        locale = Locale.FRANCE;
+                                    } else if ("es".equalsIgnoreCase(langCode) || "es-ES".equalsIgnoreCase(langCode)) {
+                                        locale = new Locale("es", "ES");
+                                    } else if (langCode != null && langCode.contains("-")) {
+                                        String[] parts = langCode.split("-");
+                                        locale = new Locale(parts[0], parts[1]);
+                                    } else if (langCode != null) {
+                                        locale = new Locale(langCode);
+                                    } else {
+                                        locale = new Locale("ru", "RU");
+                                    }
+                                    tts.setLanguage(locale);
+                                    float rate = speechRate > 0.1f ? speechRate : 1.0f;
+                                    tts.setSpeechRate(rate);
+                                    tts.setPitch(1.0f);
+                                    Bundle params = new Bundle();
+                                    params.putString(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, utteranceId);
+                                    int result = tts.speak(text, TextToSpeech.QUEUE_FLUSH, params, utteranceId);
+                                    if (result != TextToSpeech.SUCCESS) {
+                                        notifyTtsDone(utteranceId);
+                                    }
+                                } catch (Exception e) {
                                     notifyTtsDone(utteranceId);
-                                    return;
                                 }
-                                Locale locale;
-                                if ("uk".equalsIgnoreCase(langCode) || "uk-UA".equalsIgnoreCase(langCode)) {
-                                    locale = new Locale("uk", "UA");
-                                } else if ("ru".equalsIgnoreCase(langCode) || "ru-RU".equalsIgnoreCase(langCode)) {
-                                    locale = new Locale("ru", "RU");
-                                } else if ("en-GB".equalsIgnoreCase(langCode) || "gb".equalsIgnoreCase(langCode)) {
-                                    locale = Locale.UK;
-                                } else if ("en".equalsIgnoreCase(langCode) || "en-US".equalsIgnoreCase(langCode) || "us".equalsIgnoreCase(langCode)) {
-                                    locale = Locale.US;
-                                } else if ("de".equalsIgnoreCase(langCode) || "de-DE".equalsIgnoreCase(langCode)) {
-                                    locale = Locale.GERMANY;
-                                } else if ("fr".equalsIgnoreCase(langCode) || "fr-FR".equalsIgnoreCase(langCode)) {
-                                    locale = Locale.FRANCE;
-                                } else if ("es".equalsIgnoreCase(langCode) || "es-ES".equalsIgnoreCase(langCode)) {
-                                    locale = new Locale("es", "ES");
-                                } else if (langCode != null && langCode.contains("-")) {
-                                    String[] parts = langCode.split("-");
-                                    locale = new Locale(parts[0], parts[1]);
-                                } else if (langCode != null) {
-                                    locale = new Locale(langCode);
-                                } else {
-                                    locale = new Locale("ru", "RU");
-                                }
-                                tts.setLanguage(locale);
-                                float rate = speechRate > 0.1f ? speechRate : 1.0f;
-                                tts.setSpeechRate(rate);
-                                tts.setPitch(1.0f);
-                                Bundle params = new Bundle();
-                                params.putString(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, utteranceId);
-                                tts.speak(text, TextToSpeech.QUEUE_FLUSH, params, utteranceId);
-                            } catch (Exception e) {
-                                notifyTtsDone(utteranceId);
+                            };
+                            if (tts == null) {
+                                initNativeTts();
                             }
+                            if (tts == null) {
+                                notifyTtsDone(utteranceId);
+                                return;
+                            }
+                            if (!ttsInitialized) {
+                                if (pendingTtsUtteranceId != null) {
+                                    notifyTtsDone(pendingTtsUtteranceId);
+                                }
+                                pendingTtsUtteranceId = utteranceId;
+                                pendingTtsAction = doSpeak;
+                                return;
+                            }
+                            doSpeak.run();
                         });
                         return true;
                     }
@@ -703,6 +760,11 @@ public class MainActivity extends BridgeActivity {
                         if (!isTrustedOrigin()) return;
                         runOnUiThread(() -> {
                             try {
+                                if (pendingTtsUtteranceId != null) {
+                                    notifyTtsDone(pendingTtsUtteranceId);
+                                }
+                                pendingTtsAction = null;
+                                pendingTtsUtteranceId = null;
                                 if (tts != null) {
                                     tts.stop();
                                 }

@@ -10985,6 +10985,100 @@ body.dark-theme .hub-dock-btn-compass .hub-dock-icon-img,
   }
 }
 
+/* ==========================================================================
+   WEBVIEW SCROLL & GPU COMPOSITING OPTIMIZATIONS
+   ========================================================================== */
+
+/* Skip layout & paint for offscreen repeating cards/rows while scrolling */
+.dict-card,
+.fav-card,
+.mr-card,
+.tc-card,
+.leaderboard-row,
+.scanner-lemma-item {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 76px;
+}
+
+.dict-card,
+.fav-card {
+  contain-intrinsic-size: auto 104px;
+}
+
+.mr-card,
+.tc-card {
+  contain-intrinsic-size: auto 84px;
+}
+
+.leaderboard-row {
+  contain-intrinsic-size: auto 60px;
+}
+
+/* Replace heavy SVG url(#liquidGlassFilter) & multi-pass backdrop-filter blur
+   with crisp high-opacity surfaces on Android WebView for 60fps scroll & modals */
+html.is-android-app .hub-bottom-dock,
+body.is-android-app .hub-bottom-dock {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(241, 245, 249, 0.94) 100%);
+  border-color: rgba(203, 213, 225, 0.92);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -1px 1px rgba(15, 23, 42, 0.08),
+    0 8px 22px rgba(15, 23, 42, 0.14);
+}
+
+html.is-android-app.dark-theme .hub-bottom-dock,
+html.is-android-app .dark-theme .hub-bottom-dock,
+html.is-android-app body.dark-theme .hub-bottom-dock,
+html.is-android-app[data-theme="dark"] .hub-bottom-dock,
+body.is-android-app.dark-theme .hub-bottom-dock {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  background: linear-gradient(180deg, rgba(30, 41, 59, 0.96) 0%, rgba(15, 23, 42, 0.95) 100%);
+  border-color: rgba(71, 85, 105, 0.72);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    inset 0 -1px 1px rgba(0, 0, 0, 0.3),
+    0 8px 24px rgba(0, 0, 0, 0.45);
+}
+
+html.is-android-app .wotd-card .flashcard-sound-btn,
+html.is-android-app .wotd-card .flashcard-fav-btn,
+body.is-android-app .wotd-card .flashcard-sound-btn,
+body.is-android-app .wotd-card .flashcard-fav-btn {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  background: rgba(15, 23, 42, 0.72);
+}
+
+html.is-android-app .word-notes-modal-overlay,
+html.is-android-app .pairs-timeout-overlay,
+html.is-android-app .prize-podium-backdrop,
+html.is-android-app .speech-diag-modal,
+html.is-android-app .scanner-modal-overlay,
+html.is-android-app .share-modal-overlay,
+html.is-android-app .modal-overlay,
+html.is-android-app .widget-sheet-backdrop,
+html.is-android-app .collection-sheet-backdrop,
+html.is-android-app .col-actions-modal-overlay,
+html.is-android-app .challenge-modal-overlay,
+body.is-android-app .word-notes-modal-overlay,
+body.is-android-app .pairs-timeout-overlay,
+body.is-android-app .prize-podium-backdrop,
+body.is-android-app .speech-diag-modal,
+body.is-android-app .scanner-modal-overlay,
+body.is-android-app .share-modal-overlay,
+body.is-android-app .modal-overlay,
+body.is-android-app .widget-sheet-backdrop,
+body.is-android-app .collection-sheet-backdrop,
+body.is-android-app .col-actions-modal-overlay,
+body.is-android-app .challenge-modal-overlay {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  background: rgba(15, 23, 42, 0.82);
+}
+
 
 
 

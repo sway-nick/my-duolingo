@@ -681,10 +681,10 @@ export function getMondayMemeTop4CutHtml(weekKey = null) {
   }
 
   const defaultWinners = [
-    { name: 'Elena', xp: 2450, avatar: 'assets/avatars/avatar_1.png' },
-    { name: 'Alex', xp: 1980, avatar: 'assets/avatars/avatar_2.png' },
-    { name: 'Max', xp: 1620, avatar: 'assets/avatars/avatar_3.png' },
-    { name: 'Anna', xp: 1350, avatar: 'assets/avatars/avatar_4.png' },
+    { name: 'Elena', xp: 2450, avatar: 'assets/avatars/avatar_1.webp' },
+    { name: 'Alex', xp: 1980, avatar: 'assets/avatars/avatar_2.webp' },
+    { name: 'Max', xp: 1620, avatar: 'assets/avatars/avatar_3.webp' },
+    { name: 'Anna', xp: 1350, avatar: 'assets/avatars/avatar_4.webp' },
   ];
 
   const top4 = [];

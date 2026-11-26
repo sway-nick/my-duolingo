@@ -1,12 +1,17 @@
 import { getCurrentUser, getGuestTrainingCount, GUEST_WORD_LIMIT, getUserAvatar } from '../../services/authService.js?v=423.0';
 import { getUserWeeklyXP, getUserWeeklyRank, formatCompactXp, getCachedLeaderboard } from '../../services/api.js?v=423.0';
-import { renderAuthModal } from '../auth/AuthModal.js?v=423.0';
-import { openShareDialog } from '../modals/ShareModal.js?v=423.0';
-import { openChallengeModal } from '../modals/ChallengeModal.js?v=423.0';
 import { t, getInterfaceLanguage } from '../../services/i18n.js?v=423.0';
 import { isEmailVerified } from '../../services/firebase.js?v=423.0';
 import { renderMondayWinnersTicker, updateMondayTickerTabVisibility, initMondayWinnersTickerListener } from './MondayWinnersTicker.js?v=423.0';
 import { isProActive } from '../../services/proState.js?v=423.0';
+
+const _lazyLayoutModCache = new Map();
+function lazyLayoutMod(path) {
+  if (!_lazyLayoutModCache.has(path)) {
+    _lazyLayoutModCache.set(path, import(path));
+  }
+  return _lazyLayoutModCache.get(path);
+}
 
 let globalAuthChangedCallback = () => {};
 let globalTabChangeCallback = () => {};
@@ -412,7 +417,9 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
     shareBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       closeDrawer();
-      openShareDialog();
+      lazyLayoutMod('../modals/ShareModal.js?v=423.0')
+        .then(({ openShareDialog }) => openShareDialog())
+        .catch(() => {});
     });
   }
 
@@ -422,7 +429,9 @@ function renderAppLayout(onTabChange = () => {}, onUserAuthChanged = () => {}, o
     challengeBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       closeDrawer();
-      openChallengeModal();
+      lazyLayoutMod('../modals/ChallengeModal.js?v=423.0')
+        .then(({ openChallengeModal }) => openChallengeModal())
+        .catch(() => {});
     });
   }
 
