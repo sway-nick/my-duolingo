@@ -2,9 +2,12 @@ name: Generate Daily News (Active PRO Regions)
 
 on:
   schedule:
-    # Runs once daily at 04:00 UTC (06:00 AM Kyiv / 07:00 AM Moscow / 09:00 AM Almaty)
-    # Generates today's editions simultaneously for ALL active PRO regions.
-    - cron: '0 4 * * *'
+    # Primary daily run at 04:17 UTC (:17 bypasses top-of-the-hour GitHub queue delays)
+    # (06:17 AM Kyiv / 07:17 AM Moscow / 09:17 AM Almaty)
+    - cron: '17 4 * * *'
+    # Backup/recovery run at 05:17 UTC in case GitHub delayed or dropped the 04:17 run.
+    # If today's edition is already generated, it exits cleanly in 2 seconds without spending API calls.
+    - cron: '17 5 * * *'
   workflow_dispatch:
     inputs:
       force_countries:
