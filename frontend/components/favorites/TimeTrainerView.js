@@ -1601,6 +1601,7 @@ export function renderTimeTrainerView(containerSelector = '#app-content', option
 
     container.querySelector('#fav-view-back-btn')?.addEventListener('click', () => {
       clearTimersAndAudio();
+      try { window._cancelSmartPathReturn?.(); } catch (_) {}
       onBack();
     });
 
@@ -1759,6 +1760,10 @@ export function renderTimeTrainerView(containerSelector = '#app-content', option
       });
     }
 
+    if (typeof window !== 'undefined' && window._returnToSmartPath && typeof window._completeSmartPathStep === 'function') {
+      window._completeSmartPathStep({ delayMs: 1200 });
+    }
+
     container.innerHTML = `
       ${getStylesHtml()}
       <div class="tt-page">
@@ -1779,9 +1784,18 @@ export function renderTimeTrainerView(containerSelector = '#app-content', option
       </div>
     `;
 
-    container.querySelector('#fav-view-back-btn')?.addEventListener('click', () => renderModeSelection());
-    container.querySelector('#tt-change-mode-btn')?.addEventListener('click', () => renderModeSelection());
-    container.querySelector('#tt-replay-mode-btn')?.addEventListener('click', () => startModeRound(selectedModeId));
+    container.querySelector('#fav-view-back-btn')?.addEventListener('click', () => {
+      try { window._cancelSmartPathReturn?.(); } catch (_) {}
+      renderModeSelection();
+    });
+    container.querySelector('#tt-change-mode-btn')?.addEventListener('click', () => {
+      try { window._cancelSmartPathReturn?.(); } catch (_) {}
+      renderModeSelection();
+    });
+    container.querySelector('#tt-replay-mode-btn')?.addEventListener('click', () => {
+      try { window._cancelSmartPathReturn?.(); } catch (_) {}
+      startModeRound(selectedModeId);
+    });
   }
 
   renderModeSelection();

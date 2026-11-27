@@ -899,3 +899,34 @@ test('Daily News: toast #news-saved-toast cleans up on exit and timeout so no un
   assert.ok(stopMatch, 'stopDailyNewsAudio() must call clearNewsToast()');
   assert.ok(closeMatch, 'closeNewsWordPopover() must call clearNewsToast()');
 });
+
+test('Smart Course auto-return: completing any recommended step returns to Smart Course modal', () => {
+  const indexHtmlSrc = fs.readFileSync(path.resolve('frontend/index.html'), 'utf8');
+  assert.ok(indexHtmlSrc.includes('window._completeSmartPathStep = function'), 'index.html defines window._completeSmartPathStep');
+  assert.ok(indexHtmlSrc.includes('window._cancelSmartPathReturn = function'), 'index.html defines window._cancelSmartPathReturn');
+
+  // Practice completion must prioritize wasSmartPathReturn BEFORE hasNavReturn()
+  const favCompleteMatch = indexHtmlSrc.match(/const wasSmartPathReturn = Boolean\(window\._returnToSmartPath\);[\s\S]{0,400}popNavReturn\(\);/);
+  assert.ok(favCompleteMatch, 'Favorite/collection practice completion checks wasSmartPathReturn before popNavReturn()');
+  const firstSmartIdx = favCompleteMatch[0].indexOf('if (wasSmartPathReturn');
+  const popIdx = favCompleteMatch[0].indexOf('popNavReturn()');
+  assert.ok(firstSmartIdx >= 0 && firstSmartIdx < popIdx, 'wasSmartPathReturn branch precedes popNavReturn()');
+
+  // Tab switch away from training cancels pending Smart Path return
+  const tabSwitchMatch = indexHtmlSrc.match(/if \(tabName !== 'training'\) \{\s*window\._cancelSmartPathReturn\?\.\(\);\s*window\._returnToSmartPath = false;/);
+  assert.ok(tabSwitchMatch, 'Switching tabs away from training clears Smart Path return state');
+
+  const viewFiles = [
+    'frontend/components/favorites/MicroRulesView.js',
+    'frontend/components/favorites/TenseConstructionsView.js',
+    'frontend/components/favorites/GrammarReferenceView.js',
+    'frontend/components/favorites/NumberAudioTrainerView.js',
+    'frontend/components/favorites/TimeTrainerView.js',
+    'frontend/components/favorites/LevelMatrixView.js',
+  ];
+  for (const relPath of viewFiles) {
+    const src = fs.readFileSync(path.resolve(relPath), 'utf8');
+    assert.ok(src.includes('_completeSmartPathStep'), `${relPath} must call window._completeSmartPathStep on completion`);
+    assert.ok(src.includes('_cancelSmartPathReturn'), `${relPath} must cancel Smart Path timer on Back/Retry`);
+  }
+});

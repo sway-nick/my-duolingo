@@ -1513,7 +1513,11 @@ export async function renderMicroRulesView(containerSelector = '#app-content', o
         updateDynamicContent();
         if (markingDone) {
           scrollRuleCardToTop(id);
-          if (typeof window !== 'undefined' && typeof window._checkCefrMilestoneNudge === 'function') {
+          const matchesSmartTarget = initialRuleId === null || initialRuleId === undefined || Number(initialRuleId) === Number(id);
+          if (matchesSmartTarget && typeof window !== 'undefined' && window._returnToSmartPath && typeof window._completeSmartPathStep === 'function') {
+            try { stopAllAudio(); } catch (_) {}
+            window._completeSmartPathStep({ delayMs: 650 });
+          } else if (typeof window !== 'undefined' && typeof window._checkCefrMilestoneNudge === 'function') {
             setTimeout(() => window._checkCefrMilestoneNudge(), 350);
           }
         } else if (typeof window !== 'undefined' && typeof window.scrollTo === 'function') {
@@ -1554,20 +1558,26 @@ export async function renderMicroRulesView(containerSelector = '#app-content', o
       const tileList = WORD_ORDER_TILES_BY_RULE_ID[ruleId] || [];
       const tileDoneCount = tileSolvedMap.get(ruleId)?.size || 0;
       const tilesDone = tileDoneCount >= tileList.length;
-      if (regularDone && tilesDone && !quizDoneSet.has(ruleId)) {
-        quizDoneSet.add(ruleId);
-        saveQuizDoneSet(quizDoneSet);
+      if (regularDone && tilesDone && (!quizDoneSet.has(ruleId) || !doneSet.has(ruleId))) {
+        if (!quizDoneSet.has(ruleId)) {
+          quizDoneSet.add(ruleId);
+          saveQuizDoneSet(quizDoneSet);
+          try { addWeeklyXP(5); } catch (_) {}
+          if (typeof window !== 'undefined' && window.trackEvent) {
+            window.trackEvent('microrule_completed', { rule_id: ruleId });
+          }
+        }
         if (!doneSet.has(ruleId)) {
           doneSet.add(ruleId);
           saveDoneSet(doneSet);
         }
         expandedDoneSet.delete(ruleId);
-        try { addWeeklyXP(5); } catch (_) {}
-        if (typeof window !== 'undefined' && window.trackEvent) {
-          window.trackEvent('microrule_completed', { rule_id: ruleId });
-        }
         updateProgressPill();
-        if (typeof window !== 'undefined' && typeof window._checkCefrMilestoneNudge === 'function') {
+        const matchesSmartTarget = initialRuleId === null || initialRuleId === undefined || Number(initialRuleId) === Number(ruleId);
+        if (matchesSmartTarget && typeof window !== 'undefined' && window._returnToSmartPath && typeof window._completeSmartPathStep === 'function') {
+          try { stopAllAudio(); } catch (_) {}
+          window._completeSmartPathStep({ delayMs: 750 });
+        } else if (typeof window !== 'undefined' && typeof window._checkCefrMilestoneNudge === 'function') {
           setTimeout(() => window._checkCefrMilestoneNudge(), 350);
         }
         return true;
@@ -1885,6 +1895,7 @@ export async function renderMicroRulesView(containerSelector = '#app-content', o
   `;
 
   container.querySelector('#fav-view-back-btn')?.addEventListener('click', () => {
+    try { window._cancelSmartPathReturn?.(); } catch (_) {}
     try { stopAllAudio(); } catch (_) {}
     onBack();
   });

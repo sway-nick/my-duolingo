@@ -1535,6 +1535,7 @@ export function renderLevelMatrixView(allWords = [], containerSelector = '#app-c
 
     container.querySelector('#fav-view-back-btn')?.addEventListener('click', () => {
       try { closeQuizWordPopover(); } catch (_) {}
+      try { window._cancelSmartPathReturn?.(); } catch (_) {}
       if (mode === 'exam' && !examFinished && examIndex > 0) {
         mode = 'matrix';
         render();
@@ -1584,9 +1585,16 @@ export function renderLevelMatrixView(allWords = [], containerSelector = '#app-c
       });
     } else if (examFinished) {
       container.querySelector('#lm-retake-exam-btn')?.addEventListener('click', () => {
+        try { window._cancelSmartPathReturn?.(); } catch (_) {}
         startExamForLevel(activeLevel);
       });
       container.querySelector('#lm-back-matrix-btn')?.addEventListener('click', () => {
+        const total = examQuestions.length;
+        const passed = total > 0 && Math.round((examScore / total) * 100) >= 80;
+        if (passed && typeof window !== 'undefined' && window._returnToSmartPath && typeof window._completeSmartPathStep === 'function') {
+          window._completeSmartPathStep({ delayMs: 0 });
+          return;
+        }
         mode = 'matrix';
         render();
       });
@@ -1719,6 +1727,9 @@ export function renderLevelMatrixView(allWords = [], containerSelector = '#app-c
               examAlreadyClaimed = true;
             }
             try { playSuccessSound(); } catch (_) {}
+            if (examScore === total && typeof window !== 'undefined' && window._returnToSmartPath && typeof window._completeSmartPathStep === 'function') {
+              window._completeSmartPathStep({ delayMs: 1400 });
+            }
           }
           render();
         }

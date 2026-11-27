@@ -2559,6 +2559,7 @@ function buildGroupMiniTestQuestions(gId, groupObj, isMatrix) {
     `;
 
     container.querySelector('#fav-view-back-btn')?.addEventListener('click', () => {
+      try { window._cancelSmartPathReturn?.(); } catch (_) {}
       onBack();
     });
 
@@ -2620,7 +2621,9 @@ function buildGroupMiniTestQuestions(gId, groupObj, isMatrix) {
           if (pct >= 80) {
             doneSet.add(`${normalizedKind}:${gId}`);
             saveGrammarRefDoneSet(doneSet);
-            if (typeof window !== 'undefined' && typeof window._checkCefrMilestoneNudge === 'function') {
+            if (typeof window !== 'undefined' && window._returnToSmartPath && typeof window._completeSmartPathStep === 'function') {
+              window._completeSmartPathStep({ delayMs: 900 });
+            } else if (typeof window !== 'undefined' && typeof window._checkCefrMilestoneNudge === 'function') {
               setTimeout(() => window._checkCefrMilestoneNudge(), 350);
             }
           }

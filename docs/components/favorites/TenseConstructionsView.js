@@ -1790,6 +1790,7 @@ export function renderTenseConstructionsView(containerSelector = '#app-content',
 
     container.querySelector('#fav-view-back-btn')?.addEventListener('click', () => {
       closeQuizWordPopover();
+      try { window._cancelSmartPathReturn?.(); } catch (_) {}
       try { stopAllAudio(); } catch (_) {}
       onBack();
     });
@@ -1896,7 +1897,11 @@ export function renderTenseConstructionsView(containerSelector = '#app-content',
         render();
         if (markingDone) {
           scrollTenseCardToTop(id, false);
-          if (typeof window !== 'undefined' && typeof window._checkCefrMilestoneNudge === 'function') {
+          const matchesSmartTarget = !initialTenseId || String(initialTenseId) === String(id);
+          if (matchesSmartTarget && typeof window !== 'undefined' && window._returnToSmartPath && typeof window._completeSmartPathStep === 'function') {
+            try { stopAllAudio(); } catch (_) {}
+            window._completeSmartPathStep({ delayMs: 650 });
+          } else if (typeof window !== 'undefined' && typeof window._checkCefrMilestoneNudge === 'function') {
             setTimeout(() => window._checkCefrMilestoneNudge(), 350);
           }
         } else if (typeof window !== 'undefined' && typeof window.scrollTo === 'function') {
@@ -2060,7 +2065,11 @@ export function renderTenseConstructionsView(containerSelector = '#app-content',
           render();
           if (justCompletedTense) {
             scrollTenseCardToTop(tenseId, false);
-            if (typeof window !== 'undefined' && typeof window._checkCefrMilestoneNudge === 'function') {
+            const matchesSmartTarget = !initialTenseId || String(initialTenseId) === String(tenseId);
+            if (matchesSmartTarget && typeof window !== 'undefined' && window._returnToSmartPath && typeof window._completeSmartPathStep === 'function') {
+              try { stopAllAudio(); } catch (_) {}
+              window._completeSmartPathStep({ delayMs: 750 });
+            } else if (typeof window !== 'undefined' && typeof window._checkCefrMilestoneNudge === 'function') {
               setTimeout(() => window._checkCefrMilestoneNudge(), 350);
             }
           } else if (typeof window !== 'undefined' && typeof window.scrollTo === 'function') {

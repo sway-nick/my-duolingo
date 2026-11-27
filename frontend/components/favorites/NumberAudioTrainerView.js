@@ -530,6 +530,9 @@ export function renderNumberAudioTrainerView(containerSelector = '#app-content',
         try { addWeeklyXP(wasAlreadyDone ? 5 : 15); } catch (_) {}
         try { pushUserDataToCloud(null, null, true); } catch (_) {}
       } catch (_) {}
+      if (typeof window !== 'undefined' && window._returnToSmartPath && typeof window._completeSmartPathStep === 'function') {
+        window._completeSmartPathStep({ delayMs: 1200 });
+      }
     }
 
     container.innerHTML = `
@@ -551,9 +554,20 @@ export function renderNumberAudioTrainerView(containerSelector = '#app-content',
       </div>
     `;
 
-    container.querySelector('#fav-view-back-btn')?.addEventListener('click', () => onBack());
-    container.querySelector('#nat-done-btn')?.addEventListener('click', () => onBack());
+    container.querySelector('#fav-view-back-btn')?.addEventListener('click', () => {
+      try { window._cancelSmartPathReturn?.(); } catch (_) {}
+      onBack();
+    });
+    container.querySelector('#nat-done-btn')?.addEventListener('click', () => {
+      if (passed && typeof window !== 'undefined' && window._returnToSmartPath && typeof window._completeSmartPathStep === 'function') {
+        window._completeSmartPathStep({ delayMs: 0 });
+        return;
+      }
+      try { window._cancelSmartPathReturn?.(); } catch (_) {}
+      onBack();
+    });
     container.querySelector('#nat-retry-btn')?.addEventListener('click', () => {
+      try { window._cancelSmartPathReturn?.(); } catch (_) {}
       roundQuestions = buildNumberAudioQuestions(mode);
       qIndex = 0;
       correctCount = 0;

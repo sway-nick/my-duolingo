@@ -1664,6 +1664,43 @@
             smartBtn.className = 'hub-dock-btn hub-dock-btn-compass';
             smartBtn.setAttribute('aria-label', 'Smart Course Path');
             smartBtn.innerHTML = '<svg class="hub-dock-icon-img" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M10.5 1C11.4 6.8 13.7 9.1 19.5 10C13.7 10.9 11.4 13.2 10.5 19C9.6 13.2 7.3 10.9 1.5 10C7.3 9.1 9.6 6.8 10.5 1Z" fill="#1e293b"/><path d="M19 14.5C19.45 17.05 20.45 18.05 23 18.5C20.45 18.95 19.45 19.95 19 22.5C18.55 19.95 17.55 18.95 15 18.5C17.55 18.05 18.55 17.05 19 14.5Z" fill="#1e293b"/></svg>';
+            window._cancelSmartPathReturn = function cancelSmartPathReturn() {
+              if (window._smartPathReturnTimer) {
+                clearTimeout(window._smartPathReturnTimer);
+                window._smartPathReturnTimer = null;
+              }
+            };
+            window._completeSmartPathStep = function completeSmartPathStep(opts = {}) {
+              const { delayMs = 650, onlyIfActive = true } = opts;
+              if (onlyIfActive && !window._returnToSmartPath) return false;
+              window._cancelSmartPathReturn();
+              const finish = () => {
+                window._smartPathReturnTimer = null;
+                window._returnToSmartPath = false;
+                clearNavReturn();
+                window._isCategorySelectOpen = false;
+                window._isInsideCollectionCards = false;
+                window._currentOpenCollectionId = null;
+                window._currentGrammarSection = null;
+                window._showHubScreen = true;
+                activeTab = 'training';
+                window._activeTab = 'training';
+                document.querySelectorAll('.nav-tab').forEach((tabEl) => {
+                  tabEl.classList.toggle('active', tabEl.getAttribute('data-tab') === 'training');
+                });
+                try { pushUserDataToCloud(null, null, true); } catch (_) {}
+                renderTrainingTab();
+                setTimeout(() => {
+                  try { window._openSmartPathModal?.(); } catch (_) {}
+                }, 80);
+              };
+              if (delayMs <= 0) {
+                finish();
+              } else {
+                window._smartPathReturnTimer = setTimeout(finish, delayMs);
+              }
+              return true;
+            };
             window._openSmartPathModal = async () => {
               const { showSmartPathModal } = await lazyMod('./components/modals/SmartPathModal.js?v=423.0');
               showSmartPathModal(allWords, {
@@ -1718,6 +1755,7 @@
                   pushNavReturn({
                     label: 'main_hub_smart_path',
                     restore: () => {
+                      window._cancelSmartPathReturn?.();
                       window._returnToSmartPath = false;
                       window._isCategorySelectOpen = false;
                       window._currentGrammarSection = null;
@@ -2357,18 +2395,10 @@
             const tabs = document.querySelectorAll('.nav-tab');
             tabs.forEach((t) => t.classList.toggle('active', t.getAttribute('data-tab') === 'favorites'));
             const wasSmartPathReturn = Boolean(window._returnToSmartPath);
-            if (typeof hasNavReturn === 'function' && hasNavReturn()) {
+            if (wasSmartPathReturn && typeof window._completeSmartPathStep === 'function') {
+              window._completeSmartPathStep({ delayMs: 80 });
+            } else if (typeof hasNavReturn === 'function' && hasNavReturn()) {
               popNavReturn();
-            } else if (wasSmartPathReturn) {
-              window._returnToSmartPath = false;
-              window._showHubScreen = true;
-              activeTab = 'training';
-              window._activeTab = 'training';
-              tabs.forEach((t) => t.classList.toggle('active', t.getAttribute('data-tab') === 'training'));
-              renderTrainingTab();
-              setTimeout(() => {
-                try { window._openSmartPathModal?.(); } catch (_) {}
-              }, 80);
             } else {
               renderTab('favorites', true);
             }
@@ -3249,6 +3279,8 @@
         } catch (e) {}
 
         if (tabName !== 'training') {
+          window._cancelSmartPathReturn?.();
+          window._returnToSmartPath = false;
           removeHubFloatingFabs();
           try { stopDailyNewsAudio(); closeNewsWordPopover(); } catch (e) {}
           try { pushUserDataToCloud(null, null, true); } catch (e) {}
@@ -3615,6 +3647,8 @@
           () => {
             // Click on Logo / Brand -> Exit any practice / mode and return cleanly to Main Hub / Training
             try {
+              window._cancelSmartPathReturn?.();
+              window._returnToSmartPath = false;
               clearNavReturn();
               const isFavPracticeRunning = Boolean(favoritePracticeWords && favoritePracticeWords.length > 0);
               if (activeTab === 'favorites' || isFavPracticeRunning || window._activePracticeCollectionId) {
