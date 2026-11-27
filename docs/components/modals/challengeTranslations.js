@@ -181,8 +181,8 @@ export const CHALLENGE_TRANSLATIONS = {
     "menuTitle": "Desafío",
     "subtitle": "¿Tienes una idea divertida? ¿Te encanta hacer videos o crear clips con IA? ¡Muéstranos lo que tienes!",
     "intro": "¡Invitamos a todos los jugadores de English Breakfast a unirse a nuestro concurso creativo de videos! Crea un video corto, divertido y entretenido en inglés. ¡Cualquier cosa que haga sonreír a la gente!",
-    "goldenCardTitle": "🌟 ¡Destacado en la Carta Dorada!",
-    "goldenCardText": "¡El equipo de English Breakfast seleccionará los mejores, más divertidos y creativos videos! Los videos ganadores se mostrarán directamente en la Tarjeta Dorada en la app de English Breakfast. ¡Comparte tu video en la app en las redes sociales!",
+    "goldenCardTitle": "🌟 ¡Destacado en la Tarjeta Dorada!",
+    "goldenCardText": "¡El equipo de English Breakfast seleccionará los mejores, más divertidos y creativos videos! Los videos ganadores se mostrarán directamente en la Tarjeta Dorada en la app de English Breakfast. ¡Comparte tu video en la app y en las redes sociales!",
     "proPrizeText": "¡Los creadores de los mejores videos recibirán una suscripción PRO al igual que los ganadores de la Liga del mes!",
     "ideasTitle": "🐱 ¿De qué puede tratar tu video?",
     "ideas": [
@@ -211,7 +211,7 @@ export const CHALLENGE_TRANSLATIONS = {
     "confirmTitle": "Al enviar tu video, confirmas que:",
     "confirmations": [
       "Posees los derechos y permisos necesarios para enviar el video.",
-      "Autorizas a English Breakfast a publicar, mostrar y compartir tu video en la app (incluida la Carta Dorada) y en redes sociales de forma gratuita.",
+      "Autorizas a English Breakfast a publicar, mostrar y compartir tu video en la app (incluida la Tarjeta Dorada) y en redes sociales de forma gratuita.",
       "Permites que English Breakfast te dé crédito como creador al publicar tu video."
     ],
     "freeNote": "¡La participación es totalmente GRATUITA!",

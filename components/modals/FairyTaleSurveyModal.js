@@ -156,7 +156,7 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
       "Regular",
       "Bueno",
       "¡Genial!",
-      "¡Bien hecho!"
+      "¡Excelente!"
     ],
     "q2": "¿Qué función te gustó?",
     "optQuiz": "Quiz",
@@ -191,7 +191,7 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
       "Regular",
       "Bueno",
       "¡Genial!",
-      "¡Bien hecho!"
+      "¡Excelente!"
     ],
     "q2": "¿Qué función te gustó?",
     "optQuiz": "Quiz",

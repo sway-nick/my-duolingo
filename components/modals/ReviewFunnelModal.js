@@ -69,7 +69,7 @@ export const REVIEW_TRANSLATIONS = {
     step1No: 'Tengo sugerencias',
     step1Later: 'Preguntar más tarde',
     step2PosTitle: '¡Muchas gracias! 💖',
-    step2PosSub: '¿Podrías tomarnos 5 segundos para calificarnos con 5 estrellas en Google Play? ¡Nos ayuda muchísimo!',
+    step2PosSub: '¿Podrías dedicarnos 5 segundos para calificarnos con 5 estrellas en Google Play? ¡Nos ayuda muchísimo!',
     step2PosRate: '⭐ Calificar en Google Play',
     step2PosDone: 'Listo',
     step2NegTitle: 'Ayúdanos a mejorar 💬',

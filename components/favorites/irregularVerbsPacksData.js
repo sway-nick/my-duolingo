@@ -720,7 +720,7 @@ export const IRREGULAR_PACKS_UI_I18N = {
     hubSubtitle: '10 paquetes mnemotécnicos con todos los verbos irregulares',
     backBtn: 'Atrás',
     allPacks: 'Todos los paquetes',
-    learnPackBtn: '🎓 Тренировка',
+    learnPackBtn: '🎓 Practicar',
     v1Label: 'V1 · Base',
     v2Label: 'V2 · Pasado',
     v3Label: 'V3 · Participio',

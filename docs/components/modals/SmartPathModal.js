@@ -1024,7 +1024,7 @@ export const SMART_PATH_I18N = {
     typeSpoken: 'Inglés hablado',
     typeExam: 'Examen de nivel',
     vocabDesc: 'Aprende palabras rumbo a la meta de {target} ({current}/{target})',
-    examDesc: 'Aprueba el examen completo para cerrar {level}',
+    examDesc: 'Aprueba el examen completo para completar {level}',
     allDoneTitle: '¡Ruta completa hasta C1 terminada!',
     allDoneDesc: 'Todos los niveles y exámenes están aprobados.',
   },

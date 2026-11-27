@@ -1028,7 +1028,7 @@ export const GRAMMAR_REF_I18N = {
   },
   'es-mx': {
     backBtn: 'Atrás',
-    practiceGroupBtn: '🎓 Тренировка',
+    practiceGroupBtn: '🎓 Practicar',
     markDoneBtn: 'Aprendido',
     doneBadge: '✓ Aprendido',
     progressLabel: 'Dominado: {done} / {total}',
