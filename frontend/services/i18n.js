@@ -552,7 +552,7 @@ export function t(key, params = null) {
   } else if (key === 'sound_on') {
     const map = {
       ru: "Озвучить слово", uk: "Озвучити слово", en: "Pronounce word", de: "Wort anhören",
-      es: "Pronunciar palabra", fr: "Prononcer le mot", pl: "Wymów słowo", it: "Pronuncia parola",
+      es: "Pronunciar palabra", fr: "Prononcer le mot", pl: "Odtwórz wymowę", it: "Pronuncia parola",
       tr: "Kelimeyi seslendir", pt: "Pronunciar palavra", ro: "Pronunță cuvântul", bg: "Произнеси думата",
       cs: "Vyslovit slovo", sk: "Vysloviť slovo", hu: "Szó kiejtése", el: "Προφορά λέξης",
       da: "Udtal ord", lv: "Izrunāt vārdu", lt: "Ištarti žodį", sl: "Izgovori besedo",
@@ -631,7 +631,7 @@ export function t(key, params = null) {
   } else if (key === 'word_notes_title') {
     const map = {
       ru: 'Примечание', uk: 'Примітка', en: 'Note', de: 'Hinweis', es: 'Nota',
-      fr: 'Remarque', pl: 'Uwaga', tr: 'Not', it: 'Nota', ro: 'Notă',
+      fr: 'Remarque', pl: 'Notatka', tr: 'Not', it: 'Nota', ro: 'Notă',
       bg: 'Бележка', hu: 'Megjegyzés', el: 'Σημείωση', da: 'Bemærkning', lv: 'Piezīme',
       lt: 'Pastaba', pt: 'Nota', sk: 'Poznámka', sl: 'Opomba', fi: 'Huomautus',
       hr: 'Bilješka', cs: 'Poznámka', sv: 'Anteckning', et: 'Märkus',
