@@ -127,7 +127,7 @@ export const SPOKEN_ENGLISH_I18N = {
   },
   "pl": {
     "grammarHubTitle": "Gramatyka",
-    "grammarHubSubtitle": "Teksty, mikroreguły, czasy i żywy język mówiony",
+    "grammarHubSubtitle": "Teksty, mikrozasady, czasy i żywy język mówiony",
     "folderTitle": "Żywy angielski",
     "folderSubtitle": "200 żywych form i skrótów",
     "hubTitle": "Żywy angielski",
@@ -142,7 +142,7 @@ export const SPOKEN_ENGLISH_I18N = {
     "nativeLabel": "Na żywo",
     "freeBadge": "Za darmo",
     "adUnlock10Btn": "Odblokuj jeszcze 10 za wideo",
-    "proRemainingHint": "Pozostałe {n} przykładów jest dostępnych w wersji PRO",
+    "proRemainingHint": "Pozostałe przykłady ({n}) są dostępne w wersji PRO",
     "unlockedCounter": "Odblokowano: {n} / {total}",
     "practiceBtn": "Trening"
   },

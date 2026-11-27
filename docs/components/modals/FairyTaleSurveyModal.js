@@ -260,7 +260,7 @@ export const FAIRY_TALE_SURVEY_TRANSLATIONS = {
       "Słabo",
       "Średnio",
       "Dobrze",
-      "Świetnie!",
+      "Bardzo dobrze",
       "Świetnie!"
     ],
     "q2": "Która funkcja Ci się spodobała?",

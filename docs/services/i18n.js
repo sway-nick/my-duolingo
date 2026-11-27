@@ -945,7 +945,7 @@ const CATEGORY_LOCALIZATIONS = {
     de: { title: "Gesprächsmuster", desc: "Feste Redewendungen, Satzmuster und idiomatische Ausdrücke" },
     es: { title: "Patrones conversacionales", desc: "Frases hechas, conectores y expresiones idiomáticas" },
     fr: { title: "Modèles de conversation", desc: "Expressions courantes, tournures de phrases et idiomes" },
-    pl: { title: "Wzorce konwersacyjne", desc: "Zwroty potoczne, spójniki mowy i wyrażenia idiomatyczne" },
+    pl: { title: "Wzorce konwersacyjne", desc: "Utarte zwroty, wyrażenia łączące i idiomy" },
     it: { title: "Pattern di conversazione", desc: "Frasi fatte, connettivi ed espressioni idiomatiche" },
     tr: { title: "Konuşma Kalıpları", desc: "Kalıplaşmış ifadeler, konuşma bağlaçları ve deyimler" },
     pt: { title: "Padrões de conversação", desc: "Frases feitas, conectivos e expressões idiomáticas" },

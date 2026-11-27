@@ -35,6 +35,81 @@ import {
 
 export { TENSE_CONSTRUCTIONS_I18N, getTenseConstructionsStrings };
 
+export const ACTIVE_MATRIX_EXAMPLES = {
+  present_simple: {
+    pos: 'I work every day.',
+    neg: "I don't work every day.",
+    ques: 'Do you work every day?',
+    short: "Yes, I do. / No, I don't.",
+  },
+  past_simple: {
+    pos: 'I worked yesterday.',
+    neg: "I didn't work yesterday.",
+    ques: 'Did you work yesterday?',
+    short: "Yes, I did. / No, I didn't.",
+  },
+  future_simple: {
+    pos: 'I will work tomorrow.',
+    neg: "I won't work tomorrow.",
+    ques: 'Will you work tomorrow?',
+    short: "Yes, I will. / No, I won't.",
+  },
+  present_continuous: {
+    pos: 'I am working right now.',
+    neg: "I'm not working right now.",
+    ques: 'Are you working right now?',
+    short: "Yes, I am. / No, I'm not.",
+  },
+  past_continuous: {
+    pos: 'I was working at 8 PM.',
+    neg: "I wasn't working at 8 PM.",
+    ques: 'Were you working at 8 PM?',
+    short: "Yes, I was. / No, I wasn't.",
+  },
+  future_continuous: {
+    pos: 'I will be working at 5 PM.',
+    neg: "I won't be working at 5 PM.",
+    ques: 'Will you be working at 5 PM?',
+    short: "Yes, I will. / No, I won't.",
+  },
+  present_perfect: {
+    pos: 'I have already finished.',
+    neg: "I haven't finished yet.",
+    ques: 'Have you finished yet?',
+    short: "Yes, I have. / No, I haven't.",
+  },
+  past_perfect: {
+    pos: 'I had finished before he came.',
+    neg: "I hadn't finished before he came.",
+    ques: 'Had you finished before he came?',
+    short: "Yes, I had. / No, I hadn't.",
+  },
+  future_perfect: {
+    pos: 'I will have finished by 6 PM.',
+    neg: "I won't have finished by 6 PM.",
+    ques: 'Will you have finished by 6 PM?',
+    short: "Yes, I will. / No, I won't.",
+  },
+  present_perfect_continuous: {
+    pos: 'I have been working for 3 hours.',
+    neg: "I haven't been working long.",
+    ques: 'Have you been working long?',
+    short: "Yes, I have. / No, I haven't.",
+  },
+  past_perfect_continuous: {
+    pos: 'I had been working for 3 hours.',
+    neg: "I hadn't been working long.",
+    ques: 'Had you been working long?',
+    short: "Yes, I had. / No, I hadn't.",
+  },
+  future_perfect_continuous: {
+    pos: 'I will have been working for a year.',
+    neg: "I won't have been working long.",
+    ques: 'Will you have been working long?',
+    short: "Yes, I will. / No, I won't.",
+  },
+};
+
 const STORAGE_KEY_DONE = 'myduo_tenses_done';
 const STORAGE_KEY_QUIZ_DONE = 'myduo_tenses_quiz_done';
 const STORAGE_KEY_UNLOCKED = 'myduo_tenses_unlocked';
@@ -683,6 +758,58 @@ function getStylesHtml() {
         line-height: 1.3;
         white-space: normal;
       }
+      .tc-matrix-cell-examples {
+        margin-top: 5px;
+        padding-top: 5px;
+        border-top: 1px dashed rgba(148, 163, 184, 0.25);
+        display: flex;
+        flex-direction: column;
+        gap: 2.5px;
+        direction: ltr;
+      }
+      .tc-matrix-ex-row {
+        display: flex;
+        align-items: baseline;
+        gap: 5px;
+        font-size: 11px;
+        font-weight: 600;
+        font-style: italic;
+        color: var(--text-muted);
+        line-height: 1.32;
+        white-space: normal;
+      }
+      .tc-matrix-ex-row.is-short {
+        font-style: normal;
+        font-size: 10.5px;
+        color: var(--text-main);
+        opacity: 0.88;
+        margin-top: 1px;
+      }
+      .tc-matrix-ex-sign {
+        display: inline-block;
+        min-width: 20px;
+        font-style: normal;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 10px;
+        font-weight: 800;
+        flex-shrink: 0;
+      }
+      .tc-matrix-ex-sign.is-pos { color: #16a34a; }
+      .tc-matrix-ex-sign.is-neg { color: #dc2626; }
+      .tc-matrix-ex-sign.is-ques { color: #2563eb; }
+      .tc-matrix-ex-sign.is-ans { color: #9333ea; }
+      body.dark-theme .tc-matrix-ex-sign.is-pos,
+      .dark-theme .tc-matrix-ex-sign.is-pos,
+      [data-theme="dark"] .tc-matrix-ex-sign.is-pos { color: #4ade80; }
+      body.dark-theme .tc-matrix-ex-sign.is-neg,
+      .dark-theme .tc-matrix-ex-sign.is-neg,
+      [data-theme="dark"] .tc-matrix-ex-sign.is-neg { color: #f87171; }
+      body.dark-theme .tc-matrix-ex-sign.is-ques,
+      .dark-theme .tc-matrix-ex-sign.is-ques,
+      [data-theme="dark"] .tc-matrix-ex-sign.is-ques { color: #60a5fa; }
+      body.dark-theme .tc-matrix-ex-sign.is-ans,
+      .dark-theme .tc-matrix-ex-sign.is-ans,
+      [data-theme="dark"] .tc-matrix-ex-sign.is-ans { color: #c084fc; }
       .tc-tok-time {
         color: #c2410c;
         background: rgba(234, 88, 12, 0.12);
@@ -1377,6 +1504,20 @@ export function renderTenseConstructionsView(containerSelector = '#app-content',
     `;
   }
 
+  function renderMatrixExamplesHtml(exObj, fallbackSingle = '') {
+    if (exObj && (exObj.pos || exObj.neg || exObj.ques || exObj.short)) {
+      return `
+        <div class="tc-matrix-cell-examples" dir="ltr">
+          ${exObj.pos ? `<div class="tc-matrix-ex-row"><span class="tc-matrix-ex-sign is-pos">(+)</span><span>${escapeHtml(exObj.pos)}</span></div>` : ''}
+          ${exObj.neg ? `<div class="tc-matrix-ex-row"><span class="tc-matrix-ex-sign is-neg">(-)</span><span>${escapeHtml(exObj.neg)}</span></div>` : ''}
+          ${exObj.ques ? `<div class="tc-matrix-ex-row"><span class="tc-matrix-ex-sign is-ques">(?)</span><span>${escapeHtml(exObj.ques)}</span></div>` : ''}
+          ${exObj.short ? `<div class="tc-matrix-ex-row is-short"><span class="tc-matrix-ex-sign is-ans">↳</span><span>${escapeHtml(exObj.short)}</span></div>` : ''}
+        </div>
+      `;
+    }
+    return fallbackSingle ? `<div class="tc-matrix-cell-example">${escapeHtml(fallbackSingle)}</div>` : '';
+  }
+
   function renderMatrixHtml() {
     const pm = getPassiveMatrixStrings(rawLang);
     const byId = new Map(TENSE_CONSTRUCTIONS.map((t) => [t.id, t]));
@@ -1493,7 +1634,7 @@ export function renderTenseConstructionsView(containerSelector = '#app-content',
                           <span class="tc-matrix-cell-formula"><span class="tc-matrix-cell-sign">(+)</span> ${formatColorCodedFormulaHtml(cell.pos)}</span>
                           <span class="tc-matrix-cell-formula"><span class="tc-matrix-cell-sign">(-)</span> ${formatColorCodedFormulaHtml(cell.neg)}</span>
                           <span class="tc-matrix-cell-formula"><span class="tc-matrix-cell-sign">(?)</span> ${formatColorCodedFormulaHtml(cell.ques)}</span>
-                          ${cell.example ? `<div class="tc-matrix-cell-example">${escapeHtml(cell.example)}</div>` : ''}
+                          ${renderMatrixExamplesHtml(cell.matrixExamples, cell.example)}
                           <span class="tc-matrix-cell-rule-tag">📖 ${escapeHtml(pm.openRuleTag)} #${escapeHtml(cell.ruleId)}</span>
                         </div>
                       </td>
@@ -1563,6 +1704,7 @@ export function renderTenseConstructionsView(containerSelector = '#app-content',
                   if (!item) return '<td></td>';
                   const isDone = doneSet.has(id);
                   const compactEx = item.examples?.[0]?.en || '';
+                  const matrixEx = ACTIVE_MATRIX_EXAMPLES[id];
                   return `
                     <td class="${isDone ? 'is-done' : ''}">
                       <div class="tc-matrix-cell" role="button" tabindex="0" data-open-tense="${escapeHtml(id)}">
@@ -1570,7 +1712,7 @@ export function renderTenseConstructionsView(containerSelector = '#app-content',
                         <span class="tc-matrix-cell-formula"><span class="tc-matrix-cell-sign">(+)</span> ${formatColorCodedFormulaHtml(item.formula.pos)}</span>
                         <span class="tc-matrix-cell-formula"><span class="tc-matrix-cell-sign">(-)</span> ${formatColorCodedFormulaHtml(item.formula.neg)}</span>
                         <span class="tc-matrix-cell-formula"><span class="tc-matrix-cell-sign">(?)</span> ${formatColorCodedFormulaHtml(item.formula.ques)}</span>
-                        ${compactEx ? `<div class="tc-matrix-cell-example">${escapeHtml(compactEx)}</div>` : ''}
+                        ${renderMatrixExamplesHtml(matrixEx, compactEx)}
                       </div>
                     </td>
                   `;

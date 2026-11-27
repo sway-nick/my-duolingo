@@ -35,7 +35,7 @@ export const PRONOUN_MATRIX_LABEL_I18N = {
   lv: 'Matrica',
   lt: 'Matrica',
   fa: 'ماتریس',
-  pl: 'Macierz',
+  pl: 'Matryca',
   pt: 'Matriz',
   'pt-br': 'Matriz',
   ro: 'Matrice',

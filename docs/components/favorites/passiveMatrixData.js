@@ -503,6 +503,12 @@ export const PASSIVE_MATRIX_CELLS = {
     neg: "S + am not / isn't / aren't + V3",
     ques: 'Am / Is / Are + S + V3?',
     example: 'Coffee is grown in Brazil.',
+    matrixExamples: {
+      pos: 'Coffee is grown in Brazil.',
+      neg: "Coffee isn't grown here.",
+      ques: 'Is coffee grown in Brazil?',
+      short: "Yes, it is. / No, it isn't.",
+    },
   },
   past_simple: {
     id: 'past_simple_passive',
@@ -512,6 +518,12 @@ export const PASSIVE_MATRIX_CELLS = {
     neg: "S + wasn't / weren't + V3",
     ques: 'Was / Were + S + V3?',
     example: 'The house was built in 1990.',
+    matrixExamples: {
+      pos: 'The house was built in 1990.',
+      neg: "The house wasn't built in 1990.",
+      ques: 'Was the house built in 1990?',
+      short: "Yes, it was. / No, it wasn't.",
+    },
   },
   future_simple: {
     id: 'future_simple_passive',
@@ -521,6 +533,12 @@ export const PASSIVE_MATRIX_CELLS = {
     neg: "S + won't be + V3",
     ques: 'Will + S + be + V3?',
     example: 'The parcel will be delivered tomorrow.',
+    matrixExamples: {
+      pos: 'The parcel will be delivered tomorrow.',
+      neg: "The parcel won't be delivered tomorrow.",
+      ques: 'Will the parcel be delivered tomorrow?',
+      short: "Yes, it will. / No, it won't.",
+    },
   },
   present_continuous: {
     id: 'present_continuous_passive',
@@ -530,6 +548,12 @@ export const PASSIVE_MATRIX_CELLS = {
     neg: "S + am not / isn't / aren't + being + V3",
     ques: 'Am / Is / Are + S + being + V3?',
     example: 'The road is being repaired now.',
+    matrixExamples: {
+      pos: 'The road is being repaired now.',
+      neg: "The road isn't being repaired now.",
+      ques: 'Is the road being repaired now?',
+      short: "Yes, it is. / No, it isn't.",
+    },
   },
   past_continuous: {
     id: 'past_continuous_passive',
@@ -539,6 +563,12 @@ export const PASSIVE_MATRIX_CELLS = {
     neg: "S + wasn't / weren't + being + V3",
     ques: 'Was / Were + S + being + V3?',
     example: 'Dinner was being cooked at 7 PM.',
+    matrixExamples: {
+      pos: 'Dinner was being cooked at 7 PM.',
+      neg: "Dinner wasn't being cooked at 7 PM.",
+      ques: 'Was dinner being cooked at 7 PM?',
+      short: "Yes, it was. / No, it wasn't.",
+    },
   },
   future_continuous: {
     id: 'future_continuous_passive',
@@ -554,6 +584,12 @@ export const PASSIVE_MATRIX_CELLS = {
     neg: "S + haven't / hasn't + been + V3",
     ques: 'Have / Has + S + been + V3?',
     example: 'The report has already been sent.',
+    matrixExamples: {
+      pos: 'The report has already been sent.',
+      neg: "The report hasn't been sent yet.",
+      ques: 'Has the report been sent yet?',
+      short: "Yes, it has. / No, it hasn't.",
+    },
   },
   past_perfect: {
     id: 'past_perfect_passive',
@@ -563,6 +599,12 @@ export const PASSIVE_MATRIX_CELLS = {
     neg: "S + hadn't been + V3",
     ques: 'Had + S + been + V3?',
     example: 'The tickets had been sold out.',
+    matrixExamples: {
+      pos: 'The tickets had been sold out.',
+      neg: "The tickets hadn't been sold out.",
+      ques: 'Had the tickets been sold out?',
+      short: "Yes, they had. / No, they hadn't.",
+    },
   },
   future_perfect: {
     id: 'future_perfect_passive',
@@ -572,6 +614,12 @@ export const PASSIVE_MATRIX_CELLS = {
     neg: "S + won't have been + V3",
     ques: 'Will + S + have been + V3?',
     example: 'The bridge will have been built by May.',
+    matrixExamples: {
+      pos: 'The bridge will have been built by May.',
+      neg: "The bridge won't have been built by May.",
+      ques: 'Will the bridge have been built by May?',
+      short: "Yes, it will. / No, it won't.",
+    },
   },
   present_perfect_continuous: {
     id: 'present_perfect_continuous_passive',

@@ -34,6 +34,7 @@ let activeNewsPopoverOutside = null;
 let activeNewsPopoverScroll = null;
 let activeProUnsub = null;
 let activeNewsToastTimer = null;
+let activeNewsToastRemoveTimer = null;
 
 function cleanNewsWordToken(rawWord) {
   return String(rawWord || '')
@@ -56,22 +57,57 @@ function isWordSavedInDictAndFav(rawWord) {
   return favSet.has(String(existing.id));
 }
 
+function clearNewsToast() {
+  if (activeNewsToastTimer) {
+    clearTimeout(activeNewsToastTimer);
+    activeNewsToastTimer = null;
+  }
+  if (activeNewsToastRemoveTimer) {
+    clearTimeout(activeNewsToastRemoveTimer);
+    activeNewsToastRemoveTimer = null;
+  }
+  if (typeof document !== 'undefined') {
+    const toast = document.getElementById('news-saved-toast');
+    if (toast && typeof toast.remove === 'function') {
+      toast.remove();
+    } else if (toast && toast.parentNode) {
+      toast.parentNode.removeChild(toast);
+    }
+  }
+}
+
 function showNewsToast(message) {
   if (typeof document === 'undefined' || !message) return;
+  if (activeNewsToastTimer) {
+    clearTimeout(activeNewsToastTimer);
+    activeNewsToastTimer = null;
+  }
+  if (activeNewsToastRemoveTimer) {
+    clearTimeout(activeNewsToastRemoveTimer);
+    activeNewsToastRemoveTimer = null;
+  }
   let toast = document.getElementById('news-saved-toast');
   if (!toast) {
     toast = document.createElement('div');
     toast.id = 'news-saved-toast';
     toast.className = 'news-saved-toast';
+    toast.style.position = 'fixed';
+    toast.style.pointerEvents = 'none';
     document.body.appendChild(toast);
   }
   toast.textContent = message;
   toast.classList.add('is-visible');
-  if (activeNewsToastTimer) {
-    clearTimeout(activeNewsToastTimer);
-  }
   activeNewsToastTimer = setTimeout(() => {
+    activeNewsToastTimer = null;
     toast.classList.remove('is-visible');
+    activeNewsToastRemoveTimer = setTimeout(() => {
+      activeNewsToastRemoveTimer = null;
+      const el = document.getElementById('news-saved-toast');
+      if (el && !el.classList.contains('is-visible')) {
+        if (typeof el.remove === 'function') el.remove();
+        else if (el.parentNode) el.parentNode.removeChild(el);
+      }
+    }, 220);
   }, 2200);
 }
 
@@ -249,6 +285,7 @@ function speakNewsSentenceDirect(text, speedRate = 0.85, runId) {
 }
 
 export function stopDailyNewsAudio() {
+  clearNewsToast();
   activeNewsAudioRunId++;
   if (activeNewsTtsTimer) {
     clearTimeout(activeNewsTtsTimer);
@@ -284,6 +321,7 @@ export function stopDailyNewsAudio() {
 }
 
 export function closeNewsWordPopover() {
+  clearNewsToast();
   if (typeof document === 'undefined') return;
   const pop = document.getElementById('news-word-popover');
   if (pop) pop.style.display = 'none';

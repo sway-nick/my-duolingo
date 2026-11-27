@@ -2044,7 +2044,7 @@ export const MICRO_RULES_I18N = {
     "ruleLabel": "Zasada #{num}",
     "searchPlaceholder": "Szukaj zasady lub słowa...",
     "showMoreBtn": "Pokaż więcej ({count})",
-    "unlockRuleBtn": "Odblokuj regułę",
+    "unlockRuleBtn": "Odblokuj zasadę",
     "quizHeading": "⚡ Minikwiz (+5 XP)",
     "quizDoneBadge": "Zaliczone ✓ +5 XP"
   },

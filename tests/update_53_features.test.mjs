@@ -856,3 +856,46 @@ test('Cloud Achievements Sync: micro-rules, tenses, grammar ref, spoken, CEFR ex
     globalThis.localStorage = prevStorage;
   }
 });
+
+test('Tense Matrix: Active (12 tenses) and Passive (8 active cells) include (+), (-), (?) and short answer examples', async () => {
+  const { ACTIVE_MATRIX_EXAMPLES } = await import('../frontend/components/favorites/TenseConstructionsView.js');
+  const { PASSIVE_MATRIX_CELLS } = await import('../frontend/components/favorites/passiveMatrixData.js');
+
+  const expectedActiveIds = [
+    'present_simple', 'past_simple', 'future_simple',
+    'present_continuous', 'past_continuous', 'future_continuous',
+    'present_perfect', 'past_perfect', 'future_perfect',
+    'present_perfect_continuous', 'past_perfect_continuous', 'future_perfect_continuous',
+  ];
+  for (const id of expectedActiveIds) {
+    const ex = ACTIVE_MATRIX_EXAMPLES[id];
+    assert.ok(ex, `ACTIVE_MATRIX_EXAMPLES must define ${id}`);
+    assert.ok(ex.pos && ex.pos.trim().length > 0, `${id} pos example required`);
+    assert.ok(ex.neg && ex.neg.trim().length > 0, `${id} neg example required`);
+    assert.ok(ex.ques && ex.ques.trim().endsWith('?'), `${id} ques example must end with ?`);
+    assert.ok(ex.short && ex.short.includes('Yes,') && ex.short.includes('No,'), `${id} short answer must show Yes/No`);
+  }
+
+  let passiveActiveCount = 0;
+  for (const [key, cell] of Object.entries(PASSIVE_MATRIX_CELLS)) {
+    if (cell.notUsed) continue;
+    passiveActiveCount++;
+    const ex = cell.matrixExamples;
+    assert.ok(ex, `PASSIVE_MATRIX_CELLS.${key} must define matrixExamples`);
+    assert.ok(ex.pos && ex.pos.trim().length > 0, `passive ${key} pos required`);
+    assert.ok(ex.neg && ex.neg.trim().length > 0, `passive ${key} neg required`);
+    assert.ok(ex.ques && ex.ques.trim().endsWith('?'), `passive ${key} ques must end with ?`);
+    assert.ok(ex.short && ex.short.includes('Yes,') && ex.short.includes('No,'), `passive ${key} short answer must show Yes/No`);
+  }
+  assert.equal(passiveActiveCount, 8, 'Expected 8 active Passive Matrix cells');
+});
+
+test('Daily News: toast #news-saved-toast cleans up on exit and timeout so no unstyled text lingers in body', () => {
+  const src = fs.readFileSync(path.resolve('frontend/components/favorites/DailyNewsView.js'), 'utf8');
+  assert.ok(src.includes('function clearNewsToast()'), 'DailyNewsView must define clearNewsToast()');
+  assert.ok(src.includes('activeNewsToastRemoveTimer'), 'DailyNewsView must remove #news-saved-toast from DOM after hide transition');
+  const stopMatch = src.match(/export function stopDailyNewsAudio\(\)\s*\{[\s\S]*?clearNewsToast\(\);/);
+  const closeMatch = src.match(/export function closeNewsWordPopover\(\)\s*\{[\s\S]*?clearNewsToast\(\);/);
+  assert.ok(stopMatch, 'stopDailyNewsAudio() must call clearNewsToast()');
+  assert.ok(closeMatch, 'closeNewsWordPopover() must call clearNewsToast()');
+});
