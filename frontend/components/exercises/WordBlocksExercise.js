@@ -1,5 +1,5 @@
-import AudioService from '../../services/audioService.js?v=386.0';
-import { t } from '../../services/i18n.js?v=386.0';
+import AudioService from '../../services/audioService.js?v=423.0';
+import { t } from '../../services/i18n.js?v=423.0';
 
 /**
  * Shuffles an array in place with Fisher-Yates algorithm.
@@ -171,31 +171,62 @@ export function renderWordBlocksExercise(container, wordObj, allWords, onWordSol
     if (!slotsRowEl) return;
     slotsRowEl.innerHTML = '';
 
+    // Group contiguous non-whitespace slots into word groups so a word never splits mid-word across lines
+    const wordGroups = [];
+    let currentGroup = [];
     slots.forEach((s) => {
-      const slotEl = document.createElement('div');
-      slotEl.className = 'wb-slot';
-      slotEl.dataset.slotIndex = String(s.index);
-
-      if (s.isPunctuation) {
-        slotEl.classList.add('wb-slot-punctuation');
-        slotEl.textContent = s.originalChar;
-      } else if (s.isLocked) {
-        slotEl.classList.add('wb-slot-locked', 'wb-slot-green');
-        slotEl.textContent = s.char;
-      } else if (s.status === 'wrong') {
-        const tObj = tiles.find((tile) => tile.id === s.currentTileId);
-        slotEl.classList.add('wb-slot-wrong');
-        slotEl.textContent = tObj ? tObj.letter : '';
-      } else if (s.currentTileId) {
-        const tObj = tiles.find((tile) => tile.id === s.currentTileId);
-        slotEl.classList.add('wb-slot-filled');
-        slotEl.textContent = tObj ? tObj.letter : '';
+      if (s.isPunctuation && /^\s+$/.test(s.originalChar)) {
+        if (currentGroup.length > 0) {
+          wordGroups.push(currentGroup);
+          currentGroup = [];
+        }
       } else {
-        slotEl.classList.add('wb-slot-empty');
-        slotEl.textContent = '';
+        currentGroup.push(s);
+      }
+    });
+    if (currentGroup.length > 0) {
+      wordGroups.push(currentGroup);
+    }
+
+    wordGroups.forEach((groupSlots) => {
+      const groupEl = document.createElement('div');
+      groupEl.className = 'wb-word-group';
+      if (groupSlots.length >= 11) {
+        groupEl.classList.add('wb-word-group-xl');
+      } else if (groupSlots.length >= 9) {
+        groupEl.classList.add('wb-word-group-lg');
+      } else if (groupSlots.length >= 7) {
+        groupEl.classList.add('wb-word-group-md');
       }
 
-      slotsRowEl.appendChild(slotEl);
+      groupSlots.forEach((s) => {
+        const slotEl = document.createElement('div');
+        slotEl.className = 'wb-slot';
+        slotEl.dataset.slotIndex = String(s.index);
+
+        if (s.isPunctuation) {
+          slotEl.classList.add('wb-slot-punctuation');
+          slotEl.textContent = s.originalChar;
+        } else if (s.isLocked) {
+          slotEl.classList.add('wb-slot-locked', 'wb-slot-green');
+          slotEl.textContent = s.char;
+        } else if (s.status === 'wrong') {
+          const tObj = tiles.find((tile) => tile.id === s.currentTileId);
+          slotEl.classList.add('wb-slot-wrong');
+          slotEl.textContent = tObj ? tObj.letter : '';
+        } else if (s.currentTileId) {
+          const tObj = tiles.find((tile) => tile.id === s.currentTileId);
+          slotEl.classList.add('wb-slot-filled');
+          slotEl.textContent = tObj ? tObj.letter : '';
+        } else {
+          slotEl.classList.add('wb-slot-empty');
+          slotEl.textContent = '';
+        }
+
+        groupEl.appendChild(slotEl);
+      });
+
+      slotsRowEl.appendChild(groupEl);
     });
   }
 
@@ -272,9 +303,9 @@ export function renderWordBlocksExercise(container, wordObj, allWords, onWordSol
       renderPool();
 
       // Shake animation on incorrect slot
-      const slotEls = slotsRowEl.querySelectorAll('.wb-slot');
-      if (slotEls[targetSlot.index]) {
-        slotEls[targetSlot.index].classList.add('wb-shake');
+      const wrongSlotEl = slotsRowEl.querySelector(`.wb-slot[data-slot-index="${targetSlot.index}"]`);
+      if (wrongSlotEl) {
+        wrongSlotEl.classList.add('wb-shake');
       }
 
       if (AudioService && typeof AudioService.playErrorSound === 'function') {

@@ -209,14 +209,17 @@ test('Gate 3: 36 Languages Dictionary and Widget Translation completeness', asyn
     `Sample 100 words must have extensive multi-language translations (found ${totalForeignTranslationsFound})`
   );
 
-  // 2. Verify i18n.js supports all 33 locales
-  const i18nPath = path.join(ROOT_DIR, 'frontend/services/i18n.js');
-  const i18nCode = fs.readFileSync(i18nPath, 'utf-8');
-
+  // 2. Verify sharded i18n_lang/<locale>.json files exist for all 36 locales with valid JSON & 0 U+FFFD
+  const i18nShardsDir = path.join(ROOT_DIR, 'frontend/assets/data/i18n_lang');
   for (const locale of REQUIRED_33_LOCALES) {
+    const shardPath = path.join(i18nShardsDir, `${locale}.json`);
+    assert.ok(fs.existsSync(shardPath), `Sharded locale file must exist: frontend/assets/data/i18n_lang/${locale}.json`);
+    const rawShard = fs.readFileSync(shardPath, 'utf-8');
+    assert.ok(!rawShard.includes('\uFFFD'), `Locale shard ${locale}.json must not contain U+FFFD replacement characters`);
+    const parsedShard = JSON.parse(rawShard);
     assert.ok(
-      i18nCode.includes(`${locale}: {`) || i18nCode.includes(`'${locale}': {`) || i18nCode.includes(`"${locale}": {`),
-      `i18n.js translations dictionary must contain locale '${locale}'`
+      typeof parsedShard.training === 'string' && parsedShard.training.length > 0,
+      `Locale shard ${locale}.json must contain 'training' translation`
     );
   }
 
@@ -390,11 +393,22 @@ test('Gate 5: Swipe Gestures and Dual Drawer Architecture (Burger Right & Leader
   assert.ok(indexHtml.includes('openLeaderboardDrawer'), 'index.html must invoke openLeaderboardDrawer on swipe right');
   assert.ok(indexHtml.includes('openDrawer'), 'index.html must invoke openDrawer on swipe left');
 
-  // 5. Leaderboard title localized in all supported locales
-  const i18nPath = path.join(ROOT_DIR, 'frontend/services/i18n.js');
-  const i18nCode = fs.readFileSync(i18nPath, 'utf-8');
-  const lbMatches = i18nCode.match(/leaderboard:\s*["']/g) || [];
-  assert.ok(lbMatches.length >= 35, `leaderboard translation key must be present for all locales (found ${lbMatches.length})`);
+  // 5. Leaderboard title localized in all 36 sharded locales
+  const i18nShardsDir = path.join(ROOT_DIR, 'frontend/assets/data/i18n_lang');
+  let lbCount = 0;
+  for (const locale of REQUIRED_33_LOCALES) {
+    const shardPath = path.join(i18nShardsDir, `${locale}.json`);
+    assert.ok(fs.existsSync(shardPath), `Missing locale shard ${locale}.json`);
+    const rawShard = fs.readFileSync(shardPath, 'utf-8');
+    assert.ok(!rawShard.includes('\uFFFD'), `Locale shard ${locale}.json must not contain U+FFFD`);
+    const parsedShard = JSON.parse(rawShard);
+    assert.ok(
+      typeof parsedShard.leaderboard === 'string' && parsedShard.leaderboard.trim().length > 0,
+      `leaderboard translation key must be present for locale '${locale}'`
+    );
+    lbCount++;
+  }
+  assert.strictEqual(lbCount, 36, `leaderboard translation key must be present for all 36 locales (found ${lbCount})`);
 });
 
 test('Gate 6: Google Analytics & Firebase Production Configuration Integrity', () => {

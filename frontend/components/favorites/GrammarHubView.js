@@ -1,11 +1,11 @@
-import { getStoryStrings } from '../modals/storyTranslations.js?v=386.0';
-import { getMicroRulesStrings, getTenseConstructionsStrings } from './grammarUiTranslations.js?v=386.0';
-import { getSpokenEnglishStrings } from './spokenEnglishI18n.js?v=386.0';
-import { getSpokenUnlockedLimit } from './SpokenEnglishView.js?v=386.0';
-import { SPOKEN_ENGLISH_ITEMS } from './spokenEnglishData.js?v=386.0';
-import { getMasteredWordsCount } from '../../services/api.js?v=386.0';
-import { getInterfaceLanguage, t } from '../../services/i18n.js?v=386.0';
-import { isProActive } from '../../services/proState.js?v=386.0';
+import { getStoryStrings } from '../modals/storyTranslations.js?v=423.0';
+import { getMicroRulesStrings, getTenseConstructionsStrings } from './grammarUiTranslations.js?v=423.0';
+import { getSpokenEnglishStrings } from './spokenEnglishI18n.js?v=423.0';
+import { getSpokenUnlockedLimit } from './SpokenEnglishView.js?v=423.0';
+import { SPOKEN_ENGLISH_ITEMS } from './spokenEnglishData.js?v=423.0';
+import { getMasteredWordsCount } from '../../services/api.js?v=423.0';
+import { getInterfaceLanguage, t } from '../../services/i18n.js?v=423.0';
+import { isProActive } from '../../services/proState.js?v=423.0';
 
 function escapeHtml(str) {
   return String(str ?? '')

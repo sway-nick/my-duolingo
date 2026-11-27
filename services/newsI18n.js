@@ -1,7 +1,7 @@
 // Daily News UI translations for ALL 36 supported locales in English Breakfast.
 // Note: News article body itself is always in English (LTR); UI chrome and word translations use the user's locale.
 
-import { SUPPORTED_LOCALE_CODES } from '../config/locales.js?v=386.0';
+import { SUPPORTED_LOCALE_CODES } from '../config/locales.js?v=423.0';
 
 const DEFAULT_EN = {
   tileTitle: 'Daily News',
@@ -32,6 +32,10 @@ const DEFAULT_EN = {
   proLockBullet3: 'Built-in audio player with 0.8x / 1.0x speed',
   proLockCta: 'Unlock with PRO',
   proPreviewLabel: 'PRO Preview',
+  addToDictBtn: "+ To Dictionary",
+  inDictBadge: "✓ In Dictionary",
+  keyVocabHeading: "Key Vocabulary",
+  savedWordToast: "Saved to Dictionary & Favorites",
 };
 
 export const NEWS_I18N = {
@@ -66,6 +70,10 @@ export const NEWS_I18N = {
     proLockBullet3: 'Озвучка новости со скоростью 0.8x и 1.0x',
     proLockCta: 'Открыть в PRO',
     proPreviewLabel: 'Доступно в PRO',
+    addToDictBtn: "+ В словарь",
+    inDictBadge: "✓ В словаре",
+    keyVocabHeading: "Ключевые слова",
+    savedWordToast: "Добавлено в словарь и избранное",
   },
 
   uk: {
@@ -97,6 +105,10 @@ export const NEWS_I18N = {
     proLockBullet3: 'Озвучення новини зі швидкістю 0.8x та 1.0x',
     proLockCta: 'Відкрити в PRO',
     proPreviewLabel: 'Доступно в PRO',
+    addToDictBtn: "+ У словник",
+    inDictBadge: "✓ У словнику",
+    keyVocabHeading: "Ключові слова",
+    savedWordToast: "Додано до словника й обраного",
   },
 
   de: {
@@ -128,6 +140,10 @@ export const NEWS_I18N = {
     proLockBullet3: 'Audio-Vorlesefunktion mit 0.8x / 1.0x Tempo',
     proLockCta: 'Mit PRO freischalten',
     proPreviewLabel: 'PRO-Vorschau',
+    addToDictBtn: "+ Ins Wörterbuch",
+    inDictBadge: "✓ Im Wörterbuch",
+    keyVocabHeading: "Schlüsselwörter",
+    savedWordToast: "Zum Wörterbuch & den Favoriten hinzugefügt",
   },
 
   es: {
@@ -159,6 +175,10 @@ export const NEWS_I18N = {
     proLockBullet3: 'Audio integrado con velocidad 0.8x / 1.0x',
     proLockCta: 'Desbloquear con PRO',
     proPreviewLabel: 'Vista previa PRO',
+    addToDictBtn: "+ Al diccionario",
+    inDictBadge: "✓ En el diccionario",
+    keyVocabHeading: "Vocabulario clave",
+    savedWordToast: "Guardado en diccionario y favoritos",
   },
 
   fr: {
@@ -190,6 +210,10 @@ export const NEWS_I18N = {
     proLockBullet3: 'Lecture audio intégrée (0.8x / 1.0x)',
     proLockCta: 'Débloquer avec PRO',
     proPreviewLabel: 'Aperçu PRO',
+    addToDictBtn: "+ Au dictionnaire",
+    inDictBadge: "✓ Dans le dictionnaire",
+    keyVocabHeading: "Vocabulaire clé",
+    savedWordToast: "Ajouté au dictionnaire et aux favoris",
   },
 
   pl: {
@@ -221,6 +245,10 @@ export const NEWS_I18N = {
     proLockBullet3: 'Odtwarzacz audio z prędkością 0.8x / 1.0x',
     proLockCta: 'Odblokuj w PRO',
     proPreviewLabel: 'Podgląd PRO',
+    addToDictBtn: "+ Do słownika",
+    inDictBadge: "✓ W słowniku",
+    keyVocabHeading: "Słownictwo kluczowe",
+    savedWordToast: "Dodano do słownika i ulubionych",
   },
 
   tr: {
@@ -252,6 +280,10 @@ export const NEWS_I18N = {
     proLockBullet3: '0.8x / 1.0x hızlı sesli dinleme',
     proLockCta: 'PRO ile Aç',
     proPreviewLabel: 'PRO Önizleme',
+    addToDictBtn: "+ Sözlüğe ekle",
+    inDictBadge: "✓ Sözlükte",
+    keyVocabHeading: "Anahtar Kelimeler",
+    savedWordToast: "Sözlüğe ve favorilere eklendi",
   },
 
   it: {
@@ -283,6 +315,10 @@ export const NEWS_I18N = {
     proLockBullet3: 'Audio integrato a velocità 0.8x / 1.0x',
     proLockCta: 'Sblocca con PRO',
     proPreviewLabel: 'Anteprima PRO',
+    addToDictBtn: "+ Al dizionario",
+    inDictBadge: "✓ Nel dizionario",
+    keyVocabHeading: "Parole chiave",
+    savedWordToast: "Salvato nel dizionario e nei preferiti",
   },
 
   ro: {
@@ -314,6 +350,10 @@ export const NEWS_I18N = {
     proLockBullet3: 'Redare audio la viteză 0.8x / 1.0x',
     proLockCta: 'Deblochează cu PRO',
     proPreviewLabel: 'Previzualizare PRO',
+    addToDictBtn: "+ În dicționar",
+    inDictBadge: "✓ În dicționar",
+    keyVocabHeading: "Cuvinte-cheie",
+    savedWordToast: "Salvat în dicționar și favorite",
   },
 
   bg: {
@@ -345,6 +385,10 @@ export const NEWS_I18N = {
     proLockBullet3: 'Аудио четене със скорост 0.8x / 1.0x',
     proLockCta: 'Отключи с PRO',
     proPreviewLabel: 'PRO преглед',
+    addToDictBtn: "+ В речника",
+    inDictBadge: "✓ В речника",
+    keyVocabHeading: "Ключови думи",
+    savedWordToast: "Добавено в речника и любими",
   },
 
   hu: {
@@ -376,6 +420,10 @@ export const NEWS_I18N = {
     proLockBullet3: 'Beépített hangos felolvasás (0.8x / 1.0x)',
     proLockCta: 'Feloldás PRO-val',
     proPreviewLabel: 'PRO előnézet',
+    addToDictBtn: "+ A szótárba",
+    inDictBadge: "✓ A szótárban",
+    keyVocabHeading: "Kulcsszavak",
+    savedWordToast: "Mentve a szótárba és a kedvencekbe",
   },
 
   el: {
@@ -407,6 +455,10 @@ export const NEWS_I18N = {
     proLockBullet3: 'Ηχητική ανάγνωση με ταχύτητα 0.8x / 1.0x',
     proLockCta: 'Ξεκλείδωμα με PRO',
     proPreviewLabel: 'Προεπισκόπηση PRO',
+    addToDictBtn: "+ Στο λεξικό",
+    inDictBadge: "✓ Στο λεξικό",
+    keyVocabHeading: "Βασικό λεξιλόγιο",
+    savedWordToast: "Αποθηκεύτηκε στο λεξικό και τα αγαπημένα",
   },
 
   da: {
@@ -438,6 +490,10 @@ export const NEWS_I18N = {
     proLockBullet3: 'Indbygget lydafspiller (0.8x / 1.0x)',
     proLockCta: 'Lås op med PRO',
     proPreviewLabel: 'PRO-forhåndsvisning',
+    addToDictBtn: "+ Til ordbog",
+    inDictBadge: "✓ I ordbogen",
+    keyVocabHeading: "Nøgleord",
+    savedWordToast: "Gemt i ordbog og favoritter",
   },
 
   lv: {
@@ -469,6 +525,10 @@ export const NEWS_I18N = {
     proLockBullet3: 'Iebūvēts audio atskaņotājs (0.8x / 1.0x)',
     proLockCta: 'Atbloķēt ar PRO',
     proPreviewLabel: 'PRO priekšskatījums',
+    addToDictBtn: "+ Vārdnīcā",
+    inDictBadge: "✓ Vārdnīcā",
+    keyVocabHeading: "Atslēgas vārdi",
+    savedWordToast: "Saglabāts vārdnīcā un izlasē",
   },
 
   lt: {
@@ -500,6 +560,10 @@ export const NEWS_I18N = {
     proLockBullet3: 'Integruotas garso grotuvas (0.8x / 1.0x)',
     proLockCta: 'Atrakinti su PRO',
     proPreviewLabel: 'PRO peržiūra',
+    addToDictBtn: "+ Į žodyną",
+    inDictBadge: "✓ Žodyne",
+    keyVocabHeading: "Pagrindiniai žodžiai",
+    savedWordToast: "Išsaugota žodyne ir mėgstamuose",
   },
 
   pt: {
@@ -531,6 +595,10 @@ export const NEWS_I18N = {
     proLockBullet3: 'Áudio integrado com velocidade 0.8x / 1.0x',
     proLockCta: 'Desbloquear com PRO',
     proPreviewLabel: 'Prévia PRO',
+    addToDictBtn: "+ Ao dicionário",
+    inDictBadge: "✓ No dicionário",
+    keyVocabHeading: "Vocabulário-chave",
+    savedWordToast: "Salvo no dicionário e favoritos",
   },
 
   sk: {
@@ -562,6 +630,10 @@ export const NEWS_I18N = {
     proLockBullet3: 'Audio prehrávač s rýchlosťou 0.8x / 1.0x',
     proLockCta: 'Odomknúť s PRO',
     proPreviewLabel: 'PRO náhľad',
+    addToDictBtn: "+ Do slovníka",
+    inDictBadge: "✓ V slovníku",
+    keyVocabHeading: "Kľúčové slová",
+    savedWordToast: "Uložené do slovníka a obľúbených",
   },
 
   sl: {
@@ -593,6 +665,10 @@ export const NEWS_I18N = {
     proLockBullet3: 'Vgrajen zvočni predvajalnik (0.8x / 1.0x)',
     proLockCta: 'Odkleni s PRO',
     proPreviewLabel: 'PRO predogled',
+    addToDictBtn: "+ V slovar",
+    inDictBadge: "✓ V slovarju",
+    keyVocabHeading: "Ključne besede",
+    savedWordToast: "Shranjeno v slovar in priljubljene",
   },
 
   fi: {
@@ -624,6 +700,10 @@ export const NEWS_I18N = {
     proLockBullet3: 'Äänitoisto nopeudella 0.8x / 1.0x',
     proLockCta: 'Avaa PRO-versiolla',
     proPreviewLabel: 'PRO-esikatselu',
+    addToDictBtn: "+ Sanakirjaan",
+    inDictBadge: "✓ Sanakirjassa",
+    keyVocabHeading: "Avainsanat",
+    savedWordToast: "Tallennettu sanakirjaan ja suosikkeihin",
   },
 
   hr: {
@@ -655,6 +735,10 @@ export const NEWS_I18N = {
     proLockBullet3: 'Ugrađeni audio reproduktor (0.8x / 1.0x)',
     proLockCta: 'Otključaj uz PRO',
     proPreviewLabel: 'PRO pregled',
+    addToDictBtn: "+ U rječnik",
+    inDictBadge: "✓ U rječniku",
+    keyVocabHeading: "Ključne riječi",
+    savedWordToast: "Spremljeno u rječnik i favorite",
   },
 
   cs: {
@@ -686,6 +770,10 @@ export const NEWS_I18N = {
     proLockBullet3: 'Audio přehrávač s rychlostí 0.8x / 1.0x',
     proLockCta: 'Odemknout s PRO',
     proPreviewLabel: 'PRO náhled',
+    addToDictBtn: "+ Do slovníku",
+    inDictBadge: "✓ Ve slovníku",
+    keyVocabHeading: "Klíčová slova",
+    savedWordToast: "Uloženo do slovníku a oblíbených",
   },
 
   sv: {
@@ -717,6 +805,10 @@ export const NEWS_I18N = {
     proLockBullet3: 'Inbyggd ljuduppspelning (0.8x / 1.0x)',
     proLockCta: 'Lås upp med PRO',
     proPreviewLabel: 'PRO-förhandsvisning',
+    addToDictBtn: "+ Till ordbok",
+    inDictBadge: "✓ I ordboken",
+    keyVocabHeading: "Nyckelord",
+    savedWordToast: "Sparat i ordbok och favoriter",
   },
 
   et: {
@@ -748,6 +840,10 @@ export const NEWS_I18N = {
     proLockBullet3: 'Sisseehitatud helimängija (0.8x / 1.0x)',
     proLockCta: 'Ava PRO-ga',
     proPreviewLabel: 'PRO eelvaade',
+    addToDictBtn: "+ Sõnastikku",
+    inDictBadge: "✓ Sõnastikus",
+    keyVocabHeading: "Võtmesõnad",
+    savedWordToast: "Salvestatud sõnastikku ja lemmikutesse",
   },
 
   hi: {
@@ -779,6 +875,10 @@ export const NEWS_I18N = {
     proLockBullet3: '0.8x / 1.0x स्पीड के साथ ऑडियो प्लेयर',
     proLockCta: 'PRO के साथ अनलॉक करें',
     proPreviewLabel: 'PRO प्रीव्यू',
+    addToDictBtn: "+ शब्दकोश में जोड़ें",
+    inDictBadge: "✓ शब्दकोश में है",
+    keyVocabHeading: "मुख्य शब्द",
+    savedWordToast: "शब्दकोश और पसंदीदा में जोड़ा गया",
   },
 
   bn: {
@@ -810,6 +910,10 @@ export const NEWS_I18N = {
     proLockBullet3: '0.8x / 1.0x গতিতে অডিও শোনার সুবিধা',
     proLockCta: 'PRO দিয়ে আনলক করুন',
     proPreviewLabel: 'PRO প্রিভিউ',
+    addToDictBtn: "+ অভিধানে যোগ করুন",
+    inDictBadge: "✓ অভিধানে আছে",
+    keyVocabHeading: "গুরুত্বপূর্ণ শব্দ",
+    savedWordToast: "অভিধান ও পছন্দে সংরক্ষিত হয়েছে",
   },
 
   ar: {
@@ -841,6 +945,10 @@ export const NEWS_I18N = {
     proLockBullet3: 'مشغل صوتي بسرعة 0.8x و 1.0x',
     proLockCta: 'افتح مع PRO',
     proPreviewLabel: 'معاينة PRO',
+    addToDictBtn: "+ إلى القاموس",
+    inDictBadge: "✓ في القاموس",
+    keyVocabHeading: "كلمات رئيسية",
+    savedWordToast: "تم الحفظ في القاموس والمفضلة",
   },
 
   fa: {
@@ -872,6 +980,10 @@ export const NEWS_I18N = {
     proLockBullet3: 'پخش صوتی با سرعت 0.8x و 1.0x',
     proLockCta: 'باز کردن با PRO',
     proPreviewLabel: 'پیش‌نمایش PRO',
+    addToDictBtn: "+ افزودن به لغت‌نامه",
+    inDictBadge: "✓ در لغت‌نامه",
+    keyVocabHeading: "واژگان کلیدی",
+    savedWordToast: "در لغت‌نامه و علاقه‌مندی‌ها ذخیره شد",
   },
 
   ur: {
@@ -903,6 +1015,10 @@ export const NEWS_I18N = {
     proLockBullet3: '0.8x اور 1.0x رفتار کے ساتھ آڈیو پلیئر',
     proLockCta: 'PRO کے ساتھ کھولیں',
     proPreviewLabel: 'PRO جھلک',
+    addToDictBtn: "+ لغت میں شامل کریں",
+    inDictBadge: "✓ لغت میں موجود",
+    keyVocabHeading: "اہم الفاظ",
+    savedWordToast: "لغت اور پسندیدہ میں محفوظ ہو گیا",
   },
 
   id: {
@@ -934,6 +1050,10 @@ export const NEWS_I18N = {
     proLockBullet3: 'Pemutar audio dengan kecepatan 0.8x / 1.0x',
     proLockCta: 'Buka dengan PRO',
     proPreviewLabel: 'Pratinjau PRO',
+    addToDictBtn: "+ Ke Kamus",
+    inDictBadge: "✓ Di Kamus",
+    keyVocabHeading: "Kosakata Kunci",
+    savedWordToast: "Disimpan ke Kamus & Favorit",
   },
 
   vi: {
@@ -965,6 +1085,10 @@ export const NEWS_I18N = {
     proLockBullet3: 'Nghe đọc tích hợp tốc độ 0.8x / 1.0x',
     proLockCta: 'Mở khóa bằng PRO',
     proPreviewLabel: 'Xem trước PRO',
+    addToDictBtn: "+ Vào từ điển",
+    inDictBadge: "✓ Trong từ điển",
+    keyVocabHeading: "Từ vựng chính",
+    savedWordToast: "Đã lưu vào Từ điển & Yêu thích",
   },
 
   th: {
@@ -996,6 +1120,10 @@ export const NEWS_I18N = {
     proLockBullet3: 'เล่นเสียงอ่านปรับความเร็ว 0.8x / 1.0x',
     proLockCta: 'ปลดล็อกด้วย PRO',
     proPreviewLabel: 'ตัวอย่าง PRO',
+    addToDictBtn: "+ เพิ่มเข้าพจนานุกรม",
+    inDictBadge: "✓ อยู่ในพจนานุกรม",
+    keyVocabHeading: "คำศัพท์สำคัญ",
+    savedWordToast: "บันทึกไปยังพจนานุกรมและรายการโปรดแล้ว",
   },
 
   ko: {
@@ -1027,6 +1155,10 @@ export const NEWS_I18N = {
     proLockBullet3: '0.8x / 1.0x 속도 조절 오디오 듣기',
     proLockCta: 'PRO로 잠금 해제',
     proPreviewLabel: 'PRO 미리보기',
+    addToDictBtn: "+ 단어장에 추가",
+    inDictBadge: "✓ 단어장에 있음",
+    keyVocabHeading: "핵심 어휘",
+    savedWordToast: "단어장 및 즐겨찾기에 저장되었습니다",
   },
 
   ja: {
@@ -1058,6 +1190,10 @@ export const NEWS_I18N = {
     proLockBullet3: '0.8x / 1.0x 速度調整できる音声再生',
     proLockCta: 'PROでアンロック',
     proPreviewLabel: 'PROプレビュー',
+    addToDictBtn: "+ 単語帳に追加",
+    inDictBadge: "✓ 単語帳に登録済み",
+    keyVocabHeading: "重要単語",
+    savedWordToast: "単語帳とお気に入りに保存しました",
   },
 
   zh: {
@@ -1089,6 +1225,10 @@ export const NEWS_I18N = {
     proLockBullet3: '内置语音朗读，支持 0.8x / 1.0x 语速',
     proLockCta: '升级 PRO 解锁',
     proPreviewLabel: 'PRO 预览',
+    addToDictBtn: "+ 加入词典",
+    inDictBadge: "✓ 已在词典中",
+    keyVocabHeading: "核心词汇",
+    savedWordToast: "已保存至词典和收藏夹",
   },
 
   kk: {
@@ -1120,6 +1260,10 @@ export const NEWS_I18N = {
     proLockBullet3: '0.8x / 1.0x жылдамдықпен аудио тыңдау',
     proLockCta: 'PRO арқылы ашу',
     proPreviewLabel: 'PRO алдын ала көру',
+    addToDictBtn: "+ Сөздікке қосу",
+    inDictBadge: "✓ Сөздікте бар",
+    keyVocabHeading: "Негізгі сөздер",
+    savedWordToast: "Сөздік пен таңдаулыларға сақталды",
   },
 };
 

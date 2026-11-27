@@ -1,6 +1,6 @@
-import { getCachedLeaderboard, getLeaderboard, formatCompactXp } from '../../services/api.js?v=386.0';
-import { getRecentWeekKeys, getIsoWeekKey } from '../../services/weekKey.js?v=386.0';
-import { t, getInterfaceLanguage } from '../../services/i18n.js?v=386.0';
+import { getCachedLeaderboard, getLeaderboard, formatCompactXp } from '../../services/api.js?v=423.0';
+import { getRecentWeekKeys, getIsoWeekKey } from '../../services/weekKey.js?v=423.0';
+import { t, getInterfaceLanguage } from '../../services/i18n.js?v=423.0';
 
 const TICKER_TEXTS = {
   ru: { badge: 'ТОП-4', badgeTitle: 'Лига недели завершена', intro: 'Лига недели завершена! Поздравляем лидеров:', rank1: '1 место', rank2: '2 место', rank3: '3 место', rank4: '4 место', outro: 'Началась новая лига! Удачи в тренировках!', close: 'Закрыть' },

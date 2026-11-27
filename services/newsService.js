@@ -7,9 +7,9 @@
 import {
   fetchDailyNewsFirestore,
   reportActiveNewsLocaleFirestore,
-} from './firebase.js?v=386.0';
-import { isProActive } from './proState.js?v=386.0';
-import { isLocaleSupported } from '../config/locales.js?v=386.0';
+} from './firebase.js?v=423.0';
+import { isProActive } from './proState.js?v=423.0';
+import { isLocaleSupported } from '../config/locales.js?v=423.0';
 
 const CACHE_PREFIX = 'eb_daily_news_v2_';
 const ACTIVE_PING_PREFIX = 'eb_news_active_ping_v2_';

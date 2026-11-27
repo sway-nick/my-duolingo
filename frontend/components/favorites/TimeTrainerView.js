@@ -6,8 +6,8 @@ import {
   playFanfareSound,
   getSavedVoiceAccent,
   triggerHaptic,
-} from '../../services/audioService.js?v=386.0';
-import { getInterfaceLanguage } from '../../services/i18n.js?v=386.0';
+} from '../../services/audioService.js?v=423.0';
+import { getInterfaceLanguage } from '../../services/i18n.js?v=423.0';
 
 export const TIME_TRAINER_TRANSLATIONS = {
   ru: {
@@ -196,8 +196,8 @@ export const TIME_TRAINER_TRANSLATIONS = {
     modePmTitle: 'Po południu (PM)',
     modePmDesc: 'Popołudnie i wieczór · 1:00–11:00 PM',
     modeHalvesTitle: 'Połówki',
-    modeHalvesDesc: 'Half past · :30 minut',
-    modeQuartersTitle: 'Kwadransy',
+    modeHalvesDesc: 'Half past · :30',
+    modeQuartersTitle: 'Kwadranse',
     modeQuartersDesc: 'Quarter past / to · :15 i :45',
     modeTenTitle: 'Co 10 minut',
     modeTenDesc: 'Dziesiątki minut · :10, :20, :40, :50',

@@ -1,7 +1,8 @@
-import { getUserStats, toggleFavoriteApi, getUserFavorites, isWordMastered, getUserProgress } from '../../services/api.js?v=386.0';
-import { getCurrentUser } from '../../services/authService.js?v=386.0';
-import { speakWord, preloadWordAudio } from '../../services/audioService.js?v=386.0';
-import { t, getInterfaceLanguage } from '../../services/i18n.js?v=386.0';
+import { getUserStats, toggleFavoriteApi, getUserFavorites, isWordMastered, getUserProgress } from '../../services/api.js?v=423.0';
+import { getCurrentUser } from '../../services/authService.js?v=423.0';
+import { speakWord, preloadWordAudio } from '../../services/audioService.js?v=423.0';
+import { t, getInterfaceLanguage } from '../../services/i18n.js?v=423.0';
+import { getLevelMatrixStrings, loadPassedCefrExams } from '../favorites/levelMatrixData.js?v=423.0';
 
 function getCategoryMeta(catName) {
   const name = String(catName || '').toLowerCase().trim();
@@ -296,6 +297,21 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
           <div class="category-progress-list" id="category-list">
             ${categoriesHtml}
           </div>
+          ${(() => {
+            const lmStrings = getLevelMatrixStrings(getInterfaceLanguage());
+            const passedSize = loadPassedCefrExams().size;
+            return `
+              <div class="category-card is-clickable" id="stats-open-level-matrix" role="button" tabindex="0" style="margin-top: 12px; border: 1.5px solid rgba(56, 189, 248, 0.35);">
+                <div class="category-info-row">
+                  <div class="cat-name-box">
+                    <span class="cat-badge badge-b1">🎓</span>
+                    <span class="cat-title-text">${lmStrings.hubTitle || 'Матрица знаний и тесты'}</span>
+                  </div>
+                  <span class="category-count">${passedSize} / 5 🏆 →</span>
+                </div>
+              </div>
+            `;
+          })()}
         </div>
 
         <!-- Custom SVG Study Progress Chart -->
@@ -318,6 +334,22 @@ async function renderStatsView(allWordsOrContainer = '#app-content', maybeContai
             handleSelect();
           }
         });
+      });
+    }
+
+    const levelMatrixCard = container.querySelector('#stats-open-level-matrix');
+    if (levelMatrixCard) {
+      const openLm = () => {
+        if (typeof window !== 'undefined' && typeof window._openLevelMatrixScreen === 'function') {
+          window._openLevelMatrixScreen('A1');
+        }
+      };
+      levelMatrixCard.addEventListener('click', openLm);
+      levelMatrixCard.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openLm();
+        }
       });
     }
 

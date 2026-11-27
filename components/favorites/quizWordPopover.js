@@ -1,9 +1,9 @@
-import { getOrBuildDictionary, resolveWord } from '../modals/MilestoneStoryModal.js?v=386.0';
+import { getOrBuildDictionary, resolveWord } from '../modals/MilestoneStoryModal.js?v=423.0';
 import {
   speakTextInLangAsync,
   getSavedVoiceAccent,
   triggerHaptic,
-} from '../../services/audioService.js?v=386.0';
+} from '../../services/audioService.js?v=423.0';
 
 let activeOutsideHandler = null;
 let activeScrollHandler = null;

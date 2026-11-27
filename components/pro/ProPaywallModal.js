@@ -1,9 +1,9 @@
-import { ProService } from '../../services/proService.js?v=386.0';
-import { getProStrings } from '../../services/proI18n.js?v=386.0';
-import { getInterfaceLanguage } from '../../services/i18n.js?v=386.0';
-import { RTL_LOCALES } from '../../config/locales.js?v=386.0';
-import { showToast } from '../layout/AppLayout.js?v=386.0';
-import { isDebugForceFree, setDebugForceFree } from '../../services/proState.js?v=386.0';
+import { ProService } from '../../services/proService.js?v=423.0';
+import { getProStrings } from '../../services/proI18n.js?v=423.0';
+import { getInterfaceLanguage } from '../../services/i18n.js?v=423.0';
+import { RTL_LOCALES } from '../../config/locales.js?v=423.0';
+import { showToast } from '../layout/AppLayout.js?v=423.0';
+import { isDebugForceFree, setDebugForceFree } from '../../services/proState.js?v=423.0';
 
 function escapeHtml(str) {
   return String(str ?? '')

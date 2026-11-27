@@ -1,5 +1,5 @@
-import AudioService from '../../services/audioService.js?v=386.0';
-import { t } from '../../services/i18n.js?v=386.0';
+import AudioService from '../../services/audioService.js?v=423.0';
+import { t } from '../../services/i18n.js?v=423.0';
 
 let currentKeyHandler = null;
 

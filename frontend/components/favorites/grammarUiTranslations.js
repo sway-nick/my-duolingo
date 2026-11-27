@@ -20,7 +20,7 @@ export const TENSE_CONSTRUCTIONS_I18N = {
     "posLabel": "+ Утверждение",
     "negLabel": "− Отрицание",
     "quesLabel": "? Вопрос",
-    "auxLabel": "Вспомогательные слова",
+    "auxLabel": "Вспомогательные глаголы",
     "markersHeading": "⏱ Маркеры времени",
     "examplesHeading": "💬 Характерные примеры",
     "markDoneBtn": "Изучено",
@@ -58,7 +58,7 @@ export const TENSE_CONSTRUCTIONS_I18N = {
     "posLabel": "+ Affirmative",
     "negLabel": "− Negative",
     "quesLabel": "? Question",
-    "auxLabel": "Auxiliaries",
+    "auxLabel": "Auxiliary verbs",
     "markersHeading": "⏱ Time markers",
     "examplesHeading": "💬 Key examples",
     "markDoneBtn": "Learned",
@@ -154,7 +154,7 @@ export const TENSE_CONSTRUCTIONS_I18N = {
     "quizDoneBadge": "সম্পন্ন ✓ +5 XP"
   },
   "bg": {
-    "auxLabel": "Спомагателни думи",
+    "auxLabel": "Спомагателни глаголи",
     "backBtn": "Назад",
     "continuousSubtitle": "Процес в момента",
     "doneBadge": "Научено ✓",
@@ -230,7 +230,7 @@ export const TENSE_CONSTRUCTIONS_I18N = {
     "quizDoneBadge": "已通过 ✓ +5 XP"
   },
   "hr": {
-    "auxLabel": "Pomoćne riječi",
+    "auxLabel": "Pomoćni glagoli",
     "backBtn": "Natrag",
     "continuousSubtitle": "Radnja u tijeku",
     "doneBadge": "Naučeno ✓",
@@ -344,7 +344,7 @@ export const TENSE_CONSTRUCTIONS_I18N = {
     "quizDoneBadge": "Bestået ✓ +5 XP"
   },
   "et": {
-    "auxLabel": "Abisõnad",
+    "auxLabel": "Abitegusõnad",
     "backBtn": "Tagasi",
     "continuousSubtitle": "Toimumas hetkel",
     "doneBadge": "Õpitud ✓",
@@ -420,7 +420,7 @@ export const TENSE_CONSTRUCTIONS_I18N = {
     "quizDoneBadge": "Suoritettu ✓ +5 XP"
   },
   "fr": {
-    "auxLabel": "Auxiliaires",
+    "auxLabel": "Verbes auxiliaires",
     "backBtn": "Retour",
     "continuousSubtitle": "Action en cours",
     "doneBadge": "Appris ✓",
@@ -496,7 +496,7 @@ export const TENSE_CONSTRUCTIONS_I18N = {
     "quizDoneBadge": "Bestanden ✓ +5 XP"
   },
   "el": {
-    "auxLabel": "Βοηθητικές λέξεις",
+    "auxLabel": "Βοηθητικά ρήματα",
     "backBtn": "Πίσω",
     "continuousSubtitle": "Πράξη σε εξέλιξη",
     "doneBadge": "Ολοκληρώθηκε ✓",
@@ -610,7 +610,7 @@ export const TENSE_CONSTRUCTIONS_I18N = {
     "quizDoneBadge": "Teljesítve ✓ +5 XP"
   },
   "id": {
-    "auxLabel": "Kata bantu",
+    "auxLabel": "Kata kerja bantu",
     "backBtn": "Kembali",
     "continuousSubtitle": "Sedang berlangsung",
     "doneBadge": "Sudah dipelajari ✓",
@@ -648,7 +648,7 @@ export const TENSE_CONSTRUCTIONS_I18N = {
     "quizDoneBadge": "Selesai ✓ +5 XP"
   },
   "it": {
-    "auxLabel": "Ausiliari",
+    "auxLabel": "Verbi ausiliari",
     "backBtn": "Indietro",
     "continuousSubtitle": "Azione in corso",
     "doneBadge": "Completato ✓",
@@ -686,7 +686,7 @@ export const TENSE_CONSTRUCTIONS_I18N = {
     "quizDoneBadge": "Superato ✓ +5 XP"
   },
   "ja": {
-    "auxLabel": "助動詞・補助語",
+    "auxLabel": "助動詞",
     "backBtn": "戻る",
     "continuousSubtitle": "今まさに進行中の動作",
     "doneBadge": "習得済み ✓",
@@ -724,7 +724,7 @@ export const TENSE_CONSTRUCTIONS_I18N = {
     "quizDoneBadge": "クリア ✓ +5 XP"
   },
   "kk": {
-    "auxLabel": "Көмекші сөздер",
+    "auxLabel": "Көмекші етістіктер",
     "backBtn": "Артқа",
     "continuousSubtitle": "Дәл сәттегі үдеріс",
     "doneBadge": "Үйренілді ✓",
@@ -800,7 +800,7 @@ export const TENSE_CONSTRUCTIONS_I18N = {
     "quizDoneBadge": "완료 ✓ +5 XP"
   },
   "lv": {
-    "auxLabel": "Palīgvārdi",
+    "auxLabel": "Palīgdarbības vārdi",
     "backBtn": "Atpakaļ",
     "continuousSubtitle": "Process konkrētā brīdī",
     "doneBadge": "Apgūts ✓",
@@ -838,7 +838,7 @@ export const TENSE_CONSTRUCTIONS_I18N = {
     "quizDoneBadge": "Izpildīts ✓ +5 XP"
   },
   "lt": {
-    "auxLabel": "Pagalbiniai žodžiai",
+    "auxLabel": "Pagalbiniai veiksmažodžiai",
     "backBtn": "Atgal",
     "continuousSubtitle": "Vykstantis veiksmas",
     "doneBadge": "Išmokta ✓",
@@ -952,7 +952,7 @@ export const TENSE_CONSTRUCTIONS_I18N = {
     "quizDoneBadge": "Zaliczone ✓ +5 XP"
   },
   "pt": {
-    "auxLabel": "Auxiliares",
+    "auxLabel": "Verbos auxiliares",
     "backBtn": "Voltar",
     "continuousSubtitle": "Ações em andamento",
     "doneBadge": "Aprendido ✓",
@@ -1066,7 +1066,7 @@ export const TENSE_CONSTRUCTIONS_I18N = {
     "quizDoneBadge": "Splnené ✓ +5 XP"
   },
   "sl": {
-    "auxLabel": "Pomožne besede",
+    "auxLabel": "Pomožni glagoli",
     "backBtn": "Nazaj",
     "continuousSubtitle": "Dejanje v poteku",
     "doneBadge": "Osvojeno ✓",
@@ -1104,7 +1104,7 @@ export const TENSE_CONSTRUCTIONS_I18N = {
     "quizDoneBadge": "Opravljeno ✓ +5 XP"
   },
   "es": {
-    "auxLabel": "Auxiliares",
+    "auxLabel": "Verbos auxiliares",
     "backBtn": "Atrás",
     "continuousSubtitle": "Acción en progreso",
     "doneBadge": "Aprendido ✓",
@@ -1142,7 +1142,7 @@ export const TENSE_CONSTRUCTIONS_I18N = {
     "quizDoneBadge": "Completado ✓ +5 XP"
   },
   "sv": {
-    "auxLabel": "Hjälpord",
+    "auxLabel": "Hjälpverb",
     "backBtn": "Tillbaka",
     "continuousSubtitle": "Pågående handling i stunden",
     "doneBadge": "Inlärt ✓",
@@ -1256,7 +1256,7 @@ export const TENSE_CONSTRUCTIONS_I18N = {
     "quizDoneBadge": "Tamamlandı ✓ +5 XP"
   },
   "uk": {
-    "auxLabel": "Допоміжні слова",
+    "auxLabel": "Допоміжні дієслова",
     "backBtn": "Назад",
     "continuousSubtitle": "Процес у моменті",
     "doneBadge": "Вивчено ✓",
@@ -1294,7 +1294,7 @@ export const TENSE_CONSTRUCTIONS_I18N = {
     "quizDoneBadge": "Пройдено ✓ +5 XP"
   },
   "ur": {
-    "auxLabel": "امدادی الفاظ",
+    "auxLabel": "امدادی افعال",
     "backBtn": "واپس",
     "continuousSubtitle": "اس لمحے جاری عمل",
     "doneBadge": "سیکھ لیا ✓",
@@ -1370,7 +1370,7 @@ export const TENSE_CONSTRUCTIONS_I18N = {
     "quizDoneBadge": "Đã hoàn thành ✓ +5 XP"
   },
   "es-mx": {
-    "auxLabel": "Auxiliares",
+    "auxLabel": "Verbos auxiliares",
     "backBtn": "Atrás",
     "continuousSubtitle": "Acción en progreso",
     "doneBadge": "Aprendido ✓",
@@ -1408,7 +1408,7 @@ export const TENSE_CONSTRUCTIONS_I18N = {
     "quizDoneBadge": "Completado ✓ +5 XP"
   },
   "pt-br": {
-    "auxLabel": "Auxiliares",
+    "auxLabel": "Verbos auxiliares",
     "backBtn": "Voltar",
     "continuousSubtitle": "Ações em andamento",
     "doneBadge": "Aprendido ✓",
@@ -2044,7 +2044,7 @@ export const MICRO_RULES_I18N = {
     "ruleLabel": "Zasada #{num}",
     "searchPlaceholder": "Szukaj zasady lub słowa...",
     "showMoreBtn": "Pokaż więcej ({count})",
-    "unlockRuleBtn": "Odblokuj regułę",
+    "unlockRuleBtn": "Odblokuj zasadę",
     "quizHeading": "⚡ Minikwiz (+5 XP)",
     "quizDoneBadge": "Zaliczone ✓ +5 XP"
   },

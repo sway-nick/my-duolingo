@@ -222,6 +222,11 @@ test('Favorites & Collections: saveProgress tracks Quiz, Pairs, and Test mistake
   const solvedBlocks = await saveProgress(quizWordId, true, 'blocks', { isFavPractice: true });
   assert.equal(solvedBlocks.roundBlocksDone, true, 'Solving Word Blocks in isFavPractice must mark roundBlocksDone = true');
   assert.equal(getUserWeeklyXP(userId), expectedXp, 'Solving Word Blocks in isFavPractice must not change XP');
+
+  const masteredInFav = await saveProgress(inputWordId, true, 'input', { isFavPractice: true });
+  assert.equal(masteredInFav.mastered, true, 'Passing Test (input) in isFavPractice must mark word mastered for CEFR/course progress');
+  assert.equal(masteredInFav.needsTestRepeat, false, 'Passing Test (input) in isFavPractice clears needsTestRepeat');
+  assert.equal(getUserWeeklyXP(userId), expectedXp, 'Passing Test (input) in isFavPractice still must not change XP');
 });
 
 test('Favorites & Collections: remaining counter, forward stage progression, and Word Blocks flow', () => {
@@ -248,10 +253,11 @@ test('Favorites & Collections: remaining counter, forward stage progression, and
     'Pairs completion in isFavPracticeActive must advance currentWordIndex by 5'
   );
 
-  // Stage progression in isFavPracticeActive: cards -> quiz -> pairs -> input -> exit only after input & blocks
+  // Stage progression in isFavPracticeActive: cards -> 4-stage quiz -> pairs -> input -> exit only after input & blocks
   assert.ok(
     indexHtmlCode.includes("if (currentMethod === 'cards') {\n            favoritePracticeMethod = 'quiz';") &&
-    indexHtmlCode.includes("if (currentMethod === 'quiz') {\n            favoritePracticeMethod = 'pairs';") &&
+    indexHtmlCode.includes("if (currentMethod === 'quiz') {") &&
+    indexHtmlCode.includes("_favQuizPassIndex = 0;\n            favoritePracticeMethod = 'pairs';") &&
     indexHtmlCode.includes("if (currentMethod === 'pairs') {\n            favoritePracticeMethod = 'input';") &&
     indexHtmlCode.includes("if (currentMethod === 'input' && getBlocksWordsForInput(userProgress).length === 0)"),
     'Favorites/Collections practice must advance cards -> quiz -> pairs -> input and only exit after input + Word Blocks'

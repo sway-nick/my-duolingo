@@ -1,25 +1,31 @@
-import { getInterfaceLanguage } from '../../services/i18n.js?v=386.0';
-import { RTL_LOCALES } from '../../config/locales.js?v=386.0';
-import { isProActive } from '../../services/proState.js?v=386.0';
-import { ProService } from '../../services/proService.js?v=386.0';
-import { showProPaywall } from '../pro/ProPaywallModal.js?v=386.0';
-import { getNewsStrings } from '../../services/newsI18n.js?v=386.0';
+import { getInterfaceLanguage } from '../../services/i18n.js?v=423.0';
+import { RTL_LOCALES } from '../../config/locales.js?v=423.0';
+import { isProActive } from '../../services/proState.js?v=423.0';
+import { ProService } from '../../services/proService.js?v=423.0';
+import { showProPaywall } from '../pro/ProPaywallModal.js?v=423.0';
+import { getNewsStrings } from '../../services/newsI18n.js?v=423.0';
 import {
   fetchDailyNews,
   lookupGlossaryWord,
   getArticleGlossaryForLocale,
   normalizeNewsLocale,
-} from '../../services/newsService.js?v=386.0';
+} from '../../services/newsService.js?v=423.0';
 import {
   getOrBuildDictionary,
   resolveWord,
-} from '../modals/MilestoneStoryModal.js?v=386.0';
+} from '../modals/MilestoneStoryModal.js?v=423.0';
 import {
   speakWordAsync,
   stopAllAudio,
   getSavedVoiceAccent,
   triggerHaptic,
-} from '../../services/audioService.js?v=386.0';
+} from '../../services/audioService.js?v=423.0';
+import {
+  addCustomWord,
+  toggleFavoriteApi,
+  getUserFavorites,
+  getLoadedWordsSnapshot,
+} from '../../services/api.js?v=423.0';
 
 let activeNewsAudioRunId = 0;
 let activeNewsTtsTimer = null;
@@ -27,6 +33,152 @@ let activeNewsTtsResolve = null;
 let activeNewsPopoverOutside = null;
 let activeNewsPopoverScroll = null;
 let activeProUnsub = null;
+let activeNewsToastTimer = null;
+let activeNewsToastRemoveTimer = null;
+
+function cleanNewsWordToken(rawWord) {
+  return String(rawWord || '')
+    .replace(/[\u2018\u2019\u02BC\u02BB]/g, "'")
+    .replace(/^[^a-zA-Z'-]+|[^a-zA-Z'-]+$/g, '')
+    .trim();
+}
+
+function isWordSavedInDictAndFav(rawWord) {
+  const clean = cleanNewsWordToken(rawWord);
+  if (!clean) return false;
+  const lower = clean.toLowerCase();
+  const snapshot = typeof getLoadedWordsSnapshot === 'function' ? getLoadedWordsSnapshot() : [];
+  const existing = Array.isArray(snapshot)
+    ? snapshot.find((w) => w && String(w.word || '').trim().toLowerCase() === lower)
+    : null;
+  if (!existing) return false;
+  const favs = typeof getUserFavorites === 'function' ? getUserFavorites() : [];
+  const favSet = new Set((Array.isArray(favs) ? favs : []).map(String));
+  return favSet.has(String(existing.id));
+}
+
+function clearNewsToast() {
+  if (activeNewsToastTimer) {
+    clearTimeout(activeNewsToastTimer);
+    activeNewsToastTimer = null;
+  }
+  if (activeNewsToastRemoveTimer) {
+    clearTimeout(activeNewsToastRemoveTimer);
+    activeNewsToastRemoveTimer = null;
+  }
+  if (typeof document !== 'undefined') {
+    const toast = document.getElementById('news-saved-toast');
+    if (toast && typeof toast.remove === 'function') {
+      toast.remove();
+    } else if (toast && toast.parentNode) {
+      toast.parentNode.removeChild(toast);
+    }
+  }
+}
+
+function showNewsToast(message) {
+  if (typeof document === 'undefined' || !message) return;
+  if (activeNewsToastTimer) {
+    clearTimeout(activeNewsToastTimer);
+    activeNewsToastTimer = null;
+  }
+  if (activeNewsToastRemoveTimer) {
+    clearTimeout(activeNewsToastRemoveTimer);
+    activeNewsToastRemoveTimer = null;
+  }
+  let toast = document.getElementById('news-saved-toast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'news-saved-toast';
+    toast.className = 'news-saved-toast';
+    toast.style.position = 'fixed';
+    toast.style.pointerEvents = 'none';
+    document.body.appendChild(toast);
+  }
+  toast.textContent = message;
+  toast.classList.add('is-visible');
+  activeNewsToastTimer = setTimeout(() => {
+    activeNewsToastTimer = null;
+    toast.classList.remove('is-visible');
+    activeNewsToastRemoveTimer = setTimeout(() => {
+      activeNewsToastRemoveTimer = null;
+      const el = document.getElementById('news-saved-toast');
+      if (el && !el.classList.contains('is-visible')) {
+        if (typeof el.remove === 'function') el.remove();
+        else if (el.parentNode) el.parentNode.removeChild(el);
+      }
+    }, 220);
+  }, 2200);
+}
+
+/**
+ * Saves a word from Daily News to the user's Dictionary (or locates an existing word)
+ * and marks it as a Favorite.
+ */
+export async function saveNewsWordToDictionary(rawWord, meaning, transcription) {
+  const clean = cleanNewsWordToken(rawWord);
+  if (!clean) return { saved: false };
+
+  const lower = clean.toLowerCase();
+  const snapshot = typeof getLoadedWordsSnapshot === 'function' ? getLoadedWordsSnapshot() : [];
+  const existing = Array.isArray(snapshot)
+    ? snapshot.find((w) => w && String(w.word || '').trim().toLowerCase() === lower)
+    : null;
+
+  if (existing) {
+    const favRes = await toggleFavoriteApi(existing.id, true);
+    if (favRes && favRes.blocked) {
+      return { saved: false, blocked: favRes.blocked, word: existing };
+    }
+    return { saved: true, word: existing, existed: true };
+  }
+
+  const cleanTrans = transcription ? String(transcription).trim() : '';
+  const createdRes = await addCustomWord({
+    word: clean,
+    translation: String(meaning || '').trim(),
+    category: 'News',
+    notes: cleanTrans ? `${cleanTrans} · News` : 'News',
+  });
+
+  if (createdRes && createdRes.blocked) {
+    return { saved: false, blocked: createdRes.blocked };
+  }
+
+  const created = createdRes?.word || createdRes;
+  if (created && created.id) {
+    if (typeof window !== 'undefined' && typeof window._onCustomWordAddedFromNews === 'function') {
+      try {
+        window._onCustomWordAddedFromNews(created);
+      } catch (_) {}
+    }
+    const favRes = await toggleFavoriteApi(created.id, true);
+    if (favRes && favRes.blocked) {
+      return { saved: false, blocked: favRes.blocked, word: created };
+    }
+    return { saved: true, word: created, existed: false };
+  }
+
+  return { saved: false };
+}
+
+/**
+ * Removes a Daily News word from the user's Favorites when toggling off the heart.
+ */
+export async function removeNewsWordFromFavorites(rawWord) {
+  const clean = cleanNewsWordToken(rawWord);
+  if (!clean) return { removed: false };
+
+  const lower = clean.toLowerCase();
+  const snapshot = typeof getLoadedWordsSnapshot === 'function' ? getLoadedWordsSnapshot() : [];
+  const existing = Array.isArray(snapshot)
+    ? snapshot.find((w) => w && String(w.word || '').trim().toLowerCase() === lower)
+    : null;
+
+  if (!existing) return { removed: false };
+  await toggleFavoriteApi(existing.id, false);
+  return { removed: true, word: existing };
+}
 
 function escapeHtml(str) {
   return String(str ?? '')
@@ -133,6 +285,7 @@ function speakNewsSentenceDirect(text, speedRate = 0.85, runId) {
 }
 
 export function stopDailyNewsAudio() {
+  clearNewsToast();
   activeNewsAudioRunId++;
   if (activeNewsTtsTimer) {
     clearTimeout(activeNewsTtsTimer);
@@ -168,6 +321,7 @@ export function stopDailyNewsAudio() {
 }
 
 export function closeNewsWordPopover() {
+  clearNewsToast();
   if (typeof document === 'undefined') return;
   const pop = document.getElementById('news-word-popover');
   if (pop) pop.style.display = 'none';
@@ -234,7 +388,10 @@ function ensureNewsPopover() {
     pop.innerHTML = `
       <div class="news-word-popover-head">
         <span class="news-word-popover-word" dir="ltr"></span>
-        <button type="button" class="news-word-popover-speak" aria-label="Listen">🔊</button>
+        <div class="news-word-popover-actions">
+          <button type="button" class="news-word-popover-speak" aria-label="Listen">🔊</button>
+          <button type="button" class="news-word-popover-add-btn" aria-label="Favorite">🤍</button>
+        </div>
       </div>
       <div class="news-word-popover-trans" dir="ltr"></div>
       <div class="news-word-popover-meaning"></div>
@@ -626,6 +783,12 @@ export function renderDailyNewsView(containerSelector = '#app-content', options 
         font-size: 15px;
         font-weight: 800;
       }
+      .news-word-popover-actions {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        flex-shrink: 0;
+      }
       .news-word-popover-speak {
         border: none;
         background: rgba(37, 99, 235, 0.12);
@@ -649,6 +812,153 @@ export function renderDailyNewsView(containerSelector = '#app-content', options 
         font-size: 14.5px;
         font-weight: 600;
         line-height: 1.35;
+      }
+      .news-word-popover-add-btn {
+        border: none;
+        background: transparent;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        font-size: 18px;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        line-height: 1;
+        opacity: 1;
+        filter: none;
+        transition: transform 0.15s ease, background 0.15s ease;
+      }
+      .news-word-popover-add-btn:hover {
+        background: rgba(0, 0, 0, 0.06);
+        transform: scale(1.12);
+      }
+      body.dark-theme .news-word-popover-add-btn:hover,
+      .dark-theme .news-word-popover-add-btn:hover {
+        background: rgba(255, 255, 255, 0.12);
+      }
+      .news-word-popover-add-btn:active {
+        transform: scale(0.92);
+      }
+      .news-word-popover-add-btn.is-saved {
+        opacity: 1;
+        filter: none;
+        cursor: default;
+      }
+      .news-vocab-section {
+        margin-top: 12px;
+        padding-top: 10px;
+        border-top: 1px dashed var(--border-color, rgba(148, 163, 184, 0.28));
+      }
+      .news-vocab-heading {
+        font-size: 12px;
+        font-weight: 800;
+        color: var(--text-muted, #64748b);
+        margin-bottom: 8px;
+      }
+      .news-vocab-chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+      }
+      .news-vocab-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        max-width: 100%;
+        padding: 4px 6px 4px 9px;
+        border-radius: 999px;
+        border: 1px solid var(--border-color, #e2e8f0);
+        background: var(--bg-hover, #f8fafc);
+        font-size: 12px;
+        line-height: 1.25;
+        box-sizing: border-box;
+      }
+      .news-vocab-chip.is-saved {
+        border-color: rgba(16, 185, 129, 0.4);
+        background: rgba(16, 185, 129, 0.08);
+      }
+      body.dark-theme .news-vocab-chip,
+      .dark-theme .news-vocab-chip,
+      [data-theme="dark"] .news-vocab-chip {
+        background: rgba(15, 23, 42, 0.5);
+        border-color: rgba(148, 163, 184, 0.25);
+      }
+      body.dark-theme .news-vocab-chip.is-saved,
+      .dark-theme .news-vocab-chip.is-saved,
+      [data-theme="dark"] .news-vocab-chip.is-saved {
+        background: rgba(16, 185, 129, 0.16);
+        border-color: rgba(52, 211, 153, 0.42);
+      }
+      body.dark-theme .news-vocab-chip-word,
+      .dark-theme .news-vocab-chip-word {
+        color: #f1f5f9;
+      }
+      body.dark-theme .news-vocab-chip-meaning,
+      .dark-theme .news-vocab-chip-meaning {
+        color: #94a3b8;
+      }
+      .news-vocab-chip-word {
+        font-weight: 800;
+        color: var(--text-main, #0f172a);
+      }
+      .news-vocab-chip-sep {
+        color: var(--text-muted, #94a3b8);
+      }
+      .news-vocab-chip-meaning {
+        color: var(--text-muted, #64748b);
+        overflow-wrap: anywhere;
+      }
+      .news-vocab-add-btn {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        border: none;
+        background: transparent;
+        font-size: 15px;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        padding: 0;
+        line-height: 1;
+        opacity: 1;
+        filter: none;
+        transition: transform 0.14s ease;
+      }
+      .news-vocab-add-btn:active {
+        transform: scale(0.88);
+      }
+      .news-vocab-add-btn.is-saved {
+        background: transparent;
+        opacity: 1;
+        filter: none;
+        cursor: default;
+      }
+      .news-saved-toast {
+        position: fixed;
+        left: 50%;
+        bottom: calc(max(24px, var(--safe-bottom, env(safe-area-inset-bottom, 0px))) + 18px);
+        transform: translate(-50%, 16px);
+        z-index: 100080;
+        background: #0f172a;
+        color: #f8fafc;
+        padding: 9px 15px;
+        border-radius: 999px;
+        font-size: 13px;
+        font-weight: 700;
+        box-shadow: 0 10px 24px rgba(15, 23, 42, 0.28);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.18s ease, transform 0.18s ease;
+        max-width: calc(100vw - 32px);
+        text-align: center;
+      }
+      .news-saved-toast.is-visible {
+        opacity: 1;
+        transform: translate(-50%, 0);
       }
       .news-pro-gate {
         background: var(--card-bg, #ffffff);
@@ -900,6 +1210,36 @@ export function renderDailyNewsView(containerSelector = '#app-content', options 
           })
           .join('');
 
+        const articleGlossary = getArticleGlossaryForLocale(article, locale);
+        const vocabEntries = articleGlossary && typeof articleGlossary === 'object'
+          ? Object.entries(articleGlossary).filter(([w, m]) => w && m).slice(0, 8)
+          : [];
+        const vocabHtml = vocabEntries.length > 0 ? `
+          <div class="news-vocab-section">
+            <div class="news-vocab-heading">🔑 ${escapeHtml(strings.keyVocabHeading)}</div>
+            <div class="news-vocab-chips">
+              ${vocabEntries.map(([w, m]) => {
+                const saved = isWordSavedInDictAndFav(w);
+                return `
+                  <div class="news-vocab-chip ${saved ? 'is-saved' : ''}" data-vocab-chip="${escapeHtml(String(w).toLowerCase())}">
+                    <span class="news-vocab-chip-word" dir="ltr">${escapeHtml(w)}</span>
+                    <span class="news-vocab-chip-sep">—</span>
+                    <span class="news-vocab-chip-meaning">${escapeHtml(m)}</span>
+                    <button
+                      type="button"
+                      class="news-vocab-add-btn ${saved ? 'is-saved' : ''}"
+                      data-vocab-word="${escapeHtml(w)}"
+                      data-vocab-meaning="${escapeHtml(m)}"
+                      title="${escapeHtml(saved ? strings.inDictBadge : strings.addToDictBtn)}"
+                      aria-label="${escapeHtml(saved ? strings.inDictBadge : strings.addToDictBtn)}"
+                    >${saved ? '❤️' : '🤍'}</button>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          </div>
+        ` : '';
+
         return `
           <article class="news-card" data-article-idx="${idx}">
             <div class="news-card-top">
@@ -926,6 +1266,7 @@ export function renderDailyNewsView(containerSelector = '#app-content', options 
             </div>
             <h3 class="news-card-title" dir="ltr">${titleHtml}</h3>
             <div class="news-card-body" dir="ltr">${paragraphsHtml}</div>
+            ${vocabHtml}
             ${article.sourceName ? `
               <div class="news-card-source">
                 ${escapeHtml(strings.sourceLabel)}: ${escapeHtml(article.sourceName)}
@@ -1060,12 +1401,80 @@ export function renderDailyNewsView(containerSelector = '#app-content', options 
         const transEl = pop.querySelector('.news-word-popover-trans');
         const meaningEl = pop.querySelector('.news-word-popover-meaning');
         const speakBtn = pop.querySelector('.news-word-popover-speak');
+        const addBtn = pop.querySelector('.news-word-popover-add-btn');
 
         wordEl.textContent = rawWord;
         transEl.textContent = transcription;
         transEl.style.display = transcription ? 'block' : 'none';
         meaningEl.textContent = meaning;
         meaningEl.setAttribute('dir', isRtl ? 'rtl' : 'ltr');
+
+        if (addBtn) {
+          const cleanToken = cleanNewsWordToken(rawWord);
+          const alreadySaved = isWordSavedInDictAndFav(cleanToken);
+          addBtn.textContent = alreadySaved ? '❤️' : '🤍';
+          addBtn.title = alreadySaved ? strings.inDictBadge : strings.addToDictBtn;
+          addBtn.setAttribute('aria-label', alreadySaved ? strings.inDictBadge : strings.addToDictBtn);
+          addBtn.classList.toggle('is-saved', alreadySaved);
+          addBtn.disabled = false;
+          addBtn.style.visibility = cleanToken ? 'visible' : 'hidden';
+
+          let isSaving = false;
+          addBtn.onclick = async (ev) => {
+            ev.stopPropagation();
+            if (isSaving || !cleanToken) return;
+            isSaving = true;
+            try { triggerHaptic('light'); } catch (_) {}
+            const wasSaved = addBtn.classList.contains('is-saved');
+            const lowerKey = cleanToken.toLowerCase();
+            try {
+              if (wasSaved) {
+                const res = await removeNewsWordFromFavorites(cleanToken);
+                if (res && res.removed) {
+                  addBtn.textContent = '🤍';
+                  addBtn.title = strings.addToDictBtn;
+                  addBtn.setAttribute('aria-label', strings.addToDictBtn);
+                  addBtn.classList.remove('is-saved');
+                  contentEl.querySelectorAll('.news-vocab-chip').forEach((chip) => {
+                    if (chip.getAttribute('data-vocab-chip') !== lowerKey) return;
+                    chip.classList.remove('is-saved');
+                    const cBtn = chip.querySelector('.news-vocab-add-btn');
+                    if (cBtn) {
+                      cBtn.textContent = '🤍';
+                      cBtn.title = strings.addToDictBtn;
+                      cBtn.setAttribute('aria-label', strings.addToDictBtn);
+                      cBtn.classList.remove('is-saved');
+                    }
+                  });
+                }
+              } else {
+                const meaningForSave = meaning === strings.wordNotFound ? '' : meaning;
+                const res = await saveNewsWordToDictionary(cleanToken, meaningForSave, transcription);
+                if (res && res.saved) {
+                  addBtn.textContent = '❤️';
+                  addBtn.title = strings.inDictBadge;
+                  addBtn.setAttribute('aria-label', strings.inDictBadge);
+                  addBtn.classList.add('is-saved');
+                  contentEl.querySelectorAll('.news-vocab-chip').forEach((chip) => {
+                    if (chip.getAttribute('data-vocab-chip') !== lowerKey) return;
+                    chip.classList.add('is-saved');
+                    const cBtn = chip.querySelector('.news-vocab-add-btn');
+                    if (cBtn) {
+                      cBtn.textContent = '❤️';
+                      cBtn.title = strings.inDictBadge;
+                      cBtn.setAttribute('aria-label', strings.inDictBadge);
+                      cBtn.classList.add('is-saved');
+                    }
+                  });
+                  showNewsToast(strings.savedWordToast);
+                }
+              }
+            } catch (_) {
+            } finally {
+              isSaving = false;
+            }
+          };
+        }
 
         speakBtn.onclick = (ev) => {
           ev.stopPropagation();
@@ -1074,6 +1483,46 @@ export function renderDailyNewsView(containerSelector = '#app-content', options 
         };
 
         positionPopover(pop, tokenEl);
+      });
+    });
+
+    // Bind Key Vocabulary quick-toggle heart buttons
+    contentEl.querySelectorAll('.news-vocab-add-btn').forEach((btn) => {
+      let isSavingChip = false;
+      btn.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        if (isSavingChip) return;
+        const w = btn.getAttribute('data-vocab-word') || '';
+        const m = btn.getAttribute('data-vocab-meaning') || '';
+        if (!w) return;
+        isSavingChip = true;
+        try { triggerHaptic('light'); } catch (_) {}
+        const wasSaved = btn.classList.contains('is-saved');
+        try {
+          if (wasSaved) {
+            const res = await removeNewsWordFromFavorites(w);
+            if (res && res.removed) {
+              btn.textContent = '🤍';
+              btn.title = strings.addToDictBtn;
+              btn.setAttribute('aria-label', strings.addToDictBtn);
+              btn.classList.remove('is-saved');
+              btn.closest('.news-vocab-chip')?.classList.remove('is-saved');
+            }
+          } else {
+            const res = await saveNewsWordToDictionary(w, m, '');
+            if (res && res.saved) {
+              btn.textContent = '❤️';
+              btn.title = strings.inDictBadge;
+              btn.setAttribute('aria-label', strings.inDictBadge);
+              btn.classList.add('is-saved');
+              btn.closest('.news-vocab-chip')?.classList.add('is-saved');
+              showNewsToast(strings.savedWordToast);
+            }
+          }
+        } catch (_) {
+        } finally {
+          isSavingChip = false;
+        }
       });
     });
   });

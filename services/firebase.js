@@ -1,8 +1,8 @@
 // Firebase Integration for English Breakfast (Universal Web & Android Capacitor)
 // Uses direct native Google Identity & Firestore REST APIs (100% reliable in all WebViews with zero CDN dependency)
 
-import { getIsoWeekKey, getRecentWeekKeys, getIsoWeekStartMs } from './weekKey.js?v=386.0';
-import { isProActive } from './proState.js?v=386.0';
+import { getIsoWeekKey, getRecentWeekKeys, getIsoWeekStartMs } from './weekKey.js?v=423.0';
+import { isProActive } from './proState.js?v=423.0';
 
 const DEFAULT_FIREBASE_CONFIG = {
   apiKey: "AIzaSyD_-Zrs0NEhIerHyg3S6jlNsXVt5RevABc",
@@ -1785,6 +1785,41 @@ export async function saveUserWordOverridesFirestore(userId, overridesMap) {
   }
 }
 
+/**
+ * Persists all user learning achievements (micro-rules, tenses, grammar reference,
+ * spoken English, completed collections, CEFR exams, milestones, custom collections)
+ * to Firestore at /users/{uid}/data/achievements inside progressJson.
+ */
+export async function saveUserAchievementsFirestore(userId, achievementsObj) {
+  if (!userId || !achievementsObj || typeof achievementsObj !== 'object') return false;
+  const uid = getEffectiveFirestoreUid(userId);
+  if (!uid) return false;
+  try {
+    const headers = getAuthHeaders();
+    const jsonStr = JSON.stringify(achievementsObj);
+    if (jsonStr.length > 850000) {
+      console.warn('Firestore achievements payload too large, skipping:', jsonStr.length);
+      return false;
+    }
+    const url = getFirestoreUrl(`/users/${encodeURIComponent(uid)}/data/achievements?updateMask.fieldPaths=progressJson&updateMask.fieldPaths=updatedAt`);
+    const payload = {
+      fields: {
+        progressJson: { stringValue: jsonStr },
+        updatedAt: { integerValue: String(Date.now()) }
+      }
+    };
+    const res = await firestoreFetch(url, {
+      method: 'PATCH',
+      headers,
+      body: JSON.stringify(payload)
+    });
+    return Boolean(res && res.ok !== false);
+  } catch (err) {
+    console.warn('Firestore achievements save failed:', err);
+    return false;
+  }
+}
+
 export async function saveUserCustomWordsFirestore(userId, wordsArray) {
   if (!userId) return;
   const uid = getEffectiveFirestoreUid(userId);
@@ -2095,6 +2130,7 @@ export async function loadFullUserDataFirestore(userId) {
       let notes = {};
       let customWords = [];
       let wordOverrides = {};
+      let achievements = null;
       let weeklyXpMap = {};
 
       // Parse all documents in /users/{uid}/data (favorites, deleted_favorites, notes, custom_words, progress, weekly_xp_*)
@@ -2146,6 +2182,15 @@ export async function loadFullUserDataFirestore(userId) {
               if (doc.fields?.progressJson?.stringValue) {
                 try {
                   Object.assign(progress, JSON.parse(doc.fields.progressJson.stringValue));
+                } catch (e) {}
+              }
+            } else if (docName === 'achievements') {
+              if (doc.fields?.progressJson?.stringValue) {
+                try {
+                  const parsed = JSON.parse(doc.fields.progressJson.stringValue);
+                  if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+                    achievements = parsed;
+                  }
                 } catch (e) {}
               }
             } else if (docName.startsWith('weekly_xp_')) {
@@ -2224,6 +2269,7 @@ export async function loadFullUserDataFirestore(userId) {
         notes,
         customWords,
         wordOverrides,
+        achievements,
         weeklyXpMap
       };
     } catch (err) {

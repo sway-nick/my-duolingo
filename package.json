@@ -9,7 +9,7 @@
     "prepare:assets": "node scripts/prepare_android_assets.mjs",
     "build:apk": "node scripts/build_android_apk.mjs",
     "start": "echo Frontend runs as static files",
-    "test": "node --test tests/leaderboard.test.mjs tests/leaderboard_e2e_scenarios.test.mjs tests/ad_and_penalties.test.mjs tests/collections.test.mjs tests/monday_ticker.test.mjs tests/monday_meme.test.mjs tests/release_quality_gates.test.mjs tests/widget_modal_behavior.test.mjs tests/functional_words_exclusion.test.mjs tests/word_blocks.test.mjs tests/pro_model.test.mjs tests/daily_news.test.mjs tests/web_play_store_funnel.test.mjs",
+    "test": "node --test tests/leaderboard.test.mjs tests/leaderboard_e2e_scenarios.test.mjs tests/ad_and_penalties.test.mjs tests/collections.test.mjs tests/monday_ticker.test.mjs tests/monday_meme.test.mjs tests/release_quality_gates.test.mjs tests/widget_modal_behavior.test.mjs tests/functional_words_exclusion.test.mjs tests/word_blocks.test.mjs tests/pro_model.test.mjs tests/daily_news.test.mjs tests/web_play_store_funnel.test.mjs tests/update_53_features.test.mjs",
     "test:weekly": "node scripts/weekly_test.mjs",
     "test:weekly:report": "node scripts/weekly_test.mjs --save-report",
     "lint": "echo ESLint will be configured later",
@@ -24,12 +24,14 @@
   "devDependencies": {
     "@firebase/rules-unit-testing": "^5.0.2",
     "@google/clasp": "^3.3.0",
+    "esbuild": "^0.28.2",
+    "ffmpeg-static": "^5.3.0",
     "firebase-admin": "^14.5.0"
   },
   "dependencies": {
+    "@capacitor-community/admob": "^8.2.1",
     "@capacitor/android": "^8.5.3",
     "@capacitor/cli": "^8.5.3",
-    "@capacitor/core": "^8.5.3",
-    "@capacitor-community/admob": "^8.2.1"
+    "@capacitor/core": "^8.5.3"
   }
 }

@@ -1,6 +1,11 @@
 import fs from 'fs';
 import path from 'path';
+import { createRequire } from 'module';
+import * as esbuild from 'esbuild';
 import { BUILTIN_COLLECTIONS_DEF, DOWNLOADABLE_PACK_COLLECTIONS } from '../frontend/services/collectionsService.js';
+
+const require = createRequire(import.meta.url);
+const { minifyCssContent, cleanStaleAssetsInRoot } = require('./build.cjs');
 
 const ROOT_SOURCE = 'c:/projects/my-duolingo';
 const ANDROID_PROJECT = 'C:/projects/my-duolingo-android';
@@ -121,6 +126,169 @@ export function prepareAndroidAssets() {
         }
       }
     }
+  }
+
+  // 3. Optimize Android frontend assets: split words data, remove stale PNG avatars/dead assets, minify main.css
+  console.log('--- 3. Optimizing Android frontend data, avatars & CSS ---');
+  const srcDataDir = path.join(ROOT_SOURCE, 'frontend/assets/data');
+  const androidDataDir = path.join(ANDROID_PROJECT, 'frontend/assets/data');
+  if (!fs.existsSync(androidDataDir)) {
+    fs.mkdirSync(androidDataDir, { recursive: true });
+  }
+
+  function syncJsonShardDir(srcDir, destDir, label) {
+    if (!fs.existsSync(srcDir)) return;
+    if (!fs.existsSync(destDir)) {
+      fs.mkdirSync(destDir, { recursive: true });
+    }
+    const srcShards = new Set();
+    let copiedShards = 0;
+    for (const file of fs.readdirSync(srcDir)) {
+      if (file.endsWith('.json')) {
+        srcShards.add(file);
+        fs.copyFileSync(path.join(srcDir, file), path.join(destDir, file));
+        copiedShards++;
+      }
+    }
+    let prunedShards = 0;
+    for (const file of fs.readdirSync(destDir)) {
+      if (file.endsWith('.json') && !srcShards.has(file)) {
+        fs.unlinkSync(path.join(destDir, file));
+        prunedShards++;
+      }
+    }
+    console.log(`✅ Synced ${label}: ${copiedShards} shards copied, ${prunedShards} stale pruned.`);
+  }
+
+  const srcWordsBase = path.join(srcDataDir, 'words_base.json');
+  if (fs.existsSync(srcWordsBase)) {
+    fs.copyFileSync(srcWordsBase, path.join(androidDataDir, 'words_base.json'));
+  }
+  syncJsonShardDir(path.join(srcDataDir, 'words_lang'), path.join(androidDataDir, 'words_lang'), 'words_lang');
+  syncJsonShardDir(path.join(srcDataDir, 'i18n_lang'), path.join(androidDataDir, 'i18n_lang'), 'i18n_lang');
+
+  const staleAndroidWordsJson = path.join(androidDataDir, 'words.json');
+  if (fs.existsSync(staleAndroidWordsJson)) {
+    fs.unlinkSync(staleAndroidWordsJson);
+    console.log('✅ Removed stale Android words.json (replaced by words_base.json + words_lang/).');
+  }
+  const stalePublicWordsJson = path.join(ANDROID_PROJECT, 'android/app/src/main/assets/public/assets/data/words.json');
+  if (fs.existsSync(stalePublicWordsJson)) {
+    fs.unlinkSync(stalePublicWordsJson);
+  }
+
+  // Sync WebP avatars and remove any stale .png avatars / dead assets
+  const srcAvatarsDir = path.join(ROOT_SOURCE, 'frontend/assets/avatars');
+  const androidAvatarsDir = path.join(ANDROID_PROJECT, 'frontend/assets/avatars');
+  if (fs.existsSync(srcAvatarsDir)) {
+    if (!fs.existsSync(androidAvatarsDir)) {
+      fs.mkdirSync(androidAvatarsDir, { recursive: true });
+    }
+    for (const file of fs.readdirSync(srcAvatarsDir)) {
+      if (file.endsWith('.webp')) {
+        fs.copyFileSync(path.join(srcAvatarsDir, file), path.join(androidAvatarsDir, file));
+      }
+    }
+  }
+  for (const avatarDir of [
+    androidAvatarsDir,
+    path.join(ANDROID_PROJECT, 'android/app/src/main/assets/public/assets/avatars'),
+  ]) {
+    if (fs.existsSync(avatarDir)) {
+      for (const file of fs.readdirSync(avatarDir)) {
+        if (/^avatar_\d+\.png$/i.test(file)) {
+          fs.unlinkSync(path.join(avatarDir, file));
+        }
+      }
+    }
+  }
+  cleanStaleAssetsInRoot(path.join(ANDROID_PROJECT, 'frontend/assets'));
+
+  // Minify Android main.css from single source of truth
+  const srcMainCss = path.join(ROOT_SOURCE, 'frontend/assets/css/main.css');
+  const androidMainCss = path.join(ANDROID_PROJECT, 'frontend/assets/css/main.css');
+  const cssSourcePath = fs.existsSync(srcMainCss) ? srcMainCss : androidMainCss;
+  if (fs.existsSync(cssSourcePath)) {
+    const rawCss = fs.readFileSync(cssSourcePath, 'utf8');
+    const minCss = minifyCssContent(rawCss);
+    fs.mkdirSync(path.dirname(androidMainCss), { recursive: true });
+    fs.writeFileSync(androidMainCss, minCss, 'utf8');
+    console.log(`🎨 Minified Android main.css: ${(Buffer.byteLength(rawCss) / 1024).toFixed(1)} KB -> ${(Buffer.byteLength(minCss) / 1024).toFixed(1)} KB`);
+  }
+
+  // 4. Minify all Android JS files via esbuild (reading clean unminified sources from ROOT_SOURCE/frontend)
+  console.log('--- 4. Minifying Android JS files via esbuild ---');
+  const srcFrontendDir = path.join(ROOT_SOURCE, 'frontend');
+  const androidFrontendDir = path.join(ANDROID_PROJECT, 'frontend');
+  let jsFileCount = 0;
+  let jsRawBytes = 0;
+  let jsMinBytes = 0;
+  const expectedJsRels = new Set();
+
+  function walkAndMinifyJs(dir) {
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      const fullPath = path.join(dir, entry.name);
+      const rel = path.relative(srcFrontendDir, fullPath).replace(/\\/g, '/');
+      if (entry.isDirectory()) {
+        if (entry.name === 'node_modules' || entry.name === '.git' || entry.name === 'dist' || rel === 'assets/audio') {
+          continue;
+        }
+        walkAndMinifyJs(fullPath);
+      } else if (entry.isFile() && entry.name.endsWith('.js')) {
+        expectedJsRels.add(rel);
+        const rawCode = fs.readFileSync(fullPath, 'utf8');
+        const result = esbuild.transformSync(rawCode, {
+          loader: 'js',
+          format: 'esm',
+          target: ['chrome100', 'es2022'],
+          charset: 'utf8',
+          minifyWhitespace: true,
+          minifySyntax: true,
+          minifyIdentifiers: true,
+          legalComments: 'none',
+        });
+        const destPath = path.join(androidFrontendDir, rel);
+        fs.mkdirSync(path.dirname(destPath), { recursive: true });
+        fs.writeFileSync(destPath, result.code, 'utf8');
+        jsFileCount++;
+        jsRawBytes += Buffer.byteLength(rawCode, 'utf8');
+        jsMinBytes += Buffer.byteLength(result.code, 'utf8');
+      }
+    }
+  }
+
+  let prunedJs = 0;
+  function pruneStaleAndroidJs(dir) {
+    if (!fs.existsSync(dir)) return;
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      const fullPath = path.join(dir, entry.name);
+      const rel = path.relative(androidFrontendDir, fullPath).replace(/\\/g, '/');
+      if (entry.isDirectory()) {
+        if (entry.name === 'node_modules' || entry.name === '.git' || entry.name === 'dist' || rel === 'assets/audio') {
+          continue;
+        }
+        pruneStaleAndroidJs(fullPath);
+      } else if (entry.isFile() && entry.name.endsWith('.js') && !expectedJsRels.has(rel)) {
+        fs.unlinkSync(fullPath);
+        prunedJs++;
+      }
+    }
+  }
+
+  if (fs.existsSync(srcFrontendDir)) {
+    const srcIndexHtml = path.join(srcFrontendDir, 'index.html');
+    const destIndexHtml = path.join(androidFrontendDir, 'index.html');
+    if (fs.existsSync(srcIndexHtml)) {
+      fs.copyFileSync(srcIndexHtml, destIndexHtml);
+    }
+    walkAndMinifyJs(srcFrontendDir);
+    pruneStaleAndroidJs(androidFrontendDir);
+    const savedBytes = jsRawBytes - jsMinBytes;
+    const rawMB = (jsRawBytes / 1048576).toFixed(2);
+    const minMB = (jsMinBytes / 1048576).toFixed(2);
+    const savedKB = (savedBytes / 1024).toFixed(1);
+    const savedMB = (savedBytes / 1048576).toFixed(2);
+    console.log(`⚡ Minified ${jsFileCount} Android JS files (pruned ${prunedJs} stale): ${rawMB} MB -> ${minMB} MB (saved ${savedKB} KB / ${savedMB} MB)`);
   }
 
   console.log('✅ Android asset preparation complete: Ready for lightweight APK/AAB build.');

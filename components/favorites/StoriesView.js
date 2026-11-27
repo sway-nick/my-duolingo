@@ -1,12 +1,12 @@
-import { getStoryStrings } from '../modals/storyTranslations.js?v=386.0';
-import { showMilestoneStoryModal, showStoryToast, MILESTONE_STORIES } from '../modals/MilestoneStoryModal.js?v=386.0';
-import { showFairyTaleSurveyModal, getFairyTaleStrings } from '../modals/FairyTaleSurveyModal.js?v=386.0';
-import { getMasteredWordsCount } from '../../services/api.js?v=386.0';
-import { t, getInterfaceLanguage } from '../../services/i18n.js?v=386.0';
-import { isProActive } from '../../services/proState.js?v=386.0';
-import { ProService } from '../../services/proService.js?v=386.0';
-import { getProStrings } from '../../services/proI18n.js?v=386.0';
-import { getSpokenEnglishStrings } from './spokenEnglishI18n.js?v=386.0';
+import { getStoryStrings } from '../modals/storyTranslations.js?v=423.0';
+import { showMilestoneStoryModal, showStoryToast, MILESTONE_STORIES } from '../modals/MilestoneStoryModal.js?v=423.0';
+import { showFairyTaleSurveyModal, getFairyTaleStrings } from '../modals/FairyTaleSurveyModal.js?v=423.0';
+import { getMasteredWordsCount } from '../../services/api.js?v=423.0';
+import { t, getInterfaceLanguage } from '../../services/i18n.js?v=423.0';
+import { isProActive } from '../../services/proState.js?v=423.0';
+import { ProService } from '../../services/proService.js?v=423.0';
+import { getProStrings } from '../../services/proI18n.js?v=423.0';
+import { getSpokenEnglishStrings } from './spokenEnglishI18n.js?v=423.0';
 
 export function renderStoriesView(containerSelector = '#app-content', options = {}) {
   const container = document.querySelector(containerSelector);

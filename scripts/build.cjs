@@ -3,12 +3,129 @@ const path = require('path');
 const { optimizeWordsData } = require('./optimize_words_data.cjs');
 
 function minifyCssContent(css) {
-  return css
-    .replace(/\/\*[\s\S]*?\*\//g, '')
-    .replace(/\s*\n\s*/g, '')
-    .replace(/\s*([{}:;,])\s*/g, '$1')
+  const preserved = [];
+  const keep = (str) => {
+    const token = `__CSS_KEEP_${preserved.length}__`;
+    preserved.push(str);
+    return token;
+  };
+
+  let out = '';
+  let i = 0;
+  const len = css.length;
+
+  while (i < len) {
+    const ch = css[i];
+
+    // Strip /* ... */ comments (replace with space so adjacent tokens cannot merge)
+    if (ch === '/' && css[i + 1] === '*') {
+      const end = css.indexOf('*/', i + 2);
+      i = end === -1 ? len : end + 2;
+      out += ' ';
+      continue;
+    }
+
+    // Preserve quoted strings '...' or "..."
+    if (ch === '"' || ch === "'") {
+      const quote = ch;
+      let j = i + 1;
+      while (j < len) {
+        if (css[j] === '\\') { j += 2; continue; }
+        if (css[j] === quote) { j++; break; }
+        j++;
+      }
+      out += keep(css.slice(i, j));
+      i = j;
+      continue;
+    }
+
+    const prevOk = i === 0 || !/[a-zA-Z0-9_-]/.test(css[i - 1]);
+
+    // Preserve url(...) verbatim
+    if (prevOk && (ch === 'u' || ch === 'U') && /^url\s*\(/i.test(css.slice(i, i + 8))) {
+      let j = css.indexOf('(', i) + 1;
+      let depth = 1;
+      while (j < len && depth > 0) {
+        if (css[j] === '"' || css[j] === "'") {
+          const q = css[j++];
+          while (j < len) {
+            if (css[j] === '\\') { j += 2; continue; }
+            if (css[j] === q) { j++; break; }
+            j++;
+          }
+          continue;
+        }
+        if (css[j] === '(') depth++;
+        else if (css[j] === ')') depth--;
+        j++;
+      }
+      out += keep(css.slice(i, j));
+      i = j;
+      continue;
+    }
+
+    // Preserve spacing inside calc(...), min(...), max(...), clamp(...)
+    if (prevOk && /^(calc|min|max|clamp)\(/i.test(css.slice(i, i + 7))) {
+      let j = css.indexOf('(', i) + 1;
+      let depth = 1;
+      while (j < len && depth > 0) {
+        if (css[j] === '(') depth++;
+        else if (css[j] === ')') depth--;
+        j++;
+      }
+      const expr = css.slice(i, j)
+        .replace(/\s+/g, ' ')
+        .replace(/\(\s+/g, '(')
+        .replace(/\s+\)/g, ')')
+        .replace(/\s*,\s*/g, ',');
+      out += keep(expr);
+      i = j;
+      continue;
+    }
+
+    out += ch;
+    i++;
+  }
+
+  out = out
+    .replace(/\s+/g, ' ')
+    .replace(/\s*([{};,])\s*/g, '$1')
+    .replace(/:\s+/g, ':')
+    .replace(/\s+([>~+])\s+/g, '$1')
     .replace(/;}/g, '}')
     .trim();
+
+  return out.replace(/__CSS_KEEP_(\d+)__/g, (_, idx) => preserved[Number(idx)]);
+}
+
+function cleanStaleAssetsInRoot(assetRoot) {
+  if (!fs.existsSync(assetRoot)) return;
+  const staleRelPaths = [
+    'icons/test_transparent_512.png',
+    'icons/cute_ai_robot.png',
+    'icons/golden_crown.png',
+    'icons/pro_gem_diamond_512.png',
+    'icons/pro_gem_amber_512.png',
+    'icons/pro_crown_512.png',
+    'images/aladdin_and_the_magic_lamp.png',
+    'images/my_lord_bag_of_rice.png',
+    'css/app.css',
+  ];
+  for (const rel of staleRelPaths) {
+    const p = path.join(assetRoot, rel);
+    if (fs.existsSync(p)) fs.unlinkSync(p);
+  }
+  const avatarsDir = path.join(assetRoot, 'avatars');
+  if (fs.existsSync(avatarsDir)) {
+    for (const f of fs.readdirSync(avatarsDir)) {
+      if (/^avatar_\d+\.png$/i.test(f)) {
+        const webpPartner = path.join(avatarsDir, f.replace(/\.png$/i, '.webp'));
+        if (fs.existsSync(webpPartner)) {
+          fs.unlinkSync(path.join(avatarsDir, f));
+        }
+      }
+    }
+  }
 }
 
 function copyRecursiveSync(src, dest) {
@@ -133,7 +250,7 @@ function build() {
   }
 
   // 0.2. Align all ?v= import query versions across frontend to a single APP_BUILD_VERSION
-  const APP_BUILD_VERSION = '386.0';
+  const APP_BUILD_VERSION = '423.0';
   function normalizeVersionsInDir(dir) {
     fs.readdirSync(dir, { withFileTypes: true }).forEach((entry) => {
       const fullPath = path.join(dir, entry.name);
@@ -158,10 +275,13 @@ function build() {
   copyRecursiveSync('./frontend', './docs');
 
   // 1.1. Minify CSS assets in production docs/ output (used by Capacitor Android & Web)
-  ['./docs/assets/css/styles.css', './docs/assets/css/mobile-styles.css'].forEach((cssFile) => {
+  cleanStaleAssetsInRoot('./docs/assets');
+  ['./docs/assets/css/main.css'].forEach((cssFile) => {
     if (fs.existsSync(cssFile)) {
       const rawCss = fs.readFileSync(cssFile, 'utf8');
-      fs.writeFileSync(cssFile, minifyCssContent(rawCss), 'utf8');
+      const minCss = minifyCssContent(rawCss);
+      fs.writeFileSync(cssFile, minCss, 'utf8');
+      console.log(`🎨 Minified ${cssFile}: ${(Buffer.byteLength(rawCss) / 1024).toFixed(1)} KB -> ${(Buffer.byteLength(minCss) / 1024).toFixed(1)} KB`);
     }
   });
 
@@ -195,6 +315,12 @@ function build() {
   copyRecursiveSync('./frontend/services', './services');
   copyRecursiveSync('./frontend/config', './config');
   copyRecursiveSync('./frontend/assets', './assets');
+  cleanStaleAssetsInRoot('./assets');
+  if (fs.existsSync('./assets/css/main.css')) {
+    const rawRootCss = fs.readFileSync('./assets/css/main.css', 'utf8');
+    const minRootCss = minifyCssContent(rawRootCss);
+    fs.writeFileSync('./assets/css/main.css', minRootCss, 'utf8');
+  }
   if (fs.existsSync('./frontend/.well-known')) {
     copyRecursiveSync('./frontend/.well-known', './.well-known');
   }
@@ -212,4 +338,8 @@ function build() {
   console.log('✅ Build successful! Single source of truth (frontend/) synchronized to docs/ and root.');
 }
 
-build();
+if (require.main === module) {
+  build();
+}
+
+module.exports = { minifyCssContent, cleanStaleAssetsInRoot, build };

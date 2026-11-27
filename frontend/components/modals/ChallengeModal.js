@@ -1,5 +1,5 @@
-import { getChallengeTranslation } from './challengeTranslations.js?v=386.0';
-import { getInterfaceLanguage } from '../../services/i18n.js?v=386.0';
+import { getChallengeTranslation } from './challengeTranslations.js?v=423.0';
+import { getInterfaceLanguage } from '../../services/i18n.js?v=423.0';
 
 /**
  * Escapes HTML characters to prevent XSS

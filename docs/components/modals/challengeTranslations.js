@@ -354,7 +354,7 @@ export const CHALLENGE_TRANSLATIONS = {
     "subtitle": "Masz zabawny pomysł? Uwielbiasz kręcić filmy lub tworzyć klipy z AI? Pokaż nam, na co cię stać!",
     "intro": "Zapraszamy wszystkich graczy English Breakfast do udziału w naszym kreatywnym konkursie wideo! Stwórz krótkie, zabawne i wciągające wideo po angielsku. Cokolwiek, co wywoła uśmiech!",
     "goldenCardTitle": "🌟 Wyróżnienie na Złotej Karcie!",
-    "goldenCardText": "Zespół English Breakfast wybierze najlepsze, najzabawniejsze i najbardziej kreatywne filmy! Zwycięskie materiały pojawią się bezpośrednio na Złotej Karcie w aplikacji English Breakfast. Podziel się swoim filmem w aplikacji w mediach społecznościowych!",
+    "goldenCardText": "Zespół English Breakfast wybierze najlepsze, najzabawniejsze i najbardziej kreatywne filmy! Zwycięskie materiały pojawią się bezpośrednio na Złotej Karcie w aplikacji English Breakfast. Podziel się swoim filmem z aplikacji w mediach społecznościowych!",
     "proPrizeText": "Twórcy najlepszych filmów otrzymają subskrypcję PRO, tak jak zwycięzcy Ligi miesiąca!",
     "ideasTitle": "🐱 O czym może być twoje wideo?",
     "ideas": [

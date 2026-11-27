@@ -1,10 +1,10 @@
-import { getLeaderboard, getCachedLeaderboard, getIsoWeekKey, formatCompactXp } from '../../services/api.js?v=386.0';
-import { getRecentWeekKeys, getTimeUntilMonthEnd } from '../../services/weekKey.js?v=386.0';
-import { getCurrentUser, getUserAvatar } from '../../services/authService.js?v=386.0';
-import { renderAuthModal } from '../auth/AuthModal.js?v=386.0';
-import { t, getInterfaceLanguage } from '../../services/i18n.js?v=386.0';
-import { isEmailVerified, sendEmailVerification, checkAndRefreshEmailVerification } from '../../services/firebase.js?v=386.0';
-import { isProActive } from '../../services/proState.js?v=386.0';
+import { getLeaderboard, getCachedLeaderboard, getIsoWeekKey, formatCompactXp } from '../../services/api.js?v=423.0';
+import { getRecentWeekKeys, getTimeUntilMonthEnd } from '../../services/weekKey.js?v=423.0';
+import { getCurrentUser, getUserAvatar } from '../../services/authService.js?v=423.0';
+import { renderAuthModal } from '../auth/AuthModal.js?v=423.0';
+import { t, getInterfaceLanguage } from '../../services/i18n.js?v=423.0';
+import { isEmailVerified, sendEmailVerification, checkAndRefreshEmailVerification } from '../../services/firebase.js?v=423.0';
+import { isProActive } from '../../services/proState.js?v=423.0';
 
 let currentPeriod = typeof localStorage !== 'undefined' ? (localStorage.getItem('myduo_leaderboard_period') || 'week') : 'week'; // 'week' or 'all'
 
@@ -681,10 +681,10 @@ export function getMondayMemeTop4CutHtml(weekKey = null) {
   }
 
   const defaultWinners = [
-    { name: 'Elena', xp: 2450, avatar: 'assets/avatars/avatar_1.png' },
-    { name: 'Alex', xp: 1980, avatar: 'assets/avatars/avatar_2.png' },
-    { name: 'Max', xp: 1620, avatar: 'assets/avatars/avatar_3.png' },
-    { name: 'Anna', xp: 1350, avatar: 'assets/avatars/avatar_4.png' },
+    { name: 'Elena', xp: 2450, avatar: 'assets/avatars/avatar_1.webp' },
+    { name: 'Alex', xp: 1980, avatar: 'assets/avatars/avatar_2.webp' },
+    { name: 'Max', xp: 1620, avatar: 'assets/avatars/avatar_3.webp' },
+    { name: 'Anna', xp: 1350, avatar: 'assets/avatars/avatar_4.webp' },
   ];
 
   const top4 = [];

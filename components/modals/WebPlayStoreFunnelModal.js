@@ -6,9 +6,9 @@
  * Native Android APK/AAB is NEVER restricted by this gate.
  */
 
-import { AdService } from '../../services/adService.js?v=386.0';
-import { getInterfaceLanguage } from '../../services/i18n.js?v=386.0';
-import { getGuestTrainingCount } from '../../services/authService.js?v=386.0';
+import { AdService } from '../../services/adService.js?v=423.0';
+import { getInterfaceLanguage } from '../../services/i18n.js?v=423.0';
+import { getGuestTrainingCount } from '../../services/authService.js?v=423.0';
 
 export const WEB_GATE_WORD_LIMIT = 100;
 export const PLAY_STORE_URL =

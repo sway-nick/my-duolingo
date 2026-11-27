@@ -1,17 +1,17 @@
-import { getUserSettings, saveUserSettings, getWords, getIsoWeekKey } from '../../services/api.js?v=386.0';
-import { getCurrentUser, logoutUser, getUserAvatar, saveUserAvatar, removeUserAvatar, compressAndCropAvatar, getEffectiveUserId } from '../../services/authService.js?v=386.0';
-import { renderAuthModal } from '../auth/AuthModal.js?v=386.0';
-import { applyTheme, getSavedTheme, showToast } from '../layout/AppLayout.js?v=386.0';
-import { speakWord, setSavedVoiceAccent, getSavedVoiceAccent, isAudioMuted, setSavedSilentMode, playSuccessSound, isSfxMuted, setSavedSfxMuted, isCategoryAudioDownloaded, isVoicePackDownloaded } from '../../services/audioService.js?v=386.0';
-import { renderAvatarPickerModal } from './AvatarPickerModal.js?v=386.0';
-import { t, getInterfaceLanguage, setInterfaceLanguage } from '../../services/i18n.js?v=386.0';
-import { SUPPORTED_LOCALES, getLocaleDisplayName } from '../../config/locales.js?v=386.0';
-import { deleteCurrentUserAccount, getSiteStatsSummaryFirestore, getGa4CountryReportFirestore } from '../../services/firebase.js?v=386.0';
-import { openPrivacyModal } from '../modals/PrivacyModal.js?v=386.0';
-import { openWidgetConfigBottomSheet } from '../modals/WidgetConfigBottomSheet.js?v=386.0';
-import { ProService } from '../../services/proService.js?v=386.0';
-import { getProStrings } from '../../services/proI18n.js?v=386.0';
-import { getFreeShieldsLeft, isProActive, isDebugForceFree, setDebugForceFree } from '../../services/proState.js?v=386.0';
+import { getUserSettings, saveUserSettings, getWords, getIsoWeekKey } from '../../services/api.js?v=423.0';
+import { getCurrentUser, logoutUser, getUserAvatar, saveUserAvatar, removeUserAvatar, compressAndCropAvatar, getEffectiveUserId } from '../../services/authService.js?v=423.0';
+import { renderAuthModal } from '../auth/AuthModal.js?v=423.0';
+import { applyTheme, getSavedTheme, showToast } from '../layout/AppLayout.js?v=423.0';
+import { speakWord, setSavedVoiceAccent, getSavedVoiceAccent, isAudioMuted, setSavedSilentMode, playSuccessSound, isSfxMuted, setSavedSfxMuted, isCategoryAudioDownloaded, isVoicePackDownloaded } from '../../services/audioService.js?v=423.0';
+import { renderAvatarPickerModal } from './AvatarPickerModal.js?v=423.0';
+import { t, getInterfaceLanguage, setInterfaceLanguage, ensureLocaleLoaded } from '../../services/i18n.js?v=423.0';
+import { SUPPORTED_LOCALES, getLocaleDisplayName } from '../../config/locales.js?v=423.0';
+import { deleteCurrentUserAccount, getSiteStatsSummaryFirestore, getGa4CountryReportFirestore } from '../../services/firebase.js?v=423.0';
+import { openPrivacyModal } from '../modals/PrivacyModal.js?v=423.0';
+import { openWidgetConfigBottomSheet } from '../modals/WidgetConfigBottomSheet.js?v=423.0';
+import { ProService } from '../../services/proService.js?v=423.0';
+import { getProStrings } from '../../services/proI18n.js?v=423.0';
+import { getFreeShieldsLeft, isProActive, isDebugForceFree, setDebugForceFree } from '../../services/proState.js?v=423.0';
 
 if (typeof window !== 'undefined') {
   window.openWidgetConfigBottomSheet = openWidgetConfigBottomSheet;
@@ -516,13 +516,14 @@ async function renderSettingsView(containerSelector = '#app-content', onUserChan
     }
 
     langItems.forEach((item) => {
-      item.addEventListener('click', (e) => {
+      item.addEventListener('click', async (e) => {
         e.preventDefault();
         e.stopPropagation();
         const val = item.dataset.value;
         if (window.trackEvent) {
           window.trackEvent('settings_language_change', { lang: val });
         }
+        await ensureLocaleLoaded(val).catch(() => {});
         if (typeof setInterfaceLanguage === 'function') {
           setInterfaceLanguage(val);
         } else {

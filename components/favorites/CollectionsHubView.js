@@ -15,12 +15,21 @@ import {
   getDownloadablePackStrings,
   getCollectionUnlockStep,
   getCollectionUnlockedCount,
-} from '../../services/collectionsService.js?v=386.0';
-import { openAddWordsToCollectionModal } from '../modals/AddWordsToCollectionModal.js?v=386.0';
-import { getTimeTrainerStrings } from './TimeTrainerView.js?v=386.0';
-import { t, getInterfaceLanguage } from '../../services/i18n.js?v=386.0';
-import { isProActive } from '../../services/proState.js?v=386.0';
-import { ProService } from '../../services/proService.js?v=386.0';
+} from '../../services/collectionsService.js?v=423.0';
+import { openAddWordsToCollectionModal } from '../modals/AddWordsToCollectionModal.js?v=423.0';
+import { getTimeTrainerStrings } from './TimeTrainerView.js?v=423.0';
+import { getNumbersFolderStrings } from './NumbersFolderView.js?v=423.0';
+import { PREPOSITIONS_META_I18N } from './prepositionsData.js?v=423.0';
+import { PRONOUNS_META_I18N } from './pronounsData.js?v=423.0';
+import { CONJUNCTIONS_META_I18N } from './conjunctionsData.js?v=423.0';
+import { getIrregularPacksStrings } from './irregularVerbsPacksData.js?v=423.0';
+import { PREPOSITIONS_GROUPS } from './prepositionsData.js?v=423.0';
+import { PRONOUNS_GROUPS } from './pronounsData.js?v=423.0';
+import { CONJUNCTIONS_SECTIONS } from './conjunctionsData.js?v=423.0';
+import { getUserProgress, isWordMastered } from '../../services/api.js?v=423.0';
+import { t, getInterfaceLanguage } from '../../services/i18n.js?v=423.0';
+import { isProActive } from '../../services/proState.js?v=423.0';
+import { ProService } from '../../services/proService.js?v=423.0';
 
 export function renderCollectionsHubView(allWords = [], containerSelector = '#app-content', options = {}) {
   const container = document.querySelector(containerSelector);
@@ -183,8 +192,78 @@ export function renderCollectionsHubView(allWords = [], containerSelector = '#ap
 
   const lang = getInterfaceLanguage();
   const timeStrings = getTimeTrainerStrings(lang);
+  const normLang = String(lang || 'ru').toLowerCase();
+  const baseLang = normLang.split('-')[0];
+  const pickMeta = (map) => map[normLang] || map[baseLang] || map.en || {};
+  const numbersStrings = getNumbersFolderStrings(lang);
+  const prepMeta = pickMeta(PREPOSITIONS_META_I18N);
+  const pronMeta = pickMeta(PRONOUNS_META_I18N);
+  const conjMeta = pickMeta(CONJUNCTIONS_META_I18N);
+  const irrStrings = getIrregularPacksStrings(lang);
+
+  let hubProg = {};
+  let completedColsSet = new Set();
+  let gramRefDoneSet = new Set();
+  try { hubProg = getUserProgress() || {}; } catch (_) {}
+  try {
+    const rc = typeof localStorage !== 'undefined' ? localStorage.getItem('myduo_completed_collections') : null;
+    const ac = rc ? JSON.parse(rc) : [];
+    if (Array.isArray(ac)) completedColsSet = new Set(ac.map(String));
+    const rg = typeof localStorage !== 'undefined' ? localStorage.getItem('myduo_grammar_ref_done') : null;
+    const ag = rg ? JSON.parse(rg) : [];
+    if (Array.isArray(ag)) gramRefDoneSet = new Set(ag.map(String));
+  } catch (_) {}
+
+  const areWordsCompleted = (words) =>
+    Array.isArray(words) &&
+    words.length > 0 &&
+    words.every((w) => w && w.id != null && isWordMastered(hubProg[w.id] || hubProg[String(w.id)]));
+
+  const isCollectionCompleted = (id, wordsOpt = null) => {
+    if (id === 'numbers_hub') {
+      return isCollectionCompleted('numbers') && isCollectionCompleted('ordinal_numbers');
+    }
+    if (id === 'grammar_prepositions') {
+      return PREPOSITIONS_GROUPS.every((g) => gramRefDoneSet.has(`prepositions:${g.id}`));
+    }
+    if (id === 'grammar_pronouns') {
+      return gramRefDoneSet.has('pronouns:matrix') && PRONOUNS_GROUPS.every((g) => gramRefDoneSet.has(`pronouns:${g.id}`));
+    }
+    if (id === 'grammar_conjunctions') {
+      const keys = [];
+      CONJUNCTIONS_SECTIONS.forEach((sec) => {
+        if (Array.isArray(sec.groups)) sec.groups.forEach((g) => keys.push(`conjunctions:${g.id}`));
+        else keys.push(`conjunctions:${sec.id}`);
+      });
+      return keys.length > 0 && keys.every((k) => gramRefDoneSet.has(k));
+    }
+    if (id === 'irregular_verbs_packs') {
+      const irrWords = (allWords || []).filter((w) => w && w.category === 'Irregular verbs');
+      return areWordsCompleted(irrWords);
+    }
+    if (completedColsSet.has(String(id))) return true;
+    const list = wordsOpt || getCollectionWords(id, allWords);
+    return areWordsCompleted(list);
+  };
+
+  const completedBadgeHtml = (done) => (done ? '<span class="col-tile-done-badge" aria-label="Completed">✅</span>' : '');
 
   container.innerHTML = `
+    <style>
+      .col-tile { position: relative; }
+      .col-tile.is-completed {
+        border: 2px solid #22c55e !important;
+        box-shadow: 0 0 14px rgba(34, 197, 94, 0.24) !important;
+      }
+      .col-tile-done-badge {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        font-size: 14px;
+        line-height: 1;
+        z-index: 2;
+      }
+    </style>
     <div class="collections-hub-page">
       <!-- 2-Column Grid -->
       <div class="collections-grid" id="collections-grid">
@@ -221,11 +300,64 @@ export function renderCollectionsHubView(allWords = [], containerSelector = '#ap
           </div>
         </div>
 
+        <!-- 3b. Combined Numbers & Ordinals Folder Tile -->
+        <div class="col-tile ${isCollectionCompleted('numbers_hub') ? 'is-completed' : ''}" data-col-id="numbers_hub" role="button" tabindex="0">
+          ${completedBadgeHtml(isCollectionCompleted('numbers_hub'))}
+          <div class="col-tile-icon-box">
+            <span class="col-tile-icon">🔢</span>
+          </div>
+          <div class="col-tile-content">
+            <h3 class="col-tile-name">${escapeHtml(numbersStrings.folderTitle || 'Числа и числительные')}</h3>
+            <span class="col-tile-count">${escapeHtml(numbersStrings.folderSubtitle || '2 подпапки')}</span>
+          </div>
+        </div>
+
+        <!-- 3c. Grammar Reference Collections & Irregular Verbs Packs -->
+        <div class="col-tile ${isCollectionCompleted('grammar_prepositions') ? 'is-completed' : ''}" data-col-id="grammar_prepositions" role="button" tabindex="0">${completedBadgeHtml(isCollectionCompleted('grammar_prepositions'))}
+          <div class="col-tile-icon-box">
+            <span class="col-tile-icon">🧭</span>
+          </div>
+          <div class="col-tile-content">
+            <h3 class="col-tile-name">${escapeHtml(prepMeta.tileTitle || 'Предлоги')}</h3>
+            <span class="col-tile-count">${escapeHtml(prepMeta.tileSubtitle || '9 групп')}</span>
+          </div>
+        </div>
+
+        <div class="col-tile ${isCollectionCompleted('grammar_pronouns') ? 'is-completed' : ''}" data-col-id="grammar_pronouns" role="button" tabindex="0">${completedBadgeHtml(isCollectionCompleted('grammar_pronouns'))}
+          <div class="col-tile-icon-box">
+            <span class="col-tile-icon">👤</span>
+          </div>
+          <div class="col-tile-content">
+            <h3 class="col-tile-name">${escapeHtml(pronMeta.tileTitle || 'Местоимения')}</h3>
+            <span class="col-tile-count">${escapeHtml(pronMeta.tileSubtitle || 'Таблица и 7 групп')}</span>
+          </div>
+        </div>
+
+        <div class="col-tile ${isCollectionCompleted('grammar_conjunctions') ? 'is-completed' : ''}" data-col-id="grammar_conjunctions" role="button" tabindex="0">${completedBadgeHtml(isCollectionCompleted('grammar_conjunctions'))}
+          <div class="col-tile-icon-box">
+            <span class="col-tile-icon">🔗</span>
+          </div>
+          <div class="col-tile-content">
+            <h3 class="col-tile-name">${escapeHtml(conjMeta.tileTitle || 'Союзы и наречия')}</h3>
+            <span class="col-tile-count">${escapeHtml(conjMeta.tileSubtitle || '4 раздела')}</span>
+          </div>
+        </div>
+
+        <div class="col-tile ${isCollectionCompleted('irregular_verbs_packs') ? 'is-completed' : ''}" data-col-id="irregular_verbs_packs" role="button" tabindex="0">${completedBadgeHtml(isCollectionCompleted('irregular_verbs_packs'))}
+          <div class="col-tile-icon-box">
+            <span class="col-tile-icon">⚡</span>
+          </div>
+          <div class="col-tile-content">
+            <h3 class="col-tile-name">${escapeHtml(irrStrings.hubTitle || 'Неправильные глаголы')}</h3>
+            <span class="col-tile-count">${escapeHtml(irrStrings.hubSubtitle || '10 пачек')}</span>
+          </div>
+        </div>
+
         <!-- 3. User Custom Collections -->
         ${summary.customCollections
           .map(
             (col) => `
-          <div class="col-tile col-tile-custom ${activeColId === col.id ? 'is-active-col' : ''}" data-col-id="${escapeHtml(col.id)}" role="button" tabindex="0">
+          <div class="col-tile col-tile-custom ${activeColId === col.id ? 'is-active-col' : ''} ${isCollectionCompleted(col.id, getCollectionWords(col.id, allWords)) ? 'is-completed' : ''}" data-col-id="${escapeHtml(col.id)}" role="button" tabindex="0">${completedBadgeHtml(isCollectionCompleted(col.id, getCollectionWords(col.id, allWords)))}
             <div class="col-tile-icon-box">
               <span class="col-tile-icon">${escapeHtml(col.icon || '📘')}</span>
             </div>
@@ -238,12 +370,13 @@ export function renderCollectionsHubView(allWords = [], containerSelector = '#ap
           )
           .join('')}
 
-        <!-- 4. Thematic Built-in Collections (2 per row) -->
+        <!-- 4. Thematic Built-in Collections (2 per row, excluding merged numbers/ordinal_numbers) -->
         ${summary.builtinCollections
+          .filter((col) => col.id !== 'numbers' && col.id !== 'ordinal_numbers')
           .map(
             (col) => {
               const isPro = isProActive();
-              const isItProLocked = col.id === 'it_terms' && !isPro;
+              const isItProLocked = (col.id === 'it_terms' || col.id === 'finance_terms') && !isPro;
               const unlockStep = getCollectionUnlockStep(col.id);
               const isPartial = unlockStep > 0 && !isPro;
               const partialUnlocked = isPartial ? Math.min(col.count, getCollectionUnlockedCount(col.id)) : col.count;
@@ -266,7 +399,7 @@ export function renderCollectionsHubView(allWords = [], containerSelector = '#ap
                   : `🎬 ${escapeHtml(packStrings.downloadBtn)}`;
               }
               return `
-          <div class="col-tile ${activeColId === col.id ? 'is-active-col' : ''}" data-col-id="${escapeHtml(col.id)}" role="button" tabindex="0">
+          <div class="col-tile ${activeColId === col.id ? 'is-active-col' : ''} ${isCollectionCompleted(col.id) ? 'is-completed' : ''}" data-col-id="${escapeHtml(col.id)}" role="button" tabindex="0">${completedBadgeHtml(isCollectionCompleted(col.id))}
             <div class="col-tile-icon-box">
               <span class="col-tile-icon">${escapeHtml(col.icon)}</span>
             </div>
@@ -333,8 +466,8 @@ export function renderCollectionsHubView(allWords = [], containerSelector = '#ap
       try {
         if (navigator.vibrate) navigator.vibrate(40);
       } catch (_) {}
-      if (colData.col.id === 'it_terms' && !isProActive()) {
-        ProService.openPaywall('it_terms');
+      if ((colData.col.id === 'it_terms' || colData.col.id === 'finance_terms') && !isProActive()) {
+        ProService.openPaywall(colData.col.id);
         return;
       }
       openCollectionActionsModal(colData.col, colData.isCustom);

@@ -1,12 +1,12 @@
-import { isProActive } from '../../services/proState.js?v=386.0';
-import { ProService } from '../../services/proService.js?v=386.0';
-import { getStoryStrings } from './storyTranslations.js?v=386.0';
-import { t, getInterfaceLanguage, getWordTranslation } from '../../services/i18n.js?v=386.0';
-import { speakWord } from '../../services/audioService.js?v=386.0';
-import { toggleFavoriteApi, getUserFavorites, getWords } from '../../services/api.js?v=386.0';
-import { AdService } from '../../services/adService.js?v=386.0';
-import { checkAndPromptReviewFunnel } from './ReviewFunnelModal.js?v=386.0';
-import { QUIZ_WORDS_MAP } from '../favorites/quizWordsTranslations.js?v=386.0';
+import { isProActive } from '../../services/proState.js?v=423.0';
+import { ProService } from '../../services/proService.js?v=423.0';
+import { getStoryStrings } from './storyTranslations.js?v=423.0';
+import { t, getInterfaceLanguage, getWordTranslation } from '../../services/i18n.js?v=423.0';
+import { speakWord } from '../../services/audioService.js?v=423.0';
+import { toggleFavoriteApi, getUserFavorites, getWords } from '../../services/api.js?v=423.0';
+import { AdService } from '../../services/adService.js?v=423.0';
+import { checkAndPromptReviewFunnel } from './ReviewFunnelModal.js?v=423.0';
+import { QUIZ_WORDS_MAP } from '../favorites/quizWordsTranslations.js?v=423.0';
 
 export const MILESTONE_STORIES = {
   "0": {

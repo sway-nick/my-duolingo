@@ -68,11 +68,11 @@ test('Collections: months and days_of_week are complete in words.json', async ()
   assert.equal(dayWords.length, 7, 'all 7 days present in dictionary');
 });
 
-test('Collections: all 17 thematic collections have 100% of their words in dictionary', async () => {
+test('Collections: all 18 thematic collections have 100% of their words in dictionary', async () => {
   const { BUILTIN_COLLECTIONS_DEF, getCollectionWords } = await import('../frontend/services/collectionsService.js');
 
   const thematicCols = BUILTIN_COLLECTIONS_DEF.filter((c) => c.id !== 'my_favorites');
-  assert.equal(thematicCols.length, 17, '17 thematic collections defined');
+  assert.equal(thematicCols.length, 18, '18 thematic collections defined');
 
   for (const col of thematicCols) {
     const words = getCollectionWords(col.id, wordsData);
@@ -199,7 +199,7 @@ test('i18n: Japanese interface language returns Japanese translation from words.
   }
 });
 
-test('Collections: BUILTIN_COLLECTIONS_WITH_GEAR contains exactly the 11 thematic collections', async () => {
+test('Collections: BUILTIN_COLLECTIONS_WITH_GEAR contains exactly the 12 thematic collections', async () => {
   const {
     BUILTIN_COLLECTIONS_WITH_GEAR,
     getCollectionWords,
@@ -210,8 +210,8 @@ test('Collections: BUILTIN_COLLECTIONS_WITH_GEAR contains exactly the 11 themati
     addWordToCollection,
   } = await import('../frontend/services/collectionsService.js');
 
-  const expectedIds = ['colors', 'body_parts', 'sport', 'food', 'clothes', 'animals', 'verbs', 'adjectives', 'phrasal_verbs', 'it_terms', 'idioms'];
-  assert.equal(BUILTIN_COLLECTIONS_WITH_GEAR.size, 11);
+  const expectedIds = ['colors', 'body_parts', 'sport', 'food', 'clothes', 'animals', 'verbs', 'adjectives', 'phrasal_verbs', 'it_terms', 'finance_terms', 'idioms'];
+  assert.equal(BUILTIN_COLLECTIONS_WITH_GEAR.size, 12);
   for (const id of expectedIds) {
     assert.ok(BUILTIN_COLLECTIONS_WITH_GEAR.has(id), `gear enabled for ${id}`);
   }
@@ -254,12 +254,12 @@ test('Collections: BUILTIN_COLLECTIONS_WITH_GEAR contains exactly the 11 themati
   resetBuiltinCollection('colors');
 });
 
-test('Collections: all 18 built-in collections have names in all 36 supported locales', async () => {
+test('Collections: all 19 built-in collections have names in all 36 supported locales', async () => {
   const { BUILTIN_COLLECTIONS_DEF, getCollectionTitle } = await import('../frontend/services/collectionsService.js');
   const { SUPPORTED_LOCALE_CODES } = await import('../frontend/config/locales.js');
   const locales = SUPPORTED_LOCALE_CODES;
 
-  assert.equal(BUILTIN_COLLECTIONS_DEF.length, 18, '18 built-in collections');
+  assert.equal(BUILTIN_COLLECTIONS_DEF.length, 19, '19 built-in collections');
 
   for (const col of BUILTIN_COLLECTIONS_DEF) {
     for (const loc of locales) {
@@ -604,8 +604,8 @@ test('Collections: IT, Verbs, Adjectives, Phrasal Verbs, Idioms, Tricky Sounds, 
 
   assert.deepEqual(
     Array.from(PAGINATED_COLLECTIONS).sort(),
-    ['adjectives', 'confusing_words', 'idioms', 'it_terms', 'phrasal_verbs', 'tricky_sounds', 'verbs'].sort(),
-    'PAGINATED_COLLECTIONS must contain exactly the 7 target collections'
+    ['adjectives', 'confusing_words', 'finance_terms', 'idioms', 'it_terms', 'phrasal_verbs', 'tricky_sounds', 'verbs'].sort(),
+    'PAGINATED_COLLECTIONS must contain exactly the 8 target collections'
   );
 
   const container = {
@@ -801,6 +801,7 @@ test('Collections: IT (200) and Idioms (100) have 36-locale notes and downloadab
     assert.ok(DOWNLOADABLE_PACK_I18N[loc], `DOWNLOADABLE_PACK_I18N missing locale ${loc}`);
     assert.ok(DOWNLOADABLE_PACK_I18N[loc].downloadBtn, `downloadBtn missing for ${loc}`);
     assert.ok(DOWNLOADABLE_PACK_I18N[loc].itDesc, `itDesc missing for ${loc}`);
+    assert.ok(DOWNLOADABLE_PACK_I18N[loc].financeDesc, `financeDesc missing for ${loc}`);
     assert.ok(DOWNLOADABLE_PACK_I18N[loc].idiomsDesc, `idiomsDesc missing for ${loc}`);
     assert.ok(DOWNLOADABLE_PACK_I18N[loc].verbsDesc, `verbsDesc missing for ${loc}`);
     assert.ok(DOWNLOADABLE_PACK_I18N[loc].adjectivesDesc, `adjectivesDesc missing for ${loc}`);
@@ -808,8 +809,10 @@ test('Collections: IT (200) and Idioms (100) have 36-locale notes and downloadab
   }
 
   const itWords = getCollectionWords('it_terms', wordsData);
+  const financeWords = getCollectionWords('finance_terms', wordsData);
   const idiomWords = getCollectionWords('idioms', wordsData);
   assert.equal(itWords.length, 200);
+  assert.equal(financeWords.length, 200);
   assert.equal(idiomWords.length, 150);
 
   const expectedExpandedCounts = {
@@ -835,7 +838,7 @@ test('Collections: IT (200) and Idioms (100) have 36-locale notes and downloadab
   const phrasalWords = getCollectionWords('phrasal_verbs', wordsData);
   assert.equal(phrasalWords.length, 240);
 
-  for (const w of [...itWords, ...idiomWords, ...phrasalWords]) {
+  for (const w of [...itWords, ...financeWords, ...idiomWords, ...phrasalWords]) {
     assert.ok(w.notes, `Word ${w.word} missing Russian notes`);
     assert.ok(w.all_notes, `Word ${w.word} missing all_notes`);
     for (const loc of SUPPORTED_LOCALE_CODES) {
@@ -847,10 +850,15 @@ test('Collections: IT (200) and Idioms (100) have 36-locale notes and downloadab
     }
   }
 
-  // Verify IT notes are isolated when hideItNotes: true (Dictionary / general Training), while Idiom & Phrasal Verb notes remain visible
+  // Verify IT & Finance notes are isolated when hideItNotes: true (Dictionary / general Training), while Idiom & Phrasal Verb notes remain visible
   for (const w of itWords) {
     assert.equal(getWordNotes(w, 'ru', { hideItNotes: true }), '', `IT note for "${w.word}" must be hidden when hideItNotes is true`);
     assert.ok(getWordNotes(w, 'ru', { hideItNotes: false }).length > 0, `IT note for "${w.word}" must be visible inside IT collection`);
+  }
+  for (const w of financeWords) {
+    assert.equal(getWordNotes(w, 'ru', { hideItNotes: true }), '', `Finance note for "${w.word}" must be hidden in general Dictionary`);
+    assert.equal(getWordNotes(w, 'ru', { hideItNotes: false, hideFinanceNotes: true }), '', `Finance note for "${w.word}" must be hidden when hideFinanceNotes is true`);
+    assert.ok(getWordNotes(w, 'ru', { hideItNotes: true, hideFinanceNotes: false }).length > 0, `Finance note for "${w.word}" must be visible inside Finance collection`);
   }
   for (const w of [...idiomWords, ...phrasalWords]) {
     assert.ok(getWordNotes(w, 'ru', { hideItNotes: true }).length > 0, `Note for "${w.word}" must remain visible in general Dictionary`);
@@ -937,6 +945,28 @@ test('Collections: IT (200) and Idioms (100) have 36-locale notes and downloadab
   assert.ok(container.innerHTML.includes('<div class="col-pagination">'), 'Pagination bar must be rendered for it_terms in PRO');
   assert.ok(!container.innerHTML.includes('class="col-page-info"'), 'Pagination must not show page info counter under buttons');
   assert.ok(!container.innerHTML.includes('id="open-it-pro-btn"'), 'Must not render PRO paywall button when PRO is active');
+  clearEntitlement();
+
+  // Finance collection mirrors IT PRO preview (6 preview cards in Free tier, full 10-card pagination in PRO)
+  assert.equal(isCollectionPackDownloaded('finance_terms'), false);
+  renderFavoritesView(financeWords, '#app-content', {
+    collectionId: 'finance_terms',
+    collectionTitle: 'Финансы',
+    allWords: wordsData,
+    favoriteIds: [],
+  });
+  assert.equal((container.innerHTML.match(/class="fav-card"/g) || []).length, 6, 'Free tier must show 6 preview cards for finance_terms');
+  assert.ok(container.innerHTML.includes('id="open-it-pro-btn"'), 'Must render PRO paywall button for finance_terms when not PRO');
+  setEntitlement({ active: true, source: 'play' });
+  assert.equal(isCollectionPackDownloaded('finance_terms'), true);
+  renderFavoritesView(financeWords, '#app-content', {
+    collectionId: 'finance_terms',
+    collectionTitle: 'Финансы',
+    allWords: wordsData,
+    favoriteIds: [],
+  });
+  assert.equal((container.innerHTML.match(/class="fav-card"/g) || []).length, 10, 'PRO tier page 1 must render 10 finance_terms cards with pagination');
+  assert.ok(container.innerHTML.includes('<div class="col-pagination">'), 'Pagination bar must be rendered for finance_terms in PRO');
   clearEntitlement();
 });
 
@@ -1434,7 +1464,7 @@ test('MicroRules and TenseConstructions cover all 36 supported locales, progress
   assert.ok(!microViewSource.includes('class="mr-hero-sub"'), 'MicroRulesView must not render hero subtitle');
   assert.ok(microViewSource.includes('data-toggle-expand'), 'MicroRulesView must support collapsing/reopening studied rules without ads');
   assert.ok(microViewSource.includes('mr-ref-table'), 'MicroRulesView must render reference tables when present');
-  for (const tid of [13, 14, 16, 18, 27, 31, 39, 49]) {
+  for (const tid of [13, 14, 16, 18, 27, 31, 41, 51]) {
     const ruleObj = MICRO_RULES.find((r) => r.id === tid);
     assert.ok(ruleObj?.table && Array.isArray(ruleObj.table.rows) && ruleObj.table.rows.length >= 2, `Rule ${tid} must have a reference table`);
   }

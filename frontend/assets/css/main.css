@@ -10110,9 +10110,52 @@ html.is-rtl {
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  gap: 8px;
+  row-gap: 10px;
+  column-gap: 18px;
   margin: 10px auto 20px;
   min-height: 52px;
+}
+
+.wb-word-group {
+  display: inline-flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  max-width: 100%;
+}
+
+.wb-word-group.wb-word-group-md {
+  gap: 5px;
+}
+
+.wb-word-group.wb-word-group-md .wb-slot {
+  min-width: 34px;
+  height: 44px;
+  font-size: 19px;
+}
+
+.wb-word-group.wb-word-group-lg {
+  gap: 4px;
+}
+
+.wb-word-group.wb-word-group-lg .wb-slot {
+  min-width: 28px;
+  height: 40px;
+  font-size: 17px;
+  padding: 0 2px;
+}
+
+.wb-word-group.wb-word-group-xl {
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.wb-word-group.wb-word-group-xl .wb-slot {
+  min-width: 28px;
+  height: 40px;
+  font-size: 17px;
+  padding: 0 2px;
 }
 
 .wb-slot {
@@ -10714,6 +10757,328 @@ body.dark-theme .col-page-btn.is-active,
   color: var(--text-muted, #64748b);
   margin-bottom: 12px;
 }
+
+/* Monochrome bottom dock on Hub screen — Liquid Glass Lens (Compass · Knowledge Matrix · Daily News) */
+.hub-bottom-dock {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(max(var(--safe-bottom, 0px), env(safe-area-inset-bottom, 0px)) + 14px);
+  z-index: 90;
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  padding: 6px;
+  border-radius: 999px;
+  background: radial-gradient(
+    120% 140% at 30% 20%,
+    rgba(255, 255, 255, 0.56) 0%,
+    rgba(241, 245, 249, 0.24) 72%
+  );
+  backdrop-filter: blur(10px) saturate(160%);
+  -webkit-backdrop-filter: blur(10px) saturate(160%);
+  backdrop-filter: url(#liquidGlassFilter) saturate(130%) brightness(1.03);
+  -webkit-backdrop-filter: url(#liquidGlassFilter) saturate(130%) brightness(1.03);
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  box-shadow:
+    inset 0 1px 1.5px 0 rgba(255, 255, 255, 0.85),
+    inset 0 -1px 2px 0 rgba(15, 23, 42, 0.12),
+    0 8px 24px 0 rgba(15, 23, 42, 0.16),
+    0 0 12px 0 rgba(22, 163, 74, 0.10);
+  direction: ltr;
+  isolation: isolate;
+}
+.hub-bottom-dock::before {
+  content: '';
+  position: absolute;
+  inset: 1px;
+  border-radius: 999px;
+  background: radial-gradient(
+    ellipse 85% 65% at 32% 14%,
+    rgba(255, 255, 255, 0.45) 0%,
+    rgba(255, 255, 255, 0) 58%
+  );
+  pointer-events: none;
+  opacity: 0.65;
+  z-index: 0;
+}
+.hub-bottom-dock::after {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  left: 16%;
+  right: 16%;
+  height: 28%;
+  border-radius: 999px;
+  background: radial-gradient(
+    ellipse at bottom,
+    rgba(22, 163, 74, 0.14) 0%,
+    rgba(22, 163, 74, 0) 70%
+  );
+  pointer-events: none;
+  opacity: 0.55;
+  z-index: 0;
+}
+body.dark-theme .hub-bottom-dock,
+.dark-theme .hub-bottom-dock,
+[data-theme="dark"] .hub-bottom-dock {
+  background: radial-gradient(
+    120% 140% at 30% 20%,
+    rgba(255, 255, 255, 0.10) 0%,
+    rgba(255, 255, 255, 0.01) 70%
+  );
+  backdrop-filter: blur(8px) saturate(160%);
+  -webkit-backdrop-filter: blur(8px) saturate(160%);
+  backdrop-filter: url(#liquidGlassFilter) saturate(125%) brightness(1.04);
+  -webkit-backdrop-filter: url(#liquidGlassFilter) saturate(125%) brightness(1.04);
+  border: 1px solid rgba(255, 255, 255, 0.20);
+  box-shadow:
+    inset 0 1px 1.5px 0 rgba(255, 255, 255, 0.30),
+    inset 0 -1px 2px 0 rgba(0, 0, 0, 0.30),
+    0 8px 26px 0 rgba(0, 0, 0, 0.48),
+    0 0 14px 0 rgba(56, 189, 248, 0.14);
+}
+body.dark-theme .hub-bottom-dock::before,
+.dark-theme .hub-bottom-dock::before,
+[data-theme="dark"] .hub-bottom-dock::before {
+  background: radial-gradient(
+    ellipse 85% 65% at 32% 14%,
+    rgba(255, 255, 255, 0.18) 0%,
+    rgba(255, 255, 255, 0) 58%
+  );
+  opacity: 0.65;
+}
+body.dark-theme .hub-bottom-dock::after,
+.dark-theme .hub-bottom-dock::after,
+[data-theme="dark"] .hub-bottom-dock::after {
+  background: radial-gradient(
+    ellipse at bottom,
+    rgba(56, 189, 248, 0.18) 0%,
+    rgba(56, 189, 248, 0) 70%
+  );
+  opacity: 0.55;
+}
+.hub-dock-btn {
+  position: relative;
+  z-index: 1;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s ease, background-color 0.15s ease;
+}
+.hub-dock-btn:hover {
+  background: rgba(148, 163, 184, 0.16);
+}
+.hub-dock-btn:active {
+  transform: scale(0.92);
+}
+.hub-dock-icon-img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  pointer-events: none;
+  display: block;
+}
+body.dark-theme .hub-dock-icon-img,
+.dark-theme .hub-dock-icon-img,
+[data-theme="dark"] .hub-dock-icon-img {
+  filter: brightness(0) invert(0.84);
+}
+@keyframes hubCompassRingPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(22, 163, 74, 0);
+    background-color: transparent;
+  }
+  38% {
+    box-shadow: 0 0 0 6px rgba(22, 163, 74, 0.22);
+    background-color: rgba(22, 163, 74, 0.12);
+  }
+  65% {
+    box-shadow: 0 0 0 1px rgba(22, 163, 74, 0.08);
+    background-color: transparent;
+  }
+}
+@keyframes hubCompassRingPulseDark {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(56, 189, 248, 0);
+    background-color: transparent;
+  }
+  38% {
+    box-shadow: 0 0 0 6px rgba(56, 189, 248, 0.28);
+    background-color: rgba(56, 189, 248, 0.14);
+  }
+  65% {
+    box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.08);
+    background-color: transparent;
+  }
+}
+@keyframes hubCompassWinkLight {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  35% {
+    opacity: 1;
+    transform: scale(1.15);
+    filter: brightness(1.35) drop-shadow(0 0 6px rgba(22, 163, 74, 0.65));
+  }
+  62% {
+    opacity: 0.45;
+    transform: scale(0.95);
+    filter: brightness(0.82);
+  }
+}
+@keyframes hubCompassWinkDark {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+    filter: brightness(0) invert(0.84);
+  }
+  35% {
+    opacity: 1;
+    transform: scale(1.15);
+    filter: brightness(0) invert(1) drop-shadow(0 0 7px rgba(56, 189, 248, 0.85));
+  }
+  62% {
+    opacity: 0.48;
+    transform: scale(0.95);
+    filter: brightness(0) invert(0.58);
+  }
+}
+.hub-dock-btn-compass {
+  animation: hubCompassRingPulse 1.45s ease-in-out 0.45s 2;
+}
+body.dark-theme .hub-dock-btn-compass,
+.dark-theme .hub-dock-btn-compass,
+[data-theme="dark"] .hub-dock-btn-compass {
+  animation: hubCompassRingPulseDark 1.45s ease-in-out 0.45s 2;
+}
+.hub-dock-btn-compass .hub-dock-icon-img {
+  width: 27px;
+  height: 27px;
+  animation: hubCompassWinkLight 1.45s ease-in-out 0.45s 2;
+}
+body.dark-theme .hub-dock-btn-compass .hub-dock-icon-img,
+.dark-theme .hub-dock-btn-compass .hub-dock-icon-img,
+[data-theme="dark"] .hub-dock-btn-compass .hub-dock-icon-img {
+  animation: hubCompassWinkDark 1.45s ease-in-out 0.45s 2;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hub-dock-btn-compass,
+  body.dark-theme .hub-dock-btn-compass,
+  .dark-theme .hub-dock-btn-compass,
+  [data-theme="dark"] .hub-dock-btn-compass,
+  .hub-dock-btn-compass .hub-dock-icon-img,
+  body.dark-theme .hub-dock-btn-compass .hub-dock-icon-img,
+  .dark-theme .hub-dock-btn-compass .hub-dock-icon-img,
+  [data-theme="dark"] .hub-dock-btn-compass .hub-dock-icon-img {
+    animation: none;
+  }
+}
+
+/* ==========================================================================
+   WEBVIEW SCROLL & GPU COMPOSITING OPTIMIZATIONS
+   ========================================================================== */
+
+/* Skip layout & paint for offscreen repeating cards/rows while scrolling */
+.dict-card,
+.fav-card,
+.mr-card,
+.tc-card,
+.leaderboard-row,
+.scanner-lemma-item {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 76px;
+}
+
+.dict-card,
+.fav-card {
+  contain-intrinsic-size: auto 104px;
+}
+
+.mr-card,
+.tc-card {
+  contain-intrinsic-size: auto 84px;
+}
+
+.leaderboard-row {
+  contain-intrinsic-size: auto 60px;
+}
+
+/* Replace heavy SVG url(#liquidGlassFilter) & multi-pass backdrop-filter blur
+   with crisp high-opacity surfaces on Android WebView for 60fps scroll & modals */
+html.is-android-app .hub-bottom-dock,
+body.is-android-app .hub-bottom-dock {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(241, 245, 249, 0.94) 100%);
+  border-color: rgba(203, 213, 225, 0.92);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -1px 1px rgba(15, 23, 42, 0.08),
+    0 8px 22px rgba(15, 23, 42, 0.14);
+}
+
+html.is-android-app.dark-theme .hub-bottom-dock,
+html.is-android-app .dark-theme .hub-bottom-dock,
+html.is-android-app body.dark-theme .hub-bottom-dock,
+html.is-android-app[data-theme="dark"] .hub-bottom-dock,
+body.is-android-app.dark-theme .hub-bottom-dock {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  background: linear-gradient(180deg, rgba(30, 41, 59, 0.96) 0%, rgba(15, 23, 42, 0.95) 100%);
+  border-color: rgba(71, 85, 105, 0.72);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    inset 0 -1px 1px rgba(0, 0, 0, 0.3),
+    0 8px 24px rgba(0, 0, 0, 0.45);
+}
+
+html.is-android-app .wotd-card .flashcard-sound-btn,
+html.is-android-app .wotd-card .flashcard-fav-btn,
+body.is-android-app .wotd-card .flashcard-sound-btn,
+body.is-android-app .wotd-card .flashcard-fav-btn {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  background: rgba(15, 23, 42, 0.72);
+}
+
+html.is-android-app .word-notes-modal-overlay,
+html.is-android-app .pairs-timeout-overlay,
+html.is-android-app .prize-podium-backdrop,
+html.is-android-app .speech-diag-modal,
+html.is-android-app .scanner-modal-overlay,
+html.is-android-app .share-modal-overlay,
+html.is-android-app .modal-overlay,
+html.is-android-app .widget-sheet-backdrop,
+html.is-android-app .collection-sheet-backdrop,
+html.is-android-app .col-actions-modal-overlay,
+html.is-android-app .challenge-modal-overlay,
+body.is-android-app .word-notes-modal-overlay,
+body.is-android-app .pairs-timeout-overlay,
+body.is-android-app .prize-podium-backdrop,
+body.is-android-app .speech-diag-modal,
+body.is-android-app .scanner-modal-overlay,
+body.is-android-app .share-modal-overlay,
+body.is-android-app .modal-overlay,
+body.is-android-app .widget-sheet-backdrop,
+body.is-android-app .collection-sheet-backdrop,
+body.is-android-app .col-actions-modal-overlay,
+body.is-android-app .challenge-modal-overlay {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  background: rgba(15, 23, 42, 0.82);
+}
+
 
 
 

@@ -1,5 +1,5 @@
-import { getCurrentUser, getEffectiveUserId, getGuestId, getDeterministicUserId, getAuthToken } from './authService.js?v=386.0';
-import { isProActive, PRO_LIMITS, isPatternText } from './proState.js?v=386.0';
+import { getCurrentUser, getEffectiveUserId, getGuestId, getDeterministicUserId, getAuthToken } from './authService.js?v=423.0';
+import { isProActive, PRO_LIMITS, isPatternText } from './proState.js?v=423.0';
 import { 
   syncLeaderboardScoreFirestore, 
   commitXpDeltaFirestore,
@@ -18,6 +18,7 @@ import {
   saveUserNotesFirestore,
   loadUserNotesFirestore,
   saveUserWordOverridesFirestore,
+  saveUserAchievementsFirestore,
   saveUserCustomWordsFirestore,
   fetchSharedVocabularyUpdatesFirestore,
   fetchTopFavoritedWordsFirestore,
@@ -25,9 +26,10 @@ import {
   saveSessionFirestore,
   updateUserSessionSummaryFirestore,
   loadFullUserDataFirestore
-} from './firebase.js?v=386.0';
-import { getIsoWeekKey, getRecentWeekKeys, getIsoWeekStartMs, getIsoMonthKey, getTimeUntilMonthEnd } from './weekKey.js?v=386.0';
-import { t, applyInterfaceDirection, getInterfaceLanguage, getWordTranslation, getWordNotes } from './i18n.js?v=386.0';
+} from './firebase.js?v=423.0';
+import { getIsoWeekKey, getRecentWeekKeys, getIsoWeekStartMs, getIsoMonthKey, getTimeUntilMonthEnd } from './weekKey.js?v=423.0';
+import { t, applyInterfaceDirection, getInterfaceLanguage, getWordTranslation, getWordNotes } from './i18n.js?v=423.0';
+import { SUPPORTED_LOCALE_CODES } from '../config/locales.js?v=423.0';
 
 async function getHealth() {
   return { success: true, status: 'ok', engine: 'firebase' };
@@ -122,9 +124,276 @@ function saveLocalUser(user) {
   localStorage.setItem('myduo_registered_users', JSON.stringify(users));
 }
 
-const WORDS_CACHE_VERSION = 'v402_phrasal_240_7428_36loc';
+const WORDS_CACHE_VERSION = 'v418_inbox_42words_polished_7553';
 const VOCAB_UPDATES_SYNC_TTL = 10 * 60 * 1000; // 10 minutes cooldown for /shared/vocabulary_updates
 let _lastVocabUpdatesSyncAt = 0;
+
+// ---------------------------------------------------------------------------
+// Cloud Achievements Sync (Micro-rules, Tenses, Grammar Ref, Spoken, CEFR, etc.)
+// Ensures ALL learning achievements survive app reinstall, updates, and device switches.
+// ---------------------------------------------------------------------------
+const ACHIEVEMENT_ARRAY_KEYS = [
+  'myduo_microrules_done',
+  'myduo_microrules_quiz_done',
+  'myduo_microrules_unlocked',
+  'myduo_tenses_done',
+  'myduo_tenses_quiz_done',
+  'myduo_tenses_unlocked',
+  'myduo_grammar_ref_done',
+  'myduo_spoken_practiced',
+  'myduo_completed_collections',
+  'myduo_cefr_exams_passed',
+  'myduo_cefr_nudge_milestones',
+];
+const ACHIEVEMENT_NUM_ARRAY_KEYS = new Set([
+  'myduo_microrules_done',
+  'myduo_microrules_quiz_done',
+  'myduo_microrules_unlocked',
+]);
+const ACHIEVEMENT_NUM_MAX_KEYS = [
+  'myduo_spoken_unlocked_count',
+  'myduo_milestone_highest_unlocked',
+  'myduo_active_days_count',
+];
+const ACHIEVEMENT_BOOL_OR_KEYS = [
+  'myduo_spoken_ad_unlocked',
+  'myduo_story_0_unlocked',
+];
+const ACHIEVEMENT_CUSTOM_COLLECTIONS_KEY = 'myduo_custom_collections';
+const ACHIEVEMENT_TIME_BEST_PREFIX = 'myduo_time_best_';
+const ACHIEVEMENT_STORY_DONE_RE = /^myduo_milestone_story_\d+_completed$/;
+const ALL_ACHIEVEMENT_STORAGE_KEYS = new Set([
+  ...ACHIEVEMENT_ARRAY_KEYS,
+  ...ACHIEVEMENT_NUM_MAX_KEYS,
+  ...ACHIEVEMENT_BOOL_OR_KEYS,
+  ACHIEVEMENT_CUSTOM_COLLECTIONS_KEY,
+]);
+
+function isDynamicAchievementKey(key) {
+  const k = String(key || '');
+  return k.startsWith(ACHIEVEMENT_TIME_BEST_PREFIX) || ACHIEVEMENT_STORY_DONE_RE.test(k);
+}
+
+let _isRestoringAchievements = false;
+let _achievementsSyncTimer = null;
+let _lastPushedAchievementsJson = '';
+
+function collectLocalAchievementsSnapshot() {
+  const snap = {};
+  if (typeof localStorage === 'undefined') return snap;
+  for (const key of ACHIEVEMENT_ARRAY_KEYS) {
+    try {
+      const raw = localStorage.getItem(key);
+      if (raw) {
+        const arr = JSON.parse(raw);
+        if (Array.isArray(arr) && arr.length > 0) {
+          snap[key] = ACHIEVEMENT_NUM_ARRAY_KEYS.has(key)
+            ? Array.from(new Set(arr.map(Number).filter(n => Number.isFinite(n))))
+            : Array.from(new Set(arr.filter(v => v !== null && v !== undefined && v !== '')));
+        }
+      }
+    } catch (_) {}
+  }
+  for (const key of ACHIEVEMENT_NUM_MAX_KEYS) {
+    try {
+      const n = Number(localStorage.getItem(key));
+      if (Number.isFinite(n) && n > 0) snap[key] = n;
+    } catch (_) {}
+  }
+  for (const key of ACHIEVEMENT_BOOL_OR_KEYS) {
+    try {
+      if (localStorage.getItem(key) === 'true') snap[key] = true;
+    } catch (_) {}
+  }
+  try {
+    const rawCols = localStorage.getItem(ACHIEVEMENT_CUSTOM_COLLECTIONS_KEY);
+    if (rawCols) {
+      const parsed = JSON.parse(rawCols);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        snap[ACHIEVEMENT_CUSTOM_COLLECTIONS_KEY] = parsed;
+      }
+    }
+  } catch (_) {}
+  // Collect dynamic achievement keys (Time Trainer best scores + completed Milestone Stories)
+  try {
+    const timeBest = {};
+    const storiesDone = [];
+    const len = typeof localStorage.length === 'number' ? localStorage.length : 0;
+    for (let i = 0; i < len; i++) {
+      const k = localStorage.key ? localStorage.key(i) : null;
+      if (!k) continue;
+      if (k.startsWith(ACHIEVEMENT_TIME_BEST_PREFIX)) {
+        const n = Number(localStorage.getItem(k));
+        if (Number.isFinite(n) && n > 0) timeBest[k] = n;
+      } else if (ACHIEVEMENT_STORY_DONE_RE.test(k) && localStorage.getItem(k) === 'true') {
+        storiesDone.push(k);
+      }
+    }
+    if (Object.keys(timeBest).length > 0) snap._timeBest = timeBest;
+    if (storiesDone.length > 0) snap._storiesDone = Array.from(new Set(storiesDone)).sort();
+  } catch (_) {}
+  return snap;
+}
+
+function hasAnyAchievements(snap) {
+  return Boolean(snap && typeof snap === 'object' && Object.keys(snap).length > 0);
+}
+
+function mergeAchievementsSnapshots(localSnap = {}, cloudSnap = {}) {
+  const local = (localSnap && typeof localSnap === 'object') ? localSnap : {};
+  const cloud = (cloudSnap && typeof cloudSnap === 'object') ? cloudSnap : {};
+  const merged = {};
+
+  for (const key of ACHIEVEMENT_ARRAY_KEYS) {
+    const lArr = Array.isArray(local[key]) ? local[key] : [];
+    const cArr = Array.isArray(cloud[key]) ? cloud[key] : [];
+    if (lArr.length === 0 && cArr.length === 0) continue;
+    if (ACHIEVEMENT_NUM_ARRAY_KEYS.has(key)) {
+      const set = new Set([...cArr, ...lArr].map(Number).filter(n => Number.isFinite(n)));
+      if (set.size > 0) merged[key] = Array.from(set);
+    } else {
+      const seen = new Map();
+      for (const v of [...cArr, ...lArr]) {
+        if (v === null || v === undefined || v === '') continue;
+        seen.set(String(v), v);
+      }
+      if (seen.size > 0) merged[key] = Array.from(seen.values());
+    }
+  }
+
+  for (const key of ACHIEVEMENT_NUM_MAX_KEYS) {
+    const maxVal = Math.max(Number(local[key]) || 0, Number(cloud[key]) || 0);
+    if (maxVal > 0) merged[key] = maxVal;
+  }
+
+  for (const key of ACHIEVEMENT_BOOL_OR_KEYS) {
+    if (local[key] === true || local[key] === 'true' || cloud[key] === true || cloud[key] === 'true') {
+      merged[key] = true;
+    }
+  }
+
+  const lCols = Array.isArray(local[ACHIEVEMENT_CUSTOM_COLLECTIONS_KEY]) ? local[ACHIEVEMENT_CUSTOM_COLLECTIONS_KEY] : [];
+  const cCols = Array.isArray(cloud[ACHIEVEMENT_CUSTOM_COLLECTIONS_KEY]) ? cloud[ACHIEVEMENT_CUSTOM_COLLECTIONS_KEY] : [];
+  if (lCols.length > 0 || cCols.length > 0) {
+    const byId = new Map();
+    for (const col of [...cCols, ...lCols]) {
+      if (!col || typeof col !== 'object' || !col.id) continue;
+      const prev = byId.get(col.id);
+      if (!prev) {
+        byId.set(col.id, { ...col, wordIds: Array.isArray(col.wordIds) ? Array.from(new Set(col.wordIds)) : [] });
+      } else {
+        const unionWords = Array.from(new Set([...(prev.wordIds || []), ...(Array.isArray(col.wordIds) ? col.wordIds : [])]));
+        byId.set(col.id, { ...prev, ...col, wordIds: unionWords });
+      }
+    }
+    if (byId.size > 0) merged[ACHIEVEMENT_CUSTOM_COLLECTIONS_KEY] = Array.from(byId.values());
+  }
+
+  // Merge Time Trainer best scores (max per mode)
+  const lTime = (local._timeBest && typeof local._timeBest === 'object') ? local._timeBest : {};
+  const cTime = (cloud._timeBest && typeof cloud._timeBest === 'object') ? cloud._timeBest : {};
+  const allTimeKeys = new Set([...Object.keys(cTime), ...Object.keys(lTime)]);
+  if (allTimeKeys.size > 0) {
+    const mergedTime = {};
+    for (const k of allTimeKeys) {
+      if (!k.startsWith(ACHIEVEMENT_TIME_BEST_PREFIX)) continue;
+      const v = Math.max(Number(lTime[k]) || 0, Number(cTime[k]) || 0);
+      if (v > 0) mergedTime[k] = v;
+    }
+    if (Object.keys(mergedTime).length > 0) merged._timeBest = mergedTime;
+  }
+
+  // Merge completed Milestone Stories (set union)
+  const lStories = Array.isArray(local._storiesDone) ? local._storiesDone : [];
+  const cStories = Array.isArray(cloud._storiesDone) ? cloud._storiesDone : [];
+  if (lStories.length > 0 || cStories.length > 0) {
+    const set = new Set([...cStories, ...lStories].filter(k => ACHIEVEMENT_STORY_DONE_RE.test(String(k))));
+    if (set.size > 0) merged._storiesDone = Array.from(set).sort();
+  }
+
+  return merged;
+}
+
+function applyAchievementsSnapshotToLocal(merged = {}) {
+  if (typeof localStorage === 'undefined' || !merged || typeof merged !== 'object') return;
+  _isRestoringAchievements = true;
+  try {
+    for (const key of ACHIEVEMENT_ARRAY_KEYS) {
+      if (Array.isArray(merged[key]) && merged[key].length > 0) {
+        localStorage.setItem(key, JSON.stringify(merged[key]));
+      }
+    }
+    for (const key of ACHIEVEMENT_NUM_MAX_KEYS) {
+      if (Number.isFinite(merged[key]) && merged[key] > 0) {
+        localStorage.setItem(key, String(merged[key]));
+      }
+    }
+    for (const key of ACHIEVEMENT_BOOL_OR_KEYS) {
+      if (merged[key] === true) {
+        localStorage.setItem(key, 'true');
+      }
+    }
+    if (Array.isArray(merged[ACHIEVEMENT_CUSTOM_COLLECTIONS_KEY]) && merged[ACHIEVEMENT_CUSTOM_COLLECTIONS_KEY].length > 0) {
+      localStorage.setItem(ACHIEVEMENT_CUSTOM_COLLECTIONS_KEY, JSON.stringify(merged[ACHIEVEMENT_CUSTOM_COLLECTIONS_KEY]));
+    }
+    if (merged._timeBest && typeof merged._timeBest === 'object') {
+      for (const [k, v] of Object.entries(merged._timeBest)) {
+        if (k.startsWith(ACHIEVEMENT_TIME_BEST_PREFIX) && Number.isFinite(v) && v > 0) {
+          localStorage.setItem(k, String(v));
+        }
+      }
+    }
+    if (Array.isArray(merged._storiesDone)) {
+      for (const k of merged._storiesDone) {
+        if (ACHIEVEMENT_STORY_DONE_RE.test(String(k))) {
+          localStorage.setItem(k, 'true');
+        }
+      }
+    }
+  } catch (_) {
+  } finally {
+    _isRestoringAchievements = false;
+  }
+}
+
+function scheduleAchievementsCloudSync(immediate = false) {
+  if (_isRestoringAchievements) return;
+  const doPush = () => {
+    try {
+      const user = getCurrentUser();
+      if (!user || !user.email || !user.id || String(user.id).startsWith('guest')) return;
+      const firestoreUid = getFirestoreUserId(user.id);
+      if (!firestoreUid || String(firestoreUid).startsWith('guest')) return;
+      const snap = collectLocalAchievementsSnapshot();
+      if (!hasAnyAchievements(snap)) return;
+      const jsonStr = JSON.stringify(snap);
+      if (!immediate && jsonStr === _lastPushedAchievementsJson) return;
+      _lastPushedAchievementsJson = jsonStr;
+      saveUserAchievementsFirestore(firestoreUid, snap).catch(() => {});
+    } catch (_) {}
+  };
+  if (immediate) {
+    clearTimeout(_achievementsSyncTimer);
+    doPush();
+  } else {
+    clearTimeout(_achievementsSyncTimer);
+    _achievementsSyncTimer = setTimeout(doPush, 2000);
+  }
+}
+
+// Auto-watch localStorage writes to any achievement key so every view syncs to Firestore automatically
+if (typeof window !== 'undefined' && typeof Storage !== 'undefined' && Storage.prototype && !Storage.prototype.__ebAchievementsSyncWrapped) {
+  try {
+    const _origSetItem = Storage.prototype.setItem;
+    Storage.prototype.setItem = function (key, value) {
+      _origSetItem.call(this, key, value);
+      if (!_isRestoringAchievements && this === window.localStorage && (ALL_ACHIEVEMENT_STORAGE_KEYS.has(String(key)) || isDynamicAchievementKey(key))) {
+        scheduleAchievementsCloudSync(false);
+      }
+    };
+    Storage.prototype.__ebAchievementsSyncWrapped = true;
+  } catch (_) {}
+}
 
 function getActiveLang() {
   try {
@@ -528,22 +797,32 @@ async function syncRemoteVocabularyUpdates(force = false) {
         if (w.word) wordMap.set(String(w.word).toLowerCase().trim(), i);
       });
 
+      const CURATED_NUMERAL_WORDS = new Set([
+        'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten',
+        'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty',
+        'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety', 'hundred', 'thousand', 'million', 'billion',
+        'first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth', 'ninth', 'tenth',
+        'eleventh', 'twelfth', 'thirteenth', 'fourteenth', 'fifteenth', 'sixteenth', 'seventeenth', 'eighteenth', 'nineteenth', 'twentieth',
+        'thirtieth', 'fortieth', 'fiftieth', 'sixtieth', 'seventieth', 'eightieth', 'ninetieth', 'hundredth', 'thousandth', 'millionth'
+      ]);
+
       Object.keys(updates).forEach((idKey) => {
         const u = updates[idKey];
         if (!u || !u.word) return;
 
         const cleanWord = String(u.word).toLowerCase().trim();
+        const isCuratedNumeral = CURATED_NUMERAL_WORDS.has(cleanWord);
         let targetIdx = wordMap.get(String(u.id));
         if (targetIdx === undefined) targetIdx = wordMap.get(cleanWord);
 
         if (targetIdx !== undefined) {
           const existing = cachedWordsList[targetIdx];
           let rowChanged = false;
-          if (u.translation && (existing.translation !== u.translation || !existing.translation || String(existing.translation).toLowerCase().trim() === cleanWord)) {
+          if (!isCuratedNumeral && u.translation && (existing.translation !== u.translation || !existing.translation || String(existing.translation).toLowerCase().trim() === cleanWord)) {
             existing.translation = u.translation;
             rowChanged = true;
           }
-          if (u.translations && typeof u.translations === 'object') {
+          if (!isCuratedNumeral && u.translations && typeof u.translations === 'object') {
             if (currentLang !== 'ru' && currentLang !== 'en' && u.translations[currentLang]) {
               let remoteVal = u.translations[currentLang];
               // Guard curated Brazilian Portuguese translations against stale remote regression
@@ -693,18 +972,54 @@ async function getWords(forceRefresh = false) {
     } catch (e) {}
   }
 
-  // Load static dictionary bundled with the app
+  // Load static dictionary bundled with the app (prefer per-language sharded payload)
   try {
     let wordData = null;
-    const pathsToTry = ['./assets/data/words.json', 'assets/data/words.json', '/assets/data/words.json'];
-    for (const p of pathsToTry) {
+    const rawLang = String(currentLang || 'ru').toLowerCase().trim().split(/[-_]/)[0];
+    const shardLang = SUPPORTED_LOCALE_CODES.includes(rawLang) ? rawLang : 'ru';
+    const dataPrefixes = ['./assets/data/', 'assets/data/', '/assets/data/'];
+
+    for (const prefix of dataPrefixes) {
       try {
-        const response = await fetch(p);
-        if (response.ok) {
-          wordData = await response.json();
-          if (Array.isArray(wordData) && wordData.length > 0) break;
+        const [baseRes, langRes] = await Promise.all([
+          fetch(`${prefix}words_base.json`),
+          fetch(`${prefix}words_lang/${shardLang}.json`),
+        ]);
+        if (baseRes && baseRes.ok && langRes && langRes.ok) {
+          const [baseList, langMap] = await Promise.all([baseRes.json(), langRes.json()]);
+          if (Array.isArray(baseList) && baseList.length > 0 && langMap && typeof langMap === 'object') {
+            wordData = baseList.map((b) => {
+              const entry = langMap[b.i];
+              const trans = Array.isArray(entry) ? (entry[0] || '') : (entry || '');
+              const note = Array.isArray(entry) ? (entry[1] || '') : '';
+              return {
+                id: b.i,
+                word: b.w,
+                translation: trans,
+                transcription: b.p || '',
+                level: b.l || '',
+                category: b.c || '',
+                ...(shardLang !== 'ru' && shardLang !== 'en' ? { translations: { [shardLang]: trans } } : {}),
+                ...(note ? { notes: note, ...(shardLang !== 'ru' ? { all_notes: { [shardLang]: note } } : {}) } : {}),
+              };
+            });
+            break;
+          }
         }
       } catch (err) {}
+    }
+
+    if (!Array.isArray(wordData) || wordData.length === 0) {
+      const pathsToTry = ['./assets/data/words.json', 'assets/data/words.json', '/assets/data/words.json'];
+      for (const p of pathsToTry) {
+        try {
+          const response = await fetch(p);
+          if (response.ok) {
+            wordData = await response.json();
+            if (Array.isArray(wordData) && wordData.length > 0) break;
+          }
+        } catch (err) {}
+      }
     }
 
     if (Array.isArray(wordData) && wordData.length > 0) {
@@ -1083,106 +1398,106 @@ async function syncWeeklyXpApi(userId, weekKey, xp, name, avatar) {
 }
 
 const BOT_PROFILES = [
-  { name: 'Alex Smith', avatar: './assets/avatars/avatar_1.png' },
-  { name: 'Elena Petrova', avatar: './assets/avatars/avatar_3.png' },
-  { name: 'Mark Davis', avatar: './assets/avatars/avatar_6.png' },
-  { name: 'Anna Novak', avatar: './assets/avatars/avatar_8.png' },
-  { name: 'Dmitry Kuznetsov', avatar: './assets/avatars/avatar_11.png' },
-  { name: 'Sophie Laurent', avatar: './assets/avatars/avatar_14.png' },
-  { name: 'John Doe', avatar: './assets/avatars/avatar_2.png' },
-  { name: 'Maria Ivanova', avatar: './assets/avatars/avatar_15.png' },
-  { name: 'Carlos Mendes', avatar: './assets/avatars/avatar_4.png' },
-  { name: 'Emma Watson', avatar: './assets/avatars/avatar_5.png' },
-  { name: 'Liam O\'Connor', avatar: './assets/avatars/avatar_7.png' },
-  { name: 'Yuki Tanaka', avatar: './assets/avatars/avatar_9.png' },
-  { name: 'Oliver Brown', avatar: './assets/avatars/avatar_10.png' },
-  { name: 'Chloe Dubois', avatar: './assets/avatars/avatar_12.png' },
-  { name: 'Lucas Silva', avatar: './assets/avatars/avatar_13.png' },
-  { name: 'Maximilian Becker', avatar: './assets/avatars/avatar_16.png' },
-  { name: 'Mia Andersen', avatar: './assets/avatars/avatar_1.png' },
-  { name: 'Noah Johnson', avatar: './assets/avatars/avatar_2.png' },
-  { name: 'Zoe Martin', avatar: './assets/avatars/avatar_3.png' },
-  { name: 'Artem Sokolov', avatar: './assets/avatars/avatar_4.png' },
-  { name: 'Isabella Rossi', avatar: './assets/avatars/avatar_5.png' },
-  { name: 'Viktor Orlov', avatar: './assets/avatars/avatar_6.png' },
-  { name: 'Hannah Schmidt', avatar: './assets/avatars/avatar_7.png' },
-  { name: 'Gabriel Santos', avatar: './assets/avatars/avatar_8.png' },
-  { name: 'Polina Smirnova', avatar: './assets/avatars/avatar_9.png' },
-  { name: 'Daniel Miller', avatar: './assets/avatars/avatar_10.png' },
-  { name: 'Laura Garcia', avatar: './assets/avatars/avatar_11.png' },
-  { name: 'Sergey Volkov', avatar: './assets/avatars/avatar_12.png' },
-  { name: 'Emily Clark', avatar: './assets/avatars/avatar_13.png' },
-  { name: 'Mateo Fernandez', avatar: './assets/avatars/avatar_14.png' },
-  { name: 'Alina Morozova', avatar: './assets/avatars/avatar_15.png' },
-  { name: 'William Taylor', avatar: './assets/avatars/avatar_16.png' },
-  { name: 'Camille Bernard', avatar: './assets/avatars/avatar_1.png' },
-  { name: 'Ivan Popov', avatar: './assets/avatars/avatar_2.png' },
-  { name: 'Freja Nielsen', avatar: './assets/avatars/avatar_3.png' },
-  { name: 'Ethan Wright', avatar: './assets/avatars/avatar_4.png' },
-  { name: 'Daria Lebedeva', avatar: './assets/avatars/avatar_5.png' },
-  { name: 'Leo Moreau', avatar: './assets/avatars/avatar_6.png' },
-  { name: 'Victoria Hall', avatar: './assets/avatars/avatar_7.png' },
-  { name: 'Ksenia Fedorova', avatar: './assets/avatars/avatar_8.png' },
-  { name: 'James Wilson', avatar: './assets/avatars/avatar_9.png' },
-  { name: 'Clara Meyer', avatar: './assets/avatars/avatar_10.png' },
-  { name: 'Ilya Kozlov', avatar: './assets/avatars/avatar_11.png' },
-  { name: 'Sara Lind', avatar: './assets/avatars/avatar_12.png' },
-  { name: 'Mason Evans', avatar: './assets/avatars/avatar_13.png' },
-  { name: 'Anastasia Romanova', avatar: './assets/avatars/avatar_14.png' },
-  { name: 'Hugo Lefebvre', avatar: './assets/avatars/avatar_15.png' },
-  { name: 'Evelyn Moore', avatar: './assets/avatars/avatar_16.png' },
-  { name: 'Mikhail Pavlov', avatar: './assets/avatars/avatar_1.png' },
-  { name: 'Olivia King', avatar: './assets/avatars/avatar_2.png' },
-  { name: 'Thomas Anderson', avatar: './assets/avatars/avatar_3.png' },
-  { name: 'Ekaterina Volkova', avatar: './assets/avatars/avatar_4.png' },
-  { name: 'Benjamin Lee', avatar: './assets/avatars/avatar_5.png' },
-  { name: 'Sofia Costa', avatar: './assets/avatars/avatar_6.png' },
-  { name: 'Andrey Semenov', avatar: './assets/avatars/avatar_7.png' },
-  { name: 'Charlotte Green', avatar: './assets/avatars/avatar_8.png' },
-  { name: 'Lucas Bianchi', avatar: './assets/avatars/avatar_9.png' },
-  { name: 'Valeria Tarasova', avatar: './assets/avatars/avatar_10.png' },
-  { name: 'Henry Adams', avatar: './assets/avatars/avatar_11.png' },
-  { name: 'Mila Jansen', avatar: './assets/avatars/avatar_12.png' },
-  { name: 'Denis Belov', avatar: './assets/avatars/avatar_13.png' },
-  { name: 'Amelia Baker', avatar: './assets/avatars/avatar_14.png' },
-  { name: 'Sebastian Wagner', avatar: './assets/avatars/avatar_15.png' },
-  { name: 'Kira Vasilyeva', avatar: './assets/avatars/avatar_16.png' },
-  { name: 'Jack Campbell', avatar: './assets/avatars/avatar_1.png' },
-  { name: 'Astrid Larsson', avatar: './assets/avatars/avatar_2.png' },
-  { name: 'Pavel Komarov', avatar: './assets/avatars/avatar_3.png' },
-  { name: 'Harper Scott', avatar: './assets/avatars/avatar_4.png' },
-  { name: 'Diego Romero', avatar: './assets/avatars/avatar_5.png' },
-  { name: 'Alisa Zaytseva', avatar: './assets/avatars/avatar_6.png' },
-  { name: 'Samuel Harris', avatar: './assets/avatars/avatar_7.png' },
-  { name: 'Elise Fontaine', avatar: './assets/avatars/avatar_8.png' },
-  { name: 'Timur Gusev', avatar: './assets/avatars/avatar_9.png' },
-  { name: 'Grace Turner', avatar: './assets/avatars/avatar_10.png' },
-  { name: 'Felix Weber', avatar: './assets/avatars/avatar_11.png' },
-  { name: 'Veronika Danilova', avatar: './assets/avatars/avatar_12.png' },
-  { name: 'Arthur Mitchell', avatar: './assets/avatars/avatar_13.png' },
-  { name: 'Lina Johansson', avatar: './assets/avatars/avatar_14.png' },
-  { name: 'Vadim Solovyov', avatar: './assets/avatars/avatar_15.png' },
-  { name: 'Scarlett Phillips', avatar: './assets/avatars/avatar_16.png' },
-  { name: 'Oscar Dupont', avatar: './assets/avatars/avatar_1.png' },
-  { name: 'Nadezhda Belyakova', avatar: './assets/avatars/avatar_2.png' },
-  { name: 'Julian Torres', avatar: './assets/avatars/avatar_3.png' },
-  { name: 'Maya Hoffmann', avatar: './assets/avatars/avatar_4.png' },
-  { name: 'Roman Kudryavtsev', avatar: './assets/avatars/avatar_5.png' },
-  { name: 'Lily Carter', avatar: './assets/avatars/avatar_6.png' },
-  { name: 'Matteo Ricci', avatar: './assets/avatars/avatar_7.png' },
-  { name: 'Yulia Antonova', avatar: './assets/avatars/avatar_8.png' },
-  { name: 'George Kelly', avatar: './assets/avatars/avatar_9.png' },
-  { name: 'Ines Ramos', avatar: './assets/avatars/avatar_10.png' },
-  { name: 'Grigoriy Melnikov', avatar: './assets/avatars/avatar_11.png' },
-  { name: 'Ruby Bennett', avatar: './assets/avatars/avatar_12.png' },
-  { name: 'Jonas Braun', avatar: './assets/avatars/avatar_13.png' },
-  { name: 'Svetlana Ponomareva', avatar: './assets/avatars/avatar_14.png' },
-  { name: 'Louis Leroy', avatar: './assets/avatars/avatar_15.png' },
-  { name: 'Eleanor Bailey', avatar: './assets/avatars/avatar_16.png' },
-  { name: 'Stanislav Borisov', avatar: './assets/avatars/avatar_1.png' },
-  { name: 'Eva Lund', avatar: './assets/avatars/avatar_2.png' },
-  { name: 'Leon Schmitt', avatar: './assets/avatars/avatar_3.png' },
-  { name: 'Tatiana Makarova', avatar: './assets/avatars/avatar_4.png' }
+  { name: 'Alex Smith', avatar: './assets/avatars/avatar_1.webp' },
+  { name: 'Elena Petrova', avatar: './assets/avatars/avatar_3.webp' },
+  { name: 'Mark Davis', avatar: './assets/avatars/avatar_6.webp' },
+  { name: 'Anna Novak', avatar: './assets/avatars/avatar_8.webp' },
+  { name: 'Dmitry Kuznetsov', avatar: './assets/avatars/avatar_11.webp' },
+  { name: 'Sophie Laurent', avatar: './assets/avatars/avatar_14.webp' },
+  { name: 'John Doe', avatar: './assets/avatars/avatar_2.webp' },
+  { name: 'Maria Ivanova', avatar: './assets/avatars/avatar_15.webp' },
+  { name: 'Carlos Mendes', avatar: './assets/avatars/avatar_4.webp' },
+  { name: 'Emma Watson', avatar: './assets/avatars/avatar_5.webp' },
+  { name: 'Liam O\'Connor', avatar: './assets/avatars/avatar_7.webp' },
+  { name: 'Yuki Tanaka', avatar: './assets/avatars/avatar_9.webp' },
+  { name: 'Oliver Brown', avatar: './assets/avatars/avatar_10.webp' },
+  { name: 'Chloe Dubois', avatar: './assets/avatars/avatar_12.webp' },
+  { name: 'Lucas Silva', avatar: './assets/avatars/avatar_13.webp' },
+  { name: 'Maximilian Becker', avatar: './assets/avatars/avatar_16.webp' },
+  { name: 'Mia Andersen', avatar: './assets/avatars/avatar_1.webp' },
+  { name: 'Noah Johnson', avatar: './assets/avatars/avatar_2.webp' },
+  { name: 'Zoe Martin', avatar: './assets/avatars/avatar_3.webp' },
+  { name: 'Artem Sokolov', avatar: './assets/avatars/avatar_4.webp' },
+  { name: 'Isabella Rossi', avatar: './assets/avatars/avatar_5.webp' },
+  { name: 'Viktor Orlov', avatar: './assets/avatars/avatar_6.webp' },
+  { name: 'Hannah Schmidt', avatar: './assets/avatars/avatar_7.webp' },
+  { name: 'Gabriel Santos', avatar: './assets/avatars/avatar_8.webp' },
+  { name: 'Polina Smirnova', avatar: './assets/avatars/avatar_9.webp' },
+  { name: 'Daniel Miller', avatar: './assets/avatars/avatar_10.webp' },
+  { name: 'Laura Garcia', avatar: './assets/avatars/avatar_11.webp' },
+  { name: 'Sergey Volkov', avatar: './assets/avatars/avatar_12.webp' },
+  { name: 'Emily Clark', avatar: './assets/avatars/avatar_13.webp' },
+  { name: 'Mateo Fernandez', avatar: './assets/avatars/avatar_14.webp' },
+  { name: 'Alina Morozova', avatar: './assets/avatars/avatar_15.webp' },
+  { name: 'William Taylor', avatar: './assets/avatars/avatar_16.webp' },
+  { name: 'Camille Bernard', avatar: './assets/avatars/avatar_1.webp' },
+  { name: 'Ivan Popov', avatar: './assets/avatars/avatar_2.webp' },
+  { name: 'Freja Nielsen', avatar: './assets/avatars/avatar_3.webp' },
+  { name: 'Ethan Wright', avatar: './assets/avatars/avatar_4.webp' },
+  { name: 'Daria Lebedeva', avatar: './assets/avatars/avatar_5.webp' },
+  { name: 'Leo Moreau', avatar: './assets/avatars/avatar_6.webp' },
+  { name: 'Victoria Hall', avatar: './assets/avatars/avatar_7.webp' },
+  { name: 'Ksenia Fedorova', avatar: './assets/avatars/avatar_8.webp' },
+  { name: 'James Wilson', avatar: './assets/avatars/avatar_9.webp' },
+  { name: 'Clara Meyer', avatar: './assets/avatars/avatar_10.webp' },
+  { name: 'Ilya Kozlov', avatar: './assets/avatars/avatar_11.webp' },
+  { name: 'Sara Lind', avatar: './assets/avatars/avatar_12.webp' },
+  { name: 'Mason Evans', avatar: './assets/avatars/avatar_13.webp' },
+  { name: 'Anastasia Romanova', avatar: './assets/avatars/avatar_14.webp' },
+  { name: 'Hugo Lefebvre', avatar: './assets/avatars/avatar_15.webp' },
+  { name: 'Evelyn Moore', avatar: './assets/avatars/avatar_16.webp' },
+  { name: 'Mikhail Pavlov', avatar: './assets/avatars/avatar_1.webp' },
+  { name: 'Olivia King', avatar: './assets/avatars/avatar_2.webp' },
+  { name: 'Thomas Anderson', avatar: './assets/avatars/avatar_3.webp' },
+  { name: 'Ekaterina Volkova', avatar: './assets/avatars/avatar_4.webp' },
+  { name: 'Benjamin Lee', avatar: './assets/avatars/avatar_5.webp' },
+  { name: 'Sofia Costa', avatar: './assets/avatars/avatar_6.webp' },
+  { name: 'Andrey Semenov', avatar: './assets/avatars/avatar_7.webp' },
+  { name: 'Charlotte Green', avatar: './assets/avatars/avatar_8.webp' },
+  { name: 'Lucas Bianchi', avatar: './assets/avatars/avatar_9.webp' },
+  { name: 'Valeria Tarasova', avatar: './assets/avatars/avatar_10.webp' },
+  { name: 'Henry Adams', avatar: './assets/avatars/avatar_11.webp' },
+  { name: 'Mila Jansen', avatar: './assets/avatars/avatar_12.webp' },
+  { name: 'Denis Belov', avatar: './assets/avatars/avatar_13.webp' },
+  { name: 'Amelia Baker', avatar: './assets/avatars/avatar_14.webp' },
+  { name: 'Sebastian Wagner', avatar: './assets/avatars/avatar_15.webp' },
+  { name: 'Kira Vasilyeva', avatar: './assets/avatars/avatar_16.webp' },
+  { name: 'Jack Campbell', avatar: './assets/avatars/avatar_1.webp' },
+  { name: 'Astrid Larsson', avatar: './assets/avatars/avatar_2.webp' },
+  { name: 'Pavel Komarov', avatar: './assets/avatars/avatar_3.webp' },
+  { name: 'Harper Scott', avatar: './assets/avatars/avatar_4.webp' },
+  { name: 'Diego Romero', avatar: './assets/avatars/avatar_5.webp' },
+  { name: 'Alisa Zaytseva', avatar: './assets/avatars/avatar_6.webp' },
+  { name: 'Samuel Harris', avatar: './assets/avatars/avatar_7.webp' },
+  { name: 'Elise Fontaine', avatar: './assets/avatars/avatar_8.webp' },
+  { name: 'Timur Gusev', avatar: './assets/avatars/avatar_9.webp' },
+  { name: 'Grace Turner', avatar: './assets/avatars/avatar_10.webp' },
+  { name: 'Felix Weber', avatar: './assets/avatars/avatar_11.webp' },
+  { name: 'Veronika Danilova', avatar: './assets/avatars/avatar_12.webp' },
+  { name: 'Arthur Mitchell', avatar: './assets/avatars/avatar_13.webp' },
+  { name: 'Lina Johansson', avatar: './assets/avatars/avatar_14.webp' },
+  { name: 'Vadim Solovyov', avatar: './assets/avatars/avatar_15.webp' },
+  { name: 'Scarlett Phillips', avatar: './assets/avatars/avatar_16.webp' },
+  { name: 'Oscar Dupont', avatar: './assets/avatars/avatar_1.webp' },
+  { name: 'Nadezhda Belyakova', avatar: './assets/avatars/avatar_2.webp' },
+  { name: 'Julian Torres', avatar: './assets/avatars/avatar_3.webp' },
+  { name: 'Maya Hoffmann', avatar: './assets/avatars/avatar_4.webp' },
+  { name: 'Roman Kudryavtsev', avatar: './assets/avatars/avatar_5.webp' },
+  { name: 'Lily Carter', avatar: './assets/avatars/avatar_6.webp' },
+  { name: 'Matteo Ricci', avatar: './assets/avatars/avatar_7.webp' },
+  { name: 'Yulia Antonova', avatar: './assets/avatars/avatar_8.webp' },
+  { name: 'George Kelly', avatar: './assets/avatars/avatar_9.webp' },
+  { name: 'Ines Ramos', avatar: './assets/avatars/avatar_10.webp' },
+  { name: 'Grigoriy Melnikov', avatar: './assets/avatars/avatar_11.webp' },
+  { name: 'Ruby Bennett', avatar: './assets/avatars/avatar_12.webp' },
+  { name: 'Jonas Braun', avatar: './assets/avatars/avatar_13.webp' },
+  { name: 'Svetlana Ponomareva', avatar: './assets/avatars/avatar_14.webp' },
+  { name: 'Louis Leroy', avatar: './assets/avatars/avatar_15.webp' },
+  { name: 'Eleanor Bailey', avatar: './assets/avatars/avatar_16.webp' },
+  { name: 'Stanislav Borisov', avatar: './assets/avatars/avatar_1.webp' },
+  { name: 'Eva Lund', avatar: './assets/avatars/avatar_2.webp' },
+  { name: 'Leon Schmitt', avatar: './assets/avatars/avatar_3.webp' },
+  { name: 'Tatiana Makarova', avatar: './assets/avatars/avatar_4.webp' }
 ];
 
 function generateDynamicBots(weekKey) {
@@ -1806,7 +2121,25 @@ async function saveProgress(wordId, isCorrect, method = 'cards', options = {}) {
     } else if (isCorrect) {
       prog.correct = (prog.correct || 0) + 1;
       if (method === 'input') {
+        prog.inputCorrect = (prog.inputCorrect || 0) + 1;
         prog.needsTestRepeat = false;
+        prog.mastered = true;
+        prog.stage = 'mastered';
+        prog.lastReviewedAt = Date.now();
+        // Confirm Spoken English item completion only after passing final Test (input)
+        const strId = String(wordId || '');
+        if (strId.startsWith('spoken_') && typeof localStorage !== 'undefined') {
+          try {
+            const spokenNumId = Number(strId.slice('spoken_'.length));
+            if (Number.isFinite(spokenNumId)) {
+              const rawSpoken = localStorage.getItem('myduo_spoken_practiced');
+              const parsedSpoken = rawSpoken ? JSON.parse(rawSpoken) : [];
+              const spokenSet = new Set(Array.isArray(parsedSpoken) ? parsedSpoken.map(Number) : []);
+              spokenSet.add(spokenNumId);
+              localStorage.setItem('myduo_spoken_practiced', JSON.stringify([...spokenSet]));
+            }
+          } catch (_) {}
+        }
       }
     } else {
       prog.error = (prog.error || 0) + 1;
@@ -2336,8 +2669,24 @@ async function fetchUserDataFromCloud(userId = null, weekKey = null) {
       }
     }
 
+    // 3. Sync Learning Achievements (Micro-rules, Tenses, Grammar Ref, Spoken, CEFR, Collections, Milestones)
+    const cloudAchievements = mergeAchievementsSnapshots(detDoc?.achievements || {}, fullDoc?.achievements || {});
+    const localAchievements = collectLocalAchievementsSnapshot();
+    const mergedAchievements = mergeAchievementsSnapshots(localAchievements, cloudAchievements);
+    if (hasAnyAchievements(mergedAchievements)) {
+      applyAchievementsSnapshotToLocal(mergedAchievements);
+      const mergedAchJson = JSON.stringify(mergedAchievements);
+      if (mergedAchJson !== JSON.stringify(cloudAchievements)) {
+        _lastPushedAchievementsJson = mergedAchJson;
+        saveUserAchievementsFirestore(uId, mergedAchievements).catch(() => {});
+      } else {
+        _lastPushedAchievementsJson = mergedAchJson;
+      }
+    }
+
     if (typeof window !== 'undefined') {
       window.dispatchEvent(new CustomEvent('myduo:cloud_synced', { detail: { userId: uId, xp: finalFirestoreXp } }));
+      window.dispatchEvent(new CustomEvent('myduo:achievements_synced', { detail: mergedAchievements }));
       window.dispatchEvent(new CustomEvent('myduo:xp_changed', { detail: { xp: finalFirestoreXp } }));
       window.dispatchEvent(new CustomEvent('myduo:progress_updated', { detail: { userId: uId, progress: mergedProg } }));
       window.dispatchEvent(new CustomEvent('myduo_favorites_updated', { detail: mergedFavs }));
@@ -2393,6 +2742,12 @@ function pushUserDataToCloud(userId = null, weekKey = null, immediate = false) {
       const localOverrides = getUserWordOverridesLocal();
       if (Object.keys(localOverrides).length > 0) {
         saveUserWordOverridesFirestore(firestoreUid, localOverrides).catch(() => {});
+      }
+
+      const localAchievements = collectLocalAchievementsSnapshot();
+      if (hasAnyAchievements(localAchievements)) {
+        _lastPushedAchievementsJson = JSON.stringify(localAchievements);
+        saveUserAchievementsFirestore(firestoreUid, localAchievements).catch(() => {});
       }
 
       if (cachedWordsList && Array.isArray(cachedWordsList)) {
@@ -5030,6 +5385,10 @@ const ApiService = {
   getIsoWeekKey,
   fetchUserDataFromCloud,
   pushUserDataToCloud,
+  collectLocalAchievementsSnapshot,
+  mergeAchievementsSnapshots,
+  applyAchievementsSnapshotToLocal,
+  scheduleAchievementsCloudSync,
   transcribeAudio,
   transcribePingAudio,
   getCloudWordOfTheDayId,
@@ -5158,6 +5517,10 @@ export {
   resetMonthlyLeaderboard,
   fetchUserDataFromCloud,
   pushUserDataToCloud,
+  collectLocalAchievementsSnapshot,
+  mergeAchievementsSnapshots,
+  applyAchievementsSnapshotToLocal,
+  scheduleAchievementsCloudSync,
   transcribeAudio,
   transcribePingAudio,
   getCloudWordOfTheDayId,
@@ -5174,4 +5537,4 @@ export {
   FUNCTIONAL_GRAMMAR_WORDS,
 };
 
-export { getWordTranslation, getWordNotes } from './i18n.js?v=386.0';
+export { getWordTranslation, getWordNotes } from './i18n.js?v=423.0';

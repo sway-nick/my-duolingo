@@ -124,9 +124,9 @@
             window.hideAppSplashScreen();
           }
         }, 4000);
-        if ('serviceWorker' in navigator) {
+        if ('serviceWorker' in navigator && !document.documentElement.classList.contains('is-android-app')) {
           window.addEventListener('load', function() {
-            navigator.serviceWorker.register('./sw.js?v=386.0').catch(function() {});
+            navigator.serviceWorker.register('./sw.js?v=423.0').catch(function() {});
           });
         }
       })();
@@ -145,10 +145,18 @@
     <meta name="theme-color" content="#0f1c2a" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" />
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,500;1,600;1,700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="./assets/css/main.css?v=386.0" />
-    <link rel="stylesheet" href="./assets/css/arctic-glass.css?v=386.0" />
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,500;1,600;1,700&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,500;1,600;1,700&display=swap" rel="stylesheet" /></noscript>
+    <link rel="stylesheet" href="./assets/css/main.css?v=423.0" />
+    <script>
+      if (!document.documentElement.classList.contains('is-android-app')) {
+        var gsi = document.createElement('script');
+        gsi.src = 'https://accounts.google.com/gsi/client';
+        gsi.async = true;
+        gsi.defer = true;
+        document.head.appendChild(gsi);
+      }
+    </script>
   </head>
 
   <body>
@@ -215,40 +223,53 @@
     </style>
 
     <script type="module">
-      import { getWords, getUserSettings, getUserProgress, getUserFavorites, toggleFavoriteApi, saveUserSettings, isWordMastered, isWordLearning, getQueueForCards, getQueueForQuiz, getQueueForPairs, getQueueForTest, isWordProblematicForBlocks, prepareTrainingBatch, getActiveConveyorBatch, clearActiveConveyorBatch, getLeaderboard, getIsoWeekKey, fetchUserDataFromCloud, pushUserDataToCloud, getGlobalWordOfTheDay, getCloudWordOfTheDayId, syncPendingWidgetFavorites, addWeeklyXP, trackRoundCompleted, getMasteredWordsCount, saveProgress } from './services/api.js?v=386.0';
-      import { getRecentWeekKeys } from './services/weekKey.js?v=386.0';
-      import { speakWord, preloadWordAudio, playFanfareSound, releaseScreenWakeLock, stopSilentAudioAnchor, stopNativeBackgroundPlayback, isCategoryAudioDownloaded, downloadCategoryVoicePack, verifyCategoryAudioInCache, getSavedVoiceAccent } from './services/audioService.js?v=386.0';
-      import { getCurrentUser, isGuestLimitReached, incrementGuestTrainingCount, GUEST_WORD_LIMIT, getEffectiveUserId } from './services/authService.js?v=386.0';
-      import { renderAppLayout, updateHeaderUser, updateMondayTickerTabVisibility } from './components/layout/AppLayout.js?v=386.0';
-      import { t, getInterfaceLanguage, getWordTranslation, getWordNotes, getCategoryDetails, getCategoryVoiceModalStrings } from './services/i18n.js?v=386.0';
-      import { renderTrainingCard } from './components/training/TrainingCard.js?v=386.0';
-      import { renderStatsView } from './components/stats/StatsView.js?v=386.0';
-      import { renderSettingsView } from './components/settings/SettingsView.js?v=386.0';
-      import { renderFavoritesView } from './components/favorites/FavoritesView.js?v=386.0';
-      import { renderCollectionsHubView } from './components/favorites/CollectionsHubView.js?v=386.0';
-      import { renderStoriesView } from './components/favorites/StoriesView.js?v=386.0';
-      import { renderTimeTrainerView } from './components/favorites/TimeTrainerView.js?v=386.0';
-      import { renderMicroRulesView } from './components/favorites/MicroRulesView.js?v=386.0';
-      import { renderTenseConstructionsView } from './components/favorites/TenseConstructionsView.js?v=386.0';
-      import { renderGrammarHubView } from './components/favorites/GrammarHubView.js?v=386.0';
-      import { renderSpokenEnglishView } from './components/favorites/SpokenEnglishView.js?v=386.0';
-      import { renderDailyNewsView, stopDailyNewsAudio, closeNewsWordPopover } from './components/favorites/DailyNewsView.js?v=386.0';
-      import { getCollectionTitle, getActiveCollectionId, syncCollectionToAndroidWidget, getCollectionWords } from './services/collectionsService.js?v=386.0';
-      import { renderDictionaryView } from './components/dictionary/DictionaryView.js?v=386.0';
-      import { renderLeaderboardView, renderMondayMemeTop4Cut, getMondayMemeTop4CutHtml } from './components/leaderboard/LeaderboardView.js?v=386.0';
-      import { renderAuthModal } from './components/auth/AuthModal.js?v=386.0';
-      import { initPrizePodiumListener } from './components/modals/PrizePodiumModal.js?v=386.0';
-      import { showMilestoneStoryModal, showMilestoneUnlockedModal } from './components/modals/MilestoneStoryModal.js?v=386.0';
-      import { StorageService } from './services/storageService.js?v=386.0';
-      import { AdService } from './services/adService.js?v=386.0';
-      import { ProService } from './services/proService.js?v=386.0';
-      import { showProPaywall } from './components/pro/ProPaywallModal.js?v=386.0';
-      import { resolveVideoUrl, syncRemoteVideos } from './services/videoService.js?v=386.0';
-      import { recordSiteVisitFirestore } from './services/firebase.js?v=386.0';
-      import { isWeb100WordsLimitReached, showWebPlayStoreFunnelModal, renderWebLimitCard, incrementWebTrainedCount } from './components/modals/WebPlayStoreFunnelModal.js?v=386.0';
+      import { getWords, getUserSettings, getUserProgress, getUserFavorites, toggleFavoriteApi, saveUserSettings, isWordMastered, isWordLearning, getQueueForCards, getQueueForQuiz, getQueueForPairs, getQueueForTest, isWordProblematicForBlocks, prepareTrainingBatch, getActiveConveyorBatch, clearActiveConveyorBatch, getLeaderboard, getIsoWeekKey, fetchUserDataFromCloud, pushUserDataToCloud, getGlobalWordOfTheDay, getCloudWordOfTheDayId, syncPendingWidgetFavorites, addWeeklyXP, trackRoundCompleted, getMasteredWordsCount, saveProgress } from './services/api.js?v=423.0';
+      import { getRecentWeekKeys } from './services/weekKey.js?v=423.0';
+      import { speakWord, preloadWordAudio, playFanfareSound, releaseScreenWakeLock, stopSilentAudioAnchor, stopNativeBackgroundPlayback, isCategoryAudioDownloaded, downloadCategoryVoicePack, verifyCategoryAudioInCache, getSavedVoiceAccent, isSfxMuted } from './services/audioService.js?v=423.0';
+      import { getCurrentUser, isGuestLimitReached, incrementGuestTrainingCount, GUEST_WORD_LIMIT, getEffectiveUserId } from './services/authService.js?v=423.0';
+      import { renderAppLayout, updateHeaderUser, updateMondayTickerTabVisibility } from './components/layout/AppLayout.js?v=423.0';
+      import { t, getInterfaceLanguage, getWordTranslation, getWordNotes, getCategoryDetails, getCategoryVoiceModalStrings, ensureLocaleLoaded } from './services/i18n.js?v=423.0';
+      import { renderTrainingCard } from './components/training/TrainingCard.js?v=423.0';
+      import { pushNavReturn, popNavReturn, hasNavReturn, clearNavReturn } from './services/navigationStack.js?v=423.0';
+      import { getCollectionTitle, getActiveCollectionId, syncCollectionToAndroidWidget, getCollectionWords } from './services/collectionsService.js?v=423.0';
+      import { StorageService } from './services/storageService.js?v=423.0';
+      import { AdService } from './services/adService.js?v=423.0';
+      import { ProService } from './services/proService.js?v=423.0';
+      import { resolveVideoUrl, syncRemoteVideos } from './services/videoService.js?v=423.0';
+      import { recordSiteVisitFirestore } from './services/firebase.js?v=423.0';
+      import { isWeb100WordsLimitReached, showWebPlayStoreFunnelModal, renderWebLimitCard, incrementWebTrainedCount } from './components/modals/WebPlayStoreFunnelModal.js?v=423.0';
 
-      window.showMilestoneStoryModal = showMilestoneStoryModal;
-      window.showMilestoneUnlockedModal = showMilestoneUnlockedModal;
+      const _lazyCache = new Map();
+      function lazyMod(p) {
+        if (!_lazyCache.has(p)) _lazyCache.set(p, import(p));
+        return _lazyCache.get(p);
+      }
+
+      let _dailyNewsMod = null;
+      async function loadDailyNewsMod() {
+        const m = await lazyMod('./components/favorites/DailyNewsView.js?v=423.0');
+        _dailyNewsMod = m;
+        return m;
+      }
+      function stopDailyNewsAudio() {
+        if (_dailyNewsMod && typeof _dailyNewsMod.stopDailyNewsAudio === 'function') {
+          _dailyNewsMod.stopDailyNewsAudio();
+        }
+      }
+      function closeNewsWordPopover() {
+        if (_dailyNewsMod && typeof _dailyNewsMod.closeNewsWordPopover === 'function') {
+          _dailyNewsMod.closeNewsWordPopover();
+        }
+      }
+
+      window.showMilestoneStoryModal = async (...args) => {
+        const { showMilestoneStoryModal } = await lazyMod('./components/modals/MilestoneStoryModal.js?v=423.0');
+        return showMilestoneStoryModal(...args);
+      };
+      window.showMilestoneUnlockedModal = async (...args) => {
+        const { showMilestoneUnlockedModal } = await lazyMod('./components/modals/MilestoneStoryModal.js?v=423.0');
+        return showMilestoneUnlockedModal(...args);
+      };
       window.StorageService = StorageService;
 
       // Track active unique day of usage (never resets) & site visit counter
@@ -262,10 +283,12 @@
         AdService.init().catch(() => {});
         ProService.init().catch(() => {});
         window.addEventListener('eb:pro-paywall', (ev) => {
-          showProPaywall({
-            reason: ev?.detail?.reason || 'settings',
-            wordsNeeded: ev?.detail?.wordsNeeded || 0,
-          }).catch(() => {});
+          lazyMod('./components/pro/ProPaywallModal.js?v=423.0')
+            .then(({ showProPaywall }) => showProPaywall({
+              reason: ev?.detail?.reason || 'settings',
+              wordsNeeded: ev?.detail?.wordsNeeded || 0,
+            }))
+            .catch(() => {});
         });
         syncRemoteVideos().catch(() => {});
 
@@ -681,15 +704,23 @@
             localStorage.removeItem('myduo_pending_milestone_unlock');
             localStorage.setItem(`myduo_milestone_story_${targetMilestone}_shown`, 'true');
             setTimeout(() => {
-              showMilestoneUnlockedModal(targetMilestone);
+              window.showMilestoneUnlockedModal(targetMilestone);
             }, delay);
           }
         } catch (_) {}
       }
 
+      function removeHubFloatingFabs() {
+        try { document.getElementById('hub-bottom-fabs')?.remove(); } catch (e) {}
+        try { document.getElementById('hub-smart-path-fab')?.remove(); } catch (e) {}
+        try { document.getElementById('hub-daily-news-fab')?.remove(); } catch (e) {}
+        try { document.getElementById('hub-cefr-test-fab')?.remove(); } catch (e) {}
+        try { document.getElementById('smart-path-modal-overlay')?.remove(); } catch (e) {}
+      }
+
       async function renderTrainingTab() {
         if (!window._showHubScreen) {
-          try { document.getElementById('hub-daily-news-fab')?.remove(); } catch (e) {}
+          removeHubFloatingFabs();
         }
         preloadNextWotdVideo();
         const content = document.querySelector('#app-content');
@@ -722,7 +753,8 @@
 
           const signupBtn = content.querySelector('#guest-signup-btn');
           if (signupBtn) {
-            signupBtn.addEventListener('click', () => {
+            signupBtn.addEventListener('click', async () => {
+              const { renderAuthModal } = await lazyMod('./components/auth/AuthModal.js?v=423.0');
               renderAuthModal(async () => {
                 updateHeaderUser();
                 await loadData();
@@ -733,7 +765,8 @@
 
           const loginBtn = content.querySelector('#guest-login-btn');
           if (loginBtn) {
-            loginBtn.addEventListener('click', () => {
+            loginBtn.addEventListener('click', async () => {
+              const { renderAuthModal } = await lazyMod('./components/auth/AuthModal.js?v=423.0');
               renderAuthModal(async () => {
                 updateHeaderUser();
                 await loadData();
@@ -803,6 +836,7 @@
           if (!cat) return 'Elementary';
           const s = String(cat).replace(/\s*[•\-–—]?\s*[A-C][1-2].*$/i, '').trim();
           const clean = s.toLowerCase();
+          if (clean === 'it' || clean === 'idioms' || clean === 'finance') return null;
           if (clean.includes('elementary')) return 'Elementary';
           if (clean.includes('irregular')) return 'Irregular verbs';
           if (clean.includes('pattern')) return 'Pattern';
@@ -1030,6 +1064,10 @@
               window._activePracticeCollectionId = null;
               window._activePracticeCollectionTitle = null;
               currentWordIndex = 0;
+              if (hasNavReturn()) {
+                popNavReturn();
+                return;
+              }
               activeTab = 'favorites';
               window._activeTab = 'favorites';
               const tabs = document.querySelectorAll('.nav-tab');
@@ -1187,7 +1225,7 @@
             }
           }
 
-          const capSvg = `<svg width="22" height="22" viewBox="0 2 24 19" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 10v7M2 10l10-5.5 10 5.5-10 5.5z"/><path d="M6 12.5v5.5c3 3.5 9 3.5 12 0v-5.5"/></svg>`;
+          const capSvg = `<img src="assets/icons/hub_words_hand_pen.webp" alt="" width="24" height="24" style="width: 24px; height: 24px; object-fit: contain; display: block; pointer-events: none;" />`;
           const rocketSvg = capSvg;
           const bookSvg = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>`;
           const heartSvg = `<svg width="20" height="20" viewBox="0 0 24 24" fill="#ffffff" stroke="none" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>`;
@@ -1227,9 +1265,12 @@
           const canPlayDailyVideo = (lastWatchedVideoDate !== todayVideoKey) || isMemeActive;
 
           if (isMemeActive) {
-            getLeaderboard(completedWeekKey, 'week', true).then(() => {
+            getLeaderboard(completedWeekKey, 'week', true).then(async () => {
               const cCut = document.getElementById('wotd-top4-cut');
-              if (cCut) renderMondayMemeTop4Cut(cCut, completedWeekKey);
+              if (cCut) {
+                const { renderMondayMemeTop4Cut } = await lazyMod('./components/leaderboard/LeaderboardView.js?v=423.0');
+                renderMondayMemeTop4Cut(cCut, completedWeekKey);
+              }
             }).catch(() => {});
           }
 
@@ -1253,6 +1294,7 @@
               } catch (e) {}
               playFanfareSound();
               checkMilestoneStoryTrigger(600);
+              setTimeout(() => window._checkCefrMilestoneNudge?.(), 950);
             } else if (localStorage.getItem('myduo_pending_milestone_unlock')) {
               checkMilestoneStoryTrigger(600);
             }
@@ -1362,7 +1404,7 @@
                           <video id="wotd-card-video" playsinline preload="auto" muted src="assets/video/${currentWotdVideo}" style="width: 100%; height: 100%; object-fit: cover; display: block; border-radius: inherit;"></video>
                           <video id="wotd-card-video-what" playsinline preload="auto" muted src="assets/video/meme_monday_what.mp4" style="width: 100%; height: 100%; object-fit: cover; display: none; border-radius: inherit;"></video>
                           <div id="wotd-top4-cut" style="display: none; pointer-events: none;">
-                            ${isMemeActive ? getMondayMemeTop4CutHtml(completedWeekKey) : ''}
+                            ${isMemeActive ? (await lazyMod('./components/leaderboard/LeaderboardView.js?v=423.0')).getMondayMemeTop4CutHtml(completedWeekKey) : ''}
                           </div>
                         </div>
 
@@ -1598,31 +1640,169 @@
 
           attachBonusBtnListener(content.querySelector('#go-double-xp-btn'));
 
-          // Mount News globe FAB directly on document.body so CSS transforms on ancestors never trap position:fixed
-          const existingBodyFab = document.getElementById('hub-daily-news-fab');
-          if (existingBodyFab) existingBodyFab.remove();
+          // Mount monochrome 3-icon dock directly on document.body (Compass · Knowledge Matrix · Daily News)
+          removeHubFloatingFabs();
           if (isHubScreen) {
+            const fabsWrap = document.createElement('div');
+            fabsWrap.id = 'hub-bottom-fabs';
+            fabsWrap.className = 'hub-bottom-dock';
+
+            const backToMainHub = () => {
+              if (hasNavReturn()) {
+                popNavReturn();
+                return;
+              }
+              window._isCategorySelectOpen = false;
+              window._currentGrammarSection = null;
+              window._showHubScreen = true;
+              renderTrainingTab();
+            };
+
+            const smartBtn = document.createElement('button');
+            smartBtn.type = 'button';
+            smartBtn.id = 'hub-smart-path-fab';
+            smartBtn.className = 'hub-dock-btn hub-dock-btn-compass';
+            smartBtn.setAttribute('aria-label', 'Smart Course Path');
+            smartBtn.innerHTML = '<svg class="hub-dock-icon-img" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M10.5 1C11.4 6.8 13.7 9.1 19.5 10C13.7 10.9 11.4 13.2 10.5 19C9.6 13.2 7.3 10.9 1.5 10C7.3 9.1 9.6 6.8 10.5 1Z" fill="#1e293b"/><path d="M19 14.5C19.45 17.05 20.45 18.05 23 18.5C20.45 18.95 19.45 19.95 19 22.5C18.55 19.95 17.55 18.95 15 18.5C17.55 18.05 18.55 17.05 19 14.5Z" fill="#1e293b"/></svg>';
+            window._openSmartPathModal = async () => {
+              const { showSmartPathModal } = await lazyMod('./components/modals/SmartPathModal.js?v=423.0');
+              showSmartPathModal(allWords, {
+                onStartVocab: (targetCategory) => {
+                  removeHubFloatingFabs();
+                  window._returnToSmartPath = true;
+                  favoritePracticeWords = null;
+                  favoritePracticeMethod = 'cards';
+                  window._activePracticeCollectionId = null;
+                  window._activePracticeCollectionTitle = null;
+                  const chosenCat = targetCategory || userSettings.category || 'Elementary';
+                  if (chosenCat && chosenCat !== userSettings.category) {
+                    userSettings.category = chosenCat;
+                  }
+                  const catWords = allWords.filter((w) => sanitizeCategory(w.category) === sanitizeCategory(chosenCat));
+                  const pool = catWords.length > 0 ? catWords : allWords;
+                  const progMap = getUserProgress();
+                  const favList = Array.from(favoriteIds);
+                  getActiveConveyorBatch(pool, progMap, favList);
+                  const qCards = getQueueForCards(pool, progMap, favList);
+                  const qQuiz = getQueueForQuiz(pool, progMap, favList);
+                  const qPairs = getQueueForPairs(pool, progMap, favList);
+                  const qTest = getQueueForTest(pool, progMap, favList);
+                  if (qCards.length > 0) {
+                    userSettings.preferredMethod = 'cards';
+                    window._explicitCardsOpened = true;
+                  } else if (qQuiz.length > 0) {
+                    userSettings.preferredMethod = 'quiz';
+                    window._explicitCardsOpened = false;
+                  } else if (qPairs.length > 0) {
+                    userSettings.preferredMethod = 'pairs';
+                    window._explicitCardsOpened = false;
+                  } else if (qTest.length > 0) {
+                    userSettings.preferredMethod = 'input';
+                    window._explicitCardsOpened = false;
+                  } else {
+                    clearActiveConveyorBatch();
+                    getActiveConveyorBatch(pool, progMap, favList);
+                    userSettings.preferredMethod = 'cards';
+                    window._explicitCardsOpened = true;
+                  }
+                  window._showHubScreen = false;
+                  window._trainingRoundJustCompleted = false;
+                  currentWordIndex = 0;
+                  saveUserSettings(userSettings);
+                  renderTrainingTab();
+                },
+                onNavigateLink: (target) => {
+                  removeHubFloatingFabs();
+                  clearNavReturn();
+                  window._returnToSmartPath = true;
+                  pushNavReturn({
+                    label: 'main_hub_smart_path',
+                    restore: () => {
+                      window._returnToSmartPath = false;
+                      window._isCategorySelectOpen = false;
+                      window._currentGrammarSection = null;
+                      window._showHubScreen = true;
+                      activeTab = 'training';
+                      window._activeTab = 'training';
+                      document.querySelectorAll('.nav-tab').forEach((tabEl) => {
+                        tabEl.classList.toggle('active', tabEl.getAttribute('data-tab') === 'training');
+                      });
+                      renderTrainingTab();
+                      setTimeout(() => {
+                        try { window._openSmartPathModal?.(); } catch (_) {}
+                      }, 80);
+                    },
+                  });
+                  window._isCategorySelectOpen = false;
+                  window._currentGrammarSection = null;
+                  window._navigateToTopicLink(target);
+                },
+                onOpenMatrix: async (levelId) => {
+                  removeHubFloatingFabs();
+                  window._returnToSmartPath = false;
+                  window._isCategorySelectOpen = true;
+                  window._currentGrammarSection = null;
+                  const { renderLevelMatrixView } = await lazyMod('./components/favorites/LevelMatrixView.js?v=423.0');
+                  renderLevelMatrixView(allWords, '#app-content', {
+                    initialLevel: levelId || 'A1',
+                    initialMode: 'matrix',
+                    onBack: backToMainHub,
+                    onNavigateLink: window._navigateToTopicLink,
+                  });
+                },
+              });
+            };
+            smartBtn.addEventListener('click', () => {
+              if (window.trackEvent) {
+                window.trackEvent('hub_smart_path_fab_click', { locale: getInterfaceLanguage() });
+              }
+              window._openSmartPathModal();
+            });
+
+            const cefrBtn = document.createElement('button');
+            cefrBtn.type = 'button';
+            cefrBtn.id = 'hub-cefr-test-fab';
+            cefrBtn.className = 'hub-dock-btn';
+            const { getLevelMatrixStrings } = await lazyMod('./components/favorites/levelMatrixData.js?v=423.0');
+            const cefrTitle = getLevelMatrixStrings(getInterfaceLanguage())?.hubTitle || 'CEFR';
+            cefrBtn.setAttribute('aria-label', cefrTitle);
+            cefrBtn.innerHTML = '<svg class="hub-dock-icon-img" viewBox="0 2 24 19" fill="none" stroke="#1e293b" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 10v7M2 10l10-5.5 10 5.5-10 5.5z"/><path d="M6 12.5v5.5c3 3.5 9 3.5 12 0v-5.5"/></svg>';
+            cefrBtn.addEventListener('click', async () => {
+              removeHubFloatingFabs();
+              if (window.trackEvent) {
+                window.trackEvent('hub_cefr_test_fab_click', { locale: getInterfaceLanguage() });
+              }
+              window._isCategorySelectOpen = true;
+              window._currentGrammarSection = null;
+              const { renderLevelMatrixView } = await lazyMod('./components/favorites/LevelMatrixView.js?v=423.0');
+              renderLevelMatrixView(allWords, '#app-content', {
+                onBack: backToMainHub,
+                onNavigateLink: window._navigateToTopicLink,
+              });
+            });
+
             const fabBtn = document.createElement('button');
             fabBtn.type = 'button';
             fabBtn.id = 'hub-daily-news-fab';
+            fabBtn.className = 'hub-dock-btn';
             fabBtn.setAttribute('aria-label', 'Daily News');
-            fabBtn.style.cssText = 'position: fixed; right: max(18px, calc(50% - 200px)); bottom: calc(max(var(--safe-bottom, 0px), env(safe-area-inset-bottom, 0px)) + 16px); z-index: 90; width: 62px; height: 62px; padding: 0; border: none; background: transparent; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; filter: drop-shadow(0 6px 14px rgba(15, 23, 42, 0.35)); transition: transform 0.16s ease;';
             let dotHtml = '';
             try {
               const now = new Date();
               const todayKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
               if (localStorage.getItem('eb_daily_news_seen_date') !== todayKey) {
-                dotHtml = '<span class="hub-news-unread-dot" style="position: absolute; top: 2px; right: 2px; width: 12px; height: 12px; border-radius: 50%; background: #ef4444; border: 2px solid var(--card-bg, #ffffff); box-shadow: 0 2px 6px rgba(239,68,68,0.5);"></span>';
+                dotHtml = '<span class="hub-news-unread-dot" style="position: absolute; top: 6px; right: 6px; width: 9px; height: 9px; border-radius: 50%; background: #ef4444; border: 2px solid var(--card-bg, #ffffff);"></span>';
               }
             } catch (_) {}
-            fabBtn.innerHTML = `<img src="assets/icons/daily_news_globe.webp" alt="NEWS" style="width: 60px; height: 60px; object-fit: contain; pointer-events: none; display: block;" />${dotHtml}`;
-            fabBtn.addEventListener('click', () => {
-              fabBtn.remove();
+            fabBtn.innerHTML = `<img src="assets/icons/hub_nav_globe.webp" alt="NEWS" class="hub-dock-icon-img" />${dotHtml}`;
+            fabBtn.addEventListener('click', async () => {
+              removeHubFloatingFabs();
               if (window.trackEvent) {
                 window.trackEvent('hub_daily_news_fab_click', { locale: getInterfaceLanguage() });
               }
               window._isCategorySelectOpen = true;
               window._currentGrammarSection = null;
+              const { renderDailyNewsView } = await loadDailyNewsMod();
               renderDailyNewsView('#app-content', {
                 onBack: () => {
                   window._isCategorySelectOpen = false;
@@ -1631,7 +1811,12 @@
                 },
               });
             });
-            document.body.appendChild(fabBtn);
+
+            removeHubFloatingFabs();
+            fabsWrap.appendChild(smartBtn);
+            fabsWrap.appendChild(cefrBtn);
+            fabsWrap.appendChild(fabBtn);
+            document.body.appendChild(fabsWrap);
           }
 
           if (wotd && isHubScreen) {
@@ -1769,7 +1954,9 @@
 
                     const top4Cut = document.getElementById('wotd-top4-cut');
                     if (isMemeActive && top4Cut) {
-                      renderMondayMemeTop4Cut(top4Cut, completedWeekKey);
+                      lazyMod('./components/leaderboard/LeaderboardView.js?v=423.0')
+                        .then(({ renderMondayMemeTop4Cut }) => renderMondayMemeTop4Cut(top4Cut, completedWeekKey))
+                        .catch(() => {});
                     }
 
                     // Reveal video strictly when first real frame starts playing (prevents black screen!)
@@ -1786,7 +1973,9 @@
                         // STEP 2: Show Top 4 Leaders screen cut for 1.8 seconds
                         cardVideo.style.display = 'none';
                         if (top4Cut) {
-                          renderMondayMemeTop4Cut(top4Cut, completedWeekKey);
+                          lazyMod('./components/leaderboard/LeaderboardView.js?v=423.0')
+                            .then(({ renderMondayMemeTop4Cut }) => renderMondayMemeTop4Cut(top4Cut, completedWeekKey))
+                            .catch(() => {});
                           top4Cut.style.display = 'flex';
                         }
 
@@ -2085,6 +2274,15 @@
             return;
           }
           if (currentMethod === 'quiz') {
+            const favQuizOrder = (typeof isSfxMuted === 'function' && isSfxMuted()) ? [0, 2, 3] : [0, 1, 2, 3];
+            const nextPassIdx = (window._favQuizPassIndex || 0) + 1;
+            if (nextPassIdx < favQuizOrder.length) {
+              window._favQuizPassIndex = nextPassIdx;
+              currentWordIndex = 0;
+              renderTrainingTab();
+              return;
+            }
+            window._favQuizPassIndex = 0;
             favoritePracticeMethod = 'pairs';
             currentWordIndex = 0;
             renderTrainingTab();
@@ -2097,6 +2295,49 @@
             return;
           }
           if (currentMethod === 'input' && getBlocksWordsForInput(userProgress).length === 0) {
+            const freshProgMap = getUserProgress() || {};
+            const remainingUnmastered = activeWords.filter((w) => {
+              if (!w || w.id == null) return false;
+              const p = freshProgMap[w.id] || freshProgMap[String(w.id)];
+              return !isWordMastered(p);
+            });
+            if (remainingUnmastered.length > 0 && (window._favTestRetryGuard || 0) < 3) {
+              window._favTestRetryGuard = (window._favTestRetryGuard || 0) + 1;
+              favoritePracticeWords = remainingUnmastered;
+              currentWordIndex = 0;
+              renderTrainingTab();
+              return;
+            }
+            try {
+              const finishedColId = window._activePracticeCollectionId;
+              const fullColWords = Array.isArray(window._favFullCollectionWords) && window._favFullCollectionWords.length > 0
+                ? window._favFullCollectionWords
+                : (Array.isArray(window._favOriginalPracticeWords) && window._favOriginalPracticeWords.length > 0
+                  ? window._favOriginalPracticeWords
+                  : activeWords);
+              const allOrigMastered = fullColWords.length > 0 && fullColWords.every((w) => {
+                const p = freshProgMap[w.id] || freshProgMap[String(w.id)];
+                return isWordMastered(p);
+              });
+              if (finishedColId && allOrigMastered) {
+                const rawDone = localStorage.getItem('myduo_completed_collections');
+                const parsedDone = rawDone ? JSON.parse(rawDone) : [];
+                const doneSet = new Set(Array.isArray(parsedDone) ? parsedDone.map(String) : []);
+                doneSet.add(String(finishedColId));
+                localStorage.setItem('myduo_completed_collections', JSON.stringify([...doneSet]));
+
+                // Also mark Grammar Reference group done (e.g. gref_conjunctions_coordinating -> conjunctions:coordinating)
+                const grefMatch = /^gref_(prepositions|pronouns|conjunctions)_(.+)$/.exec(String(finishedColId));
+                if (grefMatch) {
+                  const grefKey = `${grefMatch[1]}:${grefMatch[2]}`;
+                  const rawGref = localStorage.getItem('myduo_grammar_ref_done');
+                  const parsedGref = rawGref ? JSON.parse(rawGref) : [];
+                  const grefSet = new Set(Array.isArray(parsedGref) ? parsedGref.map(String) : []);
+                  grefSet.add(grefKey);
+                  localStorage.setItem('myduo_grammar_ref_done', JSON.stringify([...grefSet]));
+                }
+              }
+            } catch (_) {}
             try { pushUserDataToCloud(null, null, true); } catch (e) {}
             playFanfareSound();
             if (window._favPracticeCompletedNonCardWord) {
@@ -2104,6 +2345,10 @@
             }
             favoritePracticeWords = null;
             favoritePracticeMethod = 'cards';
+            window._favQuizPassIndex = 0;
+            window._favTestRetryGuard = 0;
+            window._favOriginalPracticeWords = null;
+            window._favFullCollectionWords = null;
             window._activePracticeCollectionId = null;
             window._activePracticeCollectionTitle = null;
             currentWordIndex = 0;
@@ -2111,7 +2356,31 @@
             window._activeTab = 'favorites';
             const tabs = document.querySelectorAll('.nav-tab');
             tabs.forEach((t) => t.classList.toggle('active', t.getAttribute('data-tab') === 'favorites'));
-            renderTab('favorites', true);
+            const wasSmartPathReturn = Boolean(window._returnToSmartPath);
+            if (typeof hasNavReturn === 'function' && hasNavReturn()) {
+              popNavReturn();
+            } else if (wasSmartPathReturn) {
+              window._returnToSmartPath = false;
+              window._showHubScreen = true;
+              activeTab = 'training';
+              window._activeTab = 'training';
+              tabs.forEach((t) => t.classList.toggle('active', t.getAttribute('data-tab') === 'training'));
+              renderTrainingTab();
+              setTimeout(() => {
+                try { window._openSmartPathModal?.(); } catch (_) {}
+              }, 80);
+            } else {
+              renderTab('favorites', true);
+            }
+            if (!wasSmartPathReturn) {
+              setTimeout(() => {
+                try {
+                  if (typeof window._checkCefrMilestoneNudge === 'function') {
+                    window._checkCefrMilestoneNudge();
+                  }
+                } catch (_) {}
+              }, 450);
+            }
             return;
           }
         }
@@ -2119,10 +2388,17 @@
         if (!isFavPracticeActive && currentMethod === 'input' && currentWordIndex >= activeWords.length) {
           if (testQueue.length === 0 || unfinishedInQueue.length === 0) {
             try { pushUserDataToCloud(null, null, true); } catch (e) {}
+            const shouldReopenSmartPath = Boolean(window._returnToSmartPath);
+            window._returnToSmartPath = false;
             window._trainingRoundJustCompleted = true;
             window._showHubScreen = true;
             currentWordIndex = 0;
             renderTrainingTab();
+            if (shouldReopenSmartPath) {
+              setTimeout(() => {
+                try { window._openSmartPathModal?.(); } catch (_) {}
+              }, 120);
+            }
             return;
           } else {
             currentWordIndex = 0;
@@ -2193,6 +2469,9 @@
           dailyGoal,
           availableModes,
           isFavPractice: isFavPracticeActive,
+          favQuizStage: (isFavPracticeActive && currentMethod === 'quiz')
+            ? (((typeof isSfxMuted === 'function' && isSfxMuted()) ? [0, 2, 3] : [0, 1, 2, 3])[Math.min(window._favQuizPassIndex || 0, ((typeof isSfxMuted === 'function' && isSfxMuted()) ? 2 : 3))])
+            : null,
           favCollectionTitle: isFavPracticeActive ? (window._activePracticeCollectionTitle || getCollectionTitle(getActiveCollectionId())) : '',
           isBlocksMode: isBlocksStage,
           blocksWord: currentBlocksWord,
@@ -2237,6 +2516,8 @@
             }
             if (isFavPracticeActive) {
               favoritePracticeMethod = newMethod;
+              if (newMethod === 'quiz') window._favQuizPassIndex = 0;
+              if (newMethod === 'input') window._favTestRetryGuard = 0;
             } else {
               userSettings.preferredMethod = newMethod;
               saveUserSettings(userSettings);
@@ -2458,26 +2739,463 @@
         });
       }
 
-      window._openGrammarHubScreen = function openGrammarHubScreen() {
-        try { document.getElementById('hub-daily-news-fab')?.remove(); } catch (e) {}
+      window._onCustomWordAddedFromNews = function onCustomWordAddedFromNews(createdWord) {
+        if (!createdWord || !createdWord.word) return;
+        const cleanLow = String(createdWord.word).trim().toLowerCase();
+        if (!allWords.some((w) => String(w.id) === String(createdWord.id) || (w.word && w.word.toLowerCase() === cleanLow))) {
+          allWords.unshift(createdWord);
+        }
+        if (createdWord.id != null) {
+          favoriteIds.add(String(createdWord.id));
+        }
+      };
+
+      async function startPracticeHandler(practiceWords, colId = null, colTitle = null) {
+        window._explicitCardsOpened = true;
+        window._trainingRoundJustCompleted = false;
+        window._showHubScreen = false;
+        window._isInsideCollectionCards = false;
+        window._currentOpenCollectionId = null;
+
+        const targetId = colId || 'my_favorites';
+        window._activePracticeCollectionId = targetId;
+        window._activePracticeCollectionTitle = colTitle || getCollectionTitle(targetId);
+        window._favPracticeCompletedNonCardWord = false;
+
+        const rawPracticeList = (practiceWords && practiceWords.length > 0)
+          ? practiceWords
+          : getCollectionWords(targetId, allWords);
+
+        // Split large collections / grammar groups into digestible 10-word batches (unmastered first)
+        const FAV_BATCH_SIZE = 10;
+        let practiceList = rawPracticeList;
+        if (Array.isArray(rawPracticeList) && rawPracticeList.length > FAV_BATCH_SIZE) {
+          const progMapForBatch = getUserProgress() || {};
+          const unmastered = rawPracticeList.filter((w) => {
+            if (!w || w.id == null) return true;
+            const p = progMapForBatch[w.id] || progMapForBatch[String(w.id)];
+            return !isWordMastered(p);
+          });
+          if (unmastered.length > 0) {
+            practiceList = unmastered.slice(0, FAV_BATCH_SIZE);
+          } else {
+            // All words mastered: rotate 10-word review batches per collection
+            const rotMap = window._favReviewBatchOffsets || (window._favReviewBatchOffsets = {});
+            const offset = Number(rotMap[targetId] || 0) % rawPracticeList.length;
+            const rotated = [...rawPracticeList.slice(offset), ...rawPracticeList.slice(0, offset)];
+            practiceList = rotated.slice(0, FAV_BATCH_SIZE);
+            rotMap[targetId] = (offset + FAV_BATCH_SIZE) % rawPracticeList.length;
+          }
+        }
+
+        if (practiceList && practiceList.length > 0) {
+          try {
+            const progKey = `progress_${getEffectiveUserId()}`;
+            const progMap = getUserProgress();
+            let progChanged = false;
+            practiceList.forEach((w) => {
+              const wid = w && w.id != null ? String(w.id) : null;
+              const p = wid ? (progMap[w.id] || progMap[wid]) : null;
+              if (p) {
+                p.roundQuizMistakes = 0;
+                p.roundPairsMistakes = 0;
+                p.roundInputMistakes = 0;
+                p.roundBlocksDone = false;
+                p.needsTestRepeat = false;
+                progChanged = true;
+              }
+            });
+            if (progChanged) {
+              localStorage.setItem(progKey, JSON.stringify(progMap));
+            }
+          } catch (e) {}
+          favoritePracticeWords = [...practiceList];
+          window._favOriginalPracticeWords = [...practiceList];
+          window._favFullCollectionWords = [...rawPracticeList];
+          window._favQuizPassIndex = 0;
+          window._favTestRetryGuard = 0;
+          favoritePracticeMethod = 'cards';
+        } else {
+          favoritePracticeWords = null;
+          window._favFullCollectionWords = null;
+          favoritePracticeMethod = 'cards';
+        }
+        currentWordIndex = 0;
+
+        if (window.trackEvent) {
+          window.trackEvent('collection_practice_start', {
+            collection_id: targetId,
+            words_count: practiceList ? practiceList.length : 0,
+          });
+        }
+
+        activeTab = 'training';
+        window._activeTab = 'training';
+        const tabs = document.querySelectorAll('.nav-tab');
+        tabs.forEach((t) => t.classList.toggle('active', t.getAttribute('data-tab') === 'training'));
+        await renderTab('training', true);
+      }
+
+      window._startOpenRoundPractice = async function startOpenRoundPractice(practiceWords, colId = null, colTitle = null, restoreFn = null) {
+        if (typeof restoreFn === 'function') {
+          pushNavReturn({ label: colId || 'practice', restore: restoreFn });
+        }
+        await startPracticeHandler(practiceWords, colId, colTitle);
+      };
+
+      async function openCollectionCardsHandler(colId, extraOptions = {}) {
+        const backToFavOrStack = () => {
+          window._isInsideCollectionCards = false;
+          window._currentOpenCollectionId = null;
+          if (hasNavReturn()) {
+            popNavReturn();
+            return;
+          }
+          renderTab('favorites');
+        };
+
+        if (colId === 'numbers_hub') {
+          window._isInsideCollectionCards = true;
+          window._currentOpenCollectionId = colId;
+          const { renderNumbersFolderView } = await lazyMod('./components/favorites/NumbersFolderView.js?v=423.0');
+          renderNumbersFolderView(allWords, '#app-content', {
+            onBack: backToFavOrStack,
+            onOpenCollection: (subId) => openCollectionCardsHandler(subId),
+            onNavigateLink: window._navigateToTopicLink,
+          });
+          return;
+        }
+        if (colId === 'grammar_prepositions') {
+          window._isInsideCollectionCards = true;
+          window._currentOpenCollectionId = colId;
+          const { renderGrammarReferenceView } = await lazyMod('./components/favorites/GrammarReferenceView.js?v=423.0');
+          renderGrammarReferenceView('prepositions', '#app-content', {
+            onBack: backToFavOrStack,
+            onStartPractice: window._startOpenRoundPractice,
+            onNavigateLink: window._navigateToTopicLink,
+            initialGroup: extraOptions.initialGroup || 'all',
+          });
+          return;
+        }
+        if (colId === 'grammar_pronouns') {
+          window._isInsideCollectionCards = true;
+          window._currentOpenCollectionId = colId;
+          const { renderGrammarReferenceView } = await lazyMod('./components/favorites/GrammarReferenceView.js?v=423.0');
+          renderGrammarReferenceView('pronouns', '#app-content', {
+            onBack: backToFavOrStack,
+            onStartPractice: window._startOpenRoundPractice,
+            onNavigateLink: window._navigateToTopicLink,
+            initialGroup: extraOptions.initialGroup || 'all',
+          });
+          return;
+        }
+        if (colId === 'grammar_conjunctions') {
+          window._isInsideCollectionCards = true;
+          window._currentOpenCollectionId = colId;
+          const { renderGrammarReferenceView } = await lazyMod('./components/favorites/GrammarReferenceView.js?v=423.0');
+          renderGrammarReferenceView('conjunctions', '#app-content', {
+            onBack: backToFavOrStack,
+            onStartPractice: window._startOpenRoundPractice,
+            onNavigateLink: window._navigateToTopicLink,
+            initialGroup: extraOptions.initialGroup || 'all',
+            initialSection: extraOptions.initialSection || null,
+          });
+          return;
+        }
+        if (colId === 'irregular_verbs_packs') {
+          window._isInsideCollectionCards = true;
+          window._currentOpenCollectionId = colId;
+          const { renderIrregularVerbsPacksView } = await lazyMod('./components/favorites/IrregularVerbsPacksView.js?v=423.0');
+          renderIrregularVerbsPacksView(allWords, '#app-content', {
+            onBack: backToFavOrStack,
+            onStartPractice: window._startOpenRoundPractice,
+            onNavigateLink: window._navigateToTopicLink,
+            initialPackId: extraOptions.initialPackId || 'all',
+            highlightForm: extraOptions.highlightForm || null,
+            favoriteIds: Array.from(favoriteIds),
+            onFavoriteToggle: handleFavoriteToggle,
+          });
+          return;
+        }
+        if (colId === 'level_matrix_exams') {
+          window._isInsideCollectionCards = true;
+          window._currentOpenCollectionId = colId;
+          const { renderLevelMatrixView } = await lazyMod('./components/favorites/LevelMatrixView.js?v=423.0');
+          renderLevelMatrixView(allWords, '#app-content', {
+            onBack: backToFavOrStack,
+            onNavigateLink: window._navigateToTopicLink,
+            initialLevel: extraOptions.initialLevel || 'A1',
+          });
+          return;
+        }
+        if (colId === 'milestone_stories') {
+          window._isInsideCollectionCards = true;
+          window._currentOpenCollectionId = colId;
+          const { renderStoriesView } = await lazyMod('./components/favorites/StoriesView.js?v=423.0');
+          renderStoriesView('#app-content', { onBack: backToFavOrStack });
+          return;
+        }
+        if (colId === 'time_trainer') {
+          window._isInsideCollectionCards = true;
+          window._currentOpenCollectionId = colId;
+          const { renderTimeTrainerView } = await lazyMod('./components/favorites/TimeTrainerView.js?v=423.0');
+          renderTimeTrainerView('#app-content', { onBack: backToFavOrStack });
+          return;
+        }
+        if (colId === 'grammar_microrules') {
+          window._isInsideCollectionCards = true;
+          window._currentOpenCollectionId = colId;
+          const { renderMicroRulesView } = await lazyMod('./components/favorites/MicroRulesView.js?v=423.0');
+          renderMicroRulesView('#app-content', {
+            onBack: backToFavOrStack,
+            onNavigateLink: window._navigateToTopicLink,
+            initialRuleId: extraOptions.initialRuleId,
+            initialLevel: extraOptions.initialLevel,
+          });
+          return;
+        }
+        if (colId === 'tense_constructions') {
+          window._isInsideCollectionCards = true;
+          window._currentOpenCollectionId = colId;
+          const { renderTenseConstructionsView } = await lazyMod('./components/favorites/TenseConstructionsView.js?v=423.0');
+          renderTenseConstructionsView('#app-content', {
+            onBack: backToFavOrStack,
+            onNavigateLink: window._navigateToTopicLink,
+            initialTenseId: extraOptions.initialTenseId,
+            initialTab: extraOptions.initialTab,
+          });
+          return;
+        }
+
+        const words = getCollectionWords(colId, allWords);
+        const title = getCollectionTitle(colId);
+        window._isInsideCollectionCards = true;
+        window._currentOpenCollectionId = colId;
+
+        if (window.trackScreen) {
+          window.trackScreen('collection_cards', 'CollectionCards', { collection_id: colId });
+        }
+        if (window.trackEvent) {
+          window.trackEvent('collection_view', { collection_id: colId, words_count: words.length });
+        }
+        const { renderFavoritesView } = await lazyMod('./components/favorites/FavoritesView.js?v=423.0');
+        renderFavoritesView(words, '#app-content', {
+          collectionId: colId,
+          collectionTitle: title,
+          allWords,
+          favoriteIds: Array.from(favoriteIds),
+          onBack: backToFavOrStack,
+          onRefresh: () => openCollectionCardsHandler(colId, extraOptions),
+          onFavoriteToggle: handleFavoriteToggle,
+          onRemoveFavorite: (id) => handleFavoriteToggle(id, false),
+          onClearAllFavorites: () => {
+            favoriteIds.clear();
+          },
+          onStartFavoritePractice: async (practiceSet) => {
+            if (colId === 'numbers' || colId === 'ordinal_numbers') {
+              const { renderNumberAudioTrainerView } = await lazyMod('./components/favorites/NumberAudioTrainerView.js?v=423.0');
+              renderNumberAudioTrainerView('#app-content', {
+                mode: colId === 'ordinal_numbers' ? 'ordinals' : 'cardinals',
+                allWords,
+                onBack: () => {
+                  if (window._returnToSmartPath && typeof hasNavReturn === 'function' && hasNavReturn()) {
+                    popNavReturn();
+                  } else {
+                    openCollectionCardsHandler(colId, extraOptions);
+                  }
+                },
+              });
+              return;
+            }
+            window._isInsideCollectionCards = false;
+            window._currentOpenCollectionId = null;
+            startPracticeHandler(practiceSet, colId, title);
+          },
+        });
+      }
+
+      window._navigateToTopicLink = async function navigateToTopicLink(target) {
+        if (!target || !target.targetType) return;
+        removeHubFloatingFabs();
+        const goBack = () => {
+          if (hasNavReturn()) {
+            popNavReturn();
+            return;
+          }
+          if (window._isCategorySelectOpen && typeof window._openGrammarHubScreen === 'function') {
+            window._openGrammarHubScreen();
+            return;
+          }
+          renderTab(activeTab || 'training');
+        };
+        const type = target.targetType;
+        if (type === 'numbers_hub') {
+          const { renderNumbersFolderView } = await lazyMod('./components/favorites/NumbersFolderView.js?v=423.0');
+          renderNumbersFolderView(allWords, '#app-content', {
+            onBack: goBack,
+            onOpenCollection: (subId) => openCollectionCardsHandler(subId),
+            onNavigateLink: window._navigateToTopicLink,
+          });
+        } else if (type === 'grammar_prepositions') {
+          const { renderGrammarReferenceView } = await lazyMod('./components/favorites/GrammarReferenceView.js?v=423.0');
+          renderGrammarReferenceView('prepositions', '#app-content', {
+            onBack: goBack,
+            onStartPractice: window._startOpenRoundPractice,
+            onNavigateLink: window._navigateToTopicLink,
+            initialGroup: target.targetGroup || 'all',
+          });
+        } else if (type === 'grammar_pronouns') {
+          const { renderGrammarReferenceView } = await lazyMod('./components/favorites/GrammarReferenceView.js?v=423.0');
+          renderGrammarReferenceView('pronouns', '#app-content', {
+            onBack: goBack,
+            onStartPractice: window._startOpenRoundPractice,
+            onNavigateLink: window._navigateToTopicLink,
+            initialGroup: target.targetGroup || 'all',
+          });
+        } else if (type === 'grammar_conjunctions') {
+          const grp = target.targetGroup || 'all';
+          const secHint = grp === 'conjunctive_adverbs' ? 'conjunctive_adverbs'
+            : grp === 'correlative' ? 'correlative'
+            : grp === 'coordinating' ? 'coordinating'
+            : grp.startsWith('adv_') ? 'conjunctive_adverbs'
+            : grp.startsWith('sub_') || grp === 'subordinating' ? 'subordinating'
+            : 'all';
+          const { renderGrammarReferenceView } = await lazyMod('./components/favorites/GrammarReferenceView.js?v=423.0');
+          renderGrammarReferenceView('conjunctions', '#app-content', {
+            onBack: goBack,
+            onStartPractice: window._startOpenRoundPractice,
+            onNavigateLink: window._navigateToTopicLink,
+            initialGroup: ['coordinating', 'correlative', 'subordinating', 'conjunctive_adverbs'].includes(grp) ? 'all' : grp,
+            initialSection: secHint,
+          });
+        } else if (type === 'irregular_verbs_packs') {
+          const { renderIrregularVerbsPacksView } = await lazyMod('./components/favorites/IrregularVerbsPacksView.js?v=423.0');
+          renderIrregularVerbsPacksView(allWords, '#app-content', {
+            onBack: goBack,
+            onStartPractice: window._startOpenRoundPractice,
+            onNavigateLink: window._navigateToTopicLink,
+            initialPackId: target.packId || target.targetId || 'all',
+            highlightForm: target.highlightForm || null,
+            favoriteIds: Array.from(favoriteIds),
+            onFavoriteToggle: handleFavoriteToggle,
+          });
+        } else if (type === 'collection') {
+          await openCollectionCardsHandler(target.targetId);
+        } else if (type === 'grammar_microrules' || type === 'micro_rule') {
+          const { renderMicroRulesView } = await lazyMod('./components/favorites/MicroRulesView.js?v=423.0');
+          renderMicroRulesView('#app-content', {
+            onBack: goBack,
+            onNavigateLink: window._navigateToTopicLink,
+            initialRuleId: target.ruleId || (target.targetId ? Number(target.targetId) : undefined),
+            initialLevel: target.level,
+          });
+        } else if (type === 'tense_construction') {
+          const { renderTenseConstructionsView } = await lazyMod('./components/favorites/TenseConstructionsView.js?v=423.0');
+          renderTenseConstructionsView('#app-content', {
+            onBack: goBack,
+            onNavigateLink: window._navigateToTopicLink,
+            initialTenseId: target.targetId || null,
+            initialTab: target.tab || (target.targetId ? 'list' : 'matrix'),
+          });
+        } else if (type === 'spoken_english') {
+          const { renderSpokenEnglishView } = await lazyMod('./components/favorites/SpokenEnglishView.js?v=423.0');
+          renderSpokenEnglishView('#app-content', {
+            onBack: goBack,
+            onStartPractice: window._startOpenRoundPractice,
+            initialCategory: target.category || 'reductions',
+          });
+        } else if (type === 'level_matrix_exams') {
+          const { renderLevelMatrixView } = await lazyMod('./components/favorites/LevelMatrixView.js?v=423.0');
+          renderLevelMatrixView(allWords, '#app-content', {
+            onBack: goBack,
+            onNavigateLink: window._navigateToTopicLink,
+            initialLevel: target.level || 'A1',
+            initialMode: target.mode || 'matrix',
+          });
+        } else if (type === 'dictionary_category' || type === 'dictionary') {
+          if (target.category) {
+            try { localStorage.setItem('myduo_dict_category', target.category); } catch (_) {}
+          }
+          const { renderDictionaryView } = await lazyMod('./components/dictionary/DictionaryView.js?v=423.0');
+          renderDictionaryView(allWords, '#app-content', {
+            favoriteIds: Array.from(favoriteIds),
+            onFavoriteToggle: handleFavoriteToggle,
+          });
+        }
+      };
+
+      window._openLevelMatrixScreen = async function openLevelMatrixScreen(initialLevel = 'A1', initialMode = 'matrix') {
+        removeHubFloatingFabs();
+        const prevTab = activeTab;
+        pushNavReturn({
+          label: 'stats_level_matrix',
+          restore: () => renderTab(prevTab || 'stats', true),
+        });
+        const { renderLevelMatrixView } = await lazyMod('./components/favorites/LevelMatrixView.js?v=423.0');
+        renderLevelMatrixView(allWords, '#app-content', {
+          initialLevel,
+          initialMode,
+          onBack: () => {
+            if (hasNavReturn()) {
+              popNavReturn();
+            } else {
+              renderTab('stats', true);
+            }
+          },
+          onNavigateLink: window._navigateToTopicLink,
+        });
+      };
+
+      window._checkCefrMilestoneNudge = async function checkCefrMilestoneNudge() {
+        try {
+          if (window._returnToSmartPath || document.getElementById('smart-path-modal-overlay')) {
+            return false;
+          }
+          const { maybeShowLevelMatrixNudge } = await lazyMod('./components/modals/LevelMatrixNudgeModal.js?v=423.0');
+          return maybeShowLevelMatrixNudge(allWords, {
+            onOpenMatrix: (lvl) => window._openLevelMatrixScreen(lvl, 'matrix'),
+            onStartExam: (lvl) => window._openLevelMatrixScreen(lvl, 'exam'),
+          });
+        } catch (err) {
+          console.warn('CEFR milestone nudge check failed:', err);
+          return false;
+        }
+      };
+
+      window._openGrammarHubScreen = async function openGrammarHubScreen() {
+        removeHubFloatingFabs();
         window._isCategorySelectOpen = true;
         window._currentGrammarSection = null;
         if (window.trackScreen) {
           window.trackScreen('grammar_hub', 'GrammarHub');
         }
-        const openSection = (sectionId) => {
+        const openSection = async (sectionId) => {
           window._currentGrammarSection = sectionId;
-          const backToHub = () => openGrammarHubScreen();
+          const backToHub = () => {
+            if (hasNavReturn()) {
+              popNavReturn();
+              return;
+            }
+            openGrammarHubScreen();
+          };
           if (sectionId === 'milestone_stories') {
+            const { renderStoriesView } = await lazyMod('./components/favorites/StoriesView.js?v=423.0');
             renderStoriesView('#app-content', { onBack: backToHub });
           } else if (sectionId === 'grammar_microrules') {
-            renderMicroRulesView('#app-content', { onBack: backToHub });
+            const { renderMicroRulesView } = await lazyMod('./components/favorites/MicroRulesView.js?v=423.0');
+            renderMicroRulesView('#app-content', { onBack: backToHub, onNavigateLink: window._navigateToTopicLink });
           } else if (sectionId === 'tense_constructions') {
-            renderTenseConstructionsView('#app-content', { onBack: backToHub });
+            const { renderTenseConstructionsView } = await lazyMod('./components/favorites/TenseConstructionsView.js?v=423.0');
+            renderTenseConstructionsView('#app-content', { onBack: backToHub, onNavigateLink: window._navigateToTopicLink });
           } else if (sectionId === 'spoken_english') {
-            renderSpokenEnglishView('#app-content', { onBack: backToHub });
+            const { renderSpokenEnglishView } = await lazyMod('./components/favorites/SpokenEnglishView.js?v=423.0');
+            renderSpokenEnglishView('#app-content', { onBack: backToHub, onStartPractice: window._startOpenRoundPractice });
+          } else if (sectionId === 'level_matrix_exams') {
+            const { renderLevelMatrixView } = await lazyMod('./components/favorites/LevelMatrixView.js?v=423.0');
+            renderLevelMatrixView(allWords, '#app-content', { onBack: backToHub, onNavigateLink: window._navigateToTopicLink });
           }
         };
+        const { renderGrammarHubView } = await lazyMod('./components/favorites/GrammarHubView.js?v=423.0');
         renderGrammarHubView('#app-content', {
           onBack: () => {
             window._isCategorySelectOpen = false;
@@ -2531,7 +3249,7 @@
         } catch (e) {}
 
         if (tabName !== 'training') {
-          try { document.getElementById('hub-daily-news-fab')?.remove(); } catch (e) {}
+          removeHubFloatingFabs();
           try { stopDailyNewsAudio(); closeNewsWordPopover(); } catch (e) {}
           try { pushUserDataToCloud(null, null, true); } catch (e) {}
           favoritePracticeWords = null;
@@ -2557,6 +3275,7 @@
           window._currentGrammarSection = null;
           await renderTrainingTab();
         } else if (tabName === 'stats') {
+          const { renderStatsView } = await lazyMod('./components/stats/StatsView.js?v=423.0');
           const renderLevelTab = async () => {
             await renderStatsView(allWords, '#app-content', {
               currentCategory: userSettings.category || 'Elementary',
@@ -2569,163 +3288,21 @@
           };
           await renderLevelTab();
         } else if (tabName === 'favorites') {
-          const startPracticeHandler = async (practiceWords, colId = null, colTitle = null) => {
-            window._explicitCardsOpened = true;
-            window._trainingRoundJustCompleted = false;
-            window._showHubScreen = false;
-            window._isInsideCollectionCards = false;
-            window._currentOpenCollectionId = null;
-
-            const targetId = colId || 'my_favorites';
-            window._activePracticeCollectionId = targetId;
-            window._activePracticeCollectionTitle = colTitle || getCollectionTitle(targetId);
-            window._favPracticeCompletedNonCardWord = false;
-
-            const practiceList = (practiceWords && practiceWords.length > 0)
-              ? practiceWords
-              : getCollectionWords(targetId, allWords);
-
-            if (practiceList && practiceList.length > 0) {
-              try {
-                const progKey = `progress_${getEffectiveUserId()}`;
-                const progMap = getUserProgress();
-                let progChanged = false;
-                practiceList.forEach((w) => {
-                  const wid = w && w.id != null ? String(w.id) : null;
-                  const p = wid ? (progMap[w.id] || progMap[wid]) : null;
-                  if (p) {
-                    p.roundQuizMistakes = 0;
-                    p.roundPairsMistakes = 0;
-                    p.roundInputMistakes = 0;
-                    p.roundBlocksDone = false;
-                    p.needsTestRepeat = false;
-                    progChanged = true;
-                  }
-                });
-                if (progChanged) {
-                  localStorage.setItem(progKey, JSON.stringify(progMap));
-                }
-              } catch (e) {}
-              favoritePracticeWords = [...practiceList];
-              favoritePracticeMethod = 'cards';
-            } else {
-              favoritePracticeWords = null;
-              favoritePracticeMethod = 'cards';
-            }
-            currentWordIndex = 0;
-
-            if (window.trackEvent) {
-              window.trackEvent('collection_practice_start', {
-                collection_id: targetId,
-                words_count: practiceList ? practiceList.length : 0,
-              });
-            }
-
-            activeTab = 'training';
-            window._activeTab = 'training';
-            const tabs = document.querySelectorAll('.nav-tab');
-            tabs.forEach((t) => t.classList.toggle('active', t.getAttribute('data-tab') === 'training'));
-            await renderTab('training', true);
-          };
-
-          const openCardsHandler = (colId) => {
-            if (colId === 'milestone_stories') {
-              window._isInsideCollectionCards = true;
-              window._currentOpenCollectionId = colId;
-              renderStoriesView('#app-content', {
-                onBack: () => {
-                  window._isInsideCollectionCards = false;
-                  window._currentOpenCollectionId = null;
-                  renderTab('favorites');
-                }
-              });
-              return;
-            }
-            if (colId === 'time_trainer') {
-              window._isInsideCollectionCards = true;
-              window._currentOpenCollectionId = colId;
-              renderTimeTrainerView('#app-content', {
-                onBack: () => {
-                  window._isInsideCollectionCards = false;
-                  window._currentOpenCollectionId = null;
-                  renderTab('favorites');
-                }
-              });
-              return;
-            }
-            if (colId === 'grammar_microrules') {
-              window._isInsideCollectionCards = true;
-              window._currentOpenCollectionId = colId;
-              renderMicroRulesView('#app-content', {
-                onBack: () => {
-                  window._isInsideCollectionCards = false;
-                  window._currentOpenCollectionId = null;
-                  renderTab('favorites');
-                }
-              });
-              return;
-            }
-            if (colId === 'tense_constructions') {
-              window._isInsideCollectionCards = true;
-              window._currentOpenCollectionId = colId;
-              renderTenseConstructionsView('#app-content', {
-                onBack: () => {
-                  window._isInsideCollectionCards = false;
-                  window._currentOpenCollectionId = null;
-                  renderTab('favorites');
-                }
-              });
-              return;
-            }
-
-            const words = getCollectionWords(colId, allWords);
-            const title = getCollectionTitle(colId);
-            window._isInsideCollectionCards = true;
-            window._currentOpenCollectionId = colId;
-
-            if (window.trackScreen) {
-              window.trackScreen('collection_cards', 'CollectionCards', { collection_id: colId });
-            }
-            if (window.trackEvent) {
-              window.trackEvent('collection_view', { collection_id: colId, words_count: words.length });
-            }
-            renderFavoritesView(words, '#app-content', {
-              collectionId: colId,
-              collectionTitle: title,
-              allWords,
-              favoriteIds: Array.from(favoriteIds),
-              onBack: () => {
-                window._isInsideCollectionCards = false;
-                window._currentOpenCollectionId = null;
-                renderTab('favorites');
-              },
-              onRefresh: () => openCardsHandler(colId),
-              onFavoriteToggle: handleFavoriteToggle,
-              onRemoveFavorite: (id) => handleFavoriteToggle(id, false),
-              onClearAllFavorites: () => {
-                favoriteIds.clear();
-              },
-              onStartFavoritePractice: (words) => {
-                window._isInsideCollectionCards = false;
-                window._currentOpenCollectionId = null;
-                startPracticeHandler(words, colId, title);
-              },
-            });
-          };
-
           if (window._isInsideCollectionCards && window._currentOpenCollectionId) {
-            openCardsHandler(window._currentOpenCollectionId);
+            await openCollectionCardsHandler(window._currentOpenCollectionId);
             return;
           }
 
           window._isInsideCollectionCards = false;
           window._currentOpenCollectionId = null;
+          const { renderCollectionsHubView } = await lazyMod('./components/favorites/CollectionsHubView.js?v=423.0');
           renderCollectionsHubView(allWords, '#app-content', {
             onStartPractice: startPracticeHandler,
-            onOpenCardsView: openCardsHandler,
+            onOpenCardsView: openCollectionCardsHandler,
           });
         } else if (tabName === 'leaderboard') {
           try {
+            const { renderLeaderboardView } = await lazyMod('./components/leaderboard/LeaderboardView.js?v=423.0');
             await renderLeaderboardView('#app-content', {
               onUserChange: async () => {
                 updateHeaderUser();
@@ -2736,11 +3313,13 @@
             console.error('Failed to render leaderboard:', leadErr);
           }
         } else if (tabName === 'dictionary') {
+          const { renderDictionaryView } = await lazyMod('./components/dictionary/DictionaryView.js?v=423.0');
           renderDictionaryView(allWords, '#app-content', {
             favoriteIds: Array.from(favoriteIds),
             onFavoriteToggle: handleFavoriteToggle,
           });
         } else if (tabName === 'settings') {
+          const { renderSettingsView } = await lazyMod('./components/settings/SettingsView.js?v=423.0');
           await renderSettingsView(
             '#app-content',
             async () => {
@@ -2766,6 +3345,7 @@
 
       window._renderLeaderboardDrawerContent = async () => {
         try {
+          const { renderLeaderboardView } = await lazyMod('./components/leaderboard/LeaderboardView.js?v=423.0');
           await renderLeaderboardView('#leaderboard-drawer-content', {
             onUserChange: async () => {
               updateHeaderUser();
@@ -2778,10 +3358,15 @@
       };
 
       async function init() {
+        await ensureLocaleLoaded(getInterfaceLanguage()).catch(() => {});
         window._isAppInitializing = true;
         window._explicitCardsOpened = false;
         window._trainingRoundJustCompleted = false;
-        initPrizePodiumListener();
+        setTimeout(() => {
+          lazyMod('./components/modals/PrizePodiumModal.js?v=423.0')
+            .then((m) => m.initPrizePodiumListener())
+            .catch(() => {});
+        }, 1500);
         preloadNextWotdVideo();
 
         // 1. Instant local cache restore (0ms)
@@ -3007,6 +3592,7 @@
         // 2. Immediate zero-latency UI mount (renders instantly)
         renderAppLayout(
           (tabName) => {
+            clearNavReturn();
             if (tabName === 'training') {
               const isFavPracticeActiveOnTrainingClick = Boolean(favoritePracticeWords && favoritePracticeWords.length > 0);
               if (isFavPracticeActiveOnTrainingClick || window._activePracticeCollectionId) {
@@ -3029,6 +3615,7 @@
           () => {
             // Click on Logo / Brand -> Exit any practice / mode and return cleanly to Main Hub / Training
             try {
+              clearNavReturn();
               const isFavPracticeRunning = Boolean(favoritePracticeWords && favoritePracticeWords.length > 0);
               if (activeTab === 'favorites' || isFavPracticeRunning || window._activePracticeCollectionId) {
                 window._favPracticeCompletedNonCardWord = false;
@@ -3147,6 +3734,9 @@
 
             // Priority 2: Close any open modal dialogs or overlays
             const modalSelectors = [
+              '#lm-exam-gate-modal',
+              '#smart-path-modal-overlay',
+              '#level-matrix-nudge-overlay',
               '#eb-pro-paywall-modal',
               '#milestone-story-modal-overlay',
               '#privacy-policy-modal-overlay',
@@ -3192,7 +3782,7 @@
             if (rootModals.length > 0) {
               const topModal = rootModals[rootModals.length - 1];
               const closeBtn = topModal.querySelector(
-                '#eb-pro-close-btn, #story-close-btn, #privacy-back-btn, #privacy-close-btn, ' +
+                '#lm-gate-close-btn, #smart-path-close-btn, #eb-pro-close-btn, #story-close-btn, #privacy-back-btn, #privacy-close-btn, ' +
                 '#scanner-close-btn, .scanner-close-btn, ' +
                 '#add-word-close-btn, #add-word-cancel-btn, ' +
                 '#word-notes-close-btn, .word-notes-modal-close, ' +
@@ -3209,6 +3799,26 @@
               } else {
                 topModal.remove();
               }
+              return true;
+            }
+
+            // Priority 2.5: If cross-topic deep link return stack has a parent view, pop & restore it first
+            if (hasNavReturn()) {
+              try { stopDailyNewsAudio(); closeNewsWordPopover(); } catch (e) {}
+              window._isInsideCollectionCards = false;
+              window._currentOpenCollectionId = null;
+              if (favoritePracticeWords && favoritePracticeWords.length > 0) {
+                window._favPracticeCompletedNonCardWord = false;
+                favoritePracticeWords = null;
+                favoritePracticeMethod = 'cards';
+                window._activePracticeCollectionId = null;
+                window._activePracticeCollectionTitle = null;
+                window._showHubScreen = true;
+                window._explicitCardsOpened = false;
+                window._trainingRoundJustCompleted = false;
+                currentWordIndex = 0;
+              }
+              popNavReturn();
               return true;
             }
 
@@ -3427,5 +4037,12 @@
 
       init();
     </script>
+    <!-- Optical Liquid Glass Lens Refraction Filter -->
+    <svg width="0" height="0" style="position: absolute; width: 0; height: 0; pointer-events: none; overflow: hidden;" aria-hidden="true">
+        <filter id="liquidGlassFilter" x="-25%" y="-25%" width="150%" height="150%">
+            <feImage href="data:image/png;base64,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" result="lensMap" preserveAspectRatio="none" />
+            <feDisplacementMap in="SourceGraphic" in2="lensMap" scale="32" xChannelSelector="R" yChannelSelector="G" />
+        </filter>
+    </svg>
   </body>
 </html>
