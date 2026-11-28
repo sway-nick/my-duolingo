@@ -96,7 +96,7 @@ export const SPOKEN_ENGLISH_I18N = {
     "catDrops": "Simplificaciones",
     "catTexting": "Mensajes",
     "catPhrases": "Frases reales",
-    "formalLabel": "Manual",
+    "formalLabel": "Formal",
     "nativeLabel": "Nativo",
     "freeBadge": "Gratis",
     "adUnlock10Btn": "Desbloquear 10 más con video",
